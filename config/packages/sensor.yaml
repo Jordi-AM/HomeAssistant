@@ -1,0 +1,12 @@
+sensor:
+  - platform: template
+    sensors: 
+      xiaomi_consumo:
+        unit_of_measurement: 'W'
+        friendly_name: "Consumo Xiaomi"
+        value_template: '{{ states.switch.xiaomi.attributes.load_power|int }}'
+
+      xiaomi_on:
+        friendly_name: "Enchufe Xiaomi ON"
+        value_template: '{{ states.switch.xiaomi.attributes.in_use|default(0) }}'
+

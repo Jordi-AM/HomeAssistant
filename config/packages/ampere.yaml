@@ -1,0 +1,366 @@
+modbus:
+  name: miampere
+  type: tcp
+  host: 192.168.1.234
+  port: 502
+
+sensor:
+  - platform: template
+    sensors:
+      # tuve que hacer un sensor template e igualarlo al de ampere, porque en el de ampere (modbus) no podía establecer el friendly_name
+      temp_baterias:
+        value_template: "{{ states.sensor.ampere_temp_battcellmax.state|float }}"
+        unit_of_measurement: "°C"
+        friendly_name: ' '
+
+      temp_inverter:
+        value_template: "{{ states.sensor.ampere_temp_inverter.state|float }}"
+        unit_of_measurement: "°C"
+        friendly_name: ' '  
+
+# --------------------------------------------------------------------------------------
+# -------------------------------- SENSORES AMPERE  3.2 --------------------------------
+# --------------------------------------------------------------------------------------
+
+  - platform: modbus
+    registers:
+      - name: Ampere MeterActivePower
+        hub: miampere
+        unit_of_measurement: kW
+        register: 0
+        count: 2
+        data_type: int
+        register_type: input
+        scale: 0.001
+        precision: 2
+        
+      - name: Ampere MeterReactivePower
+        hub: miampere
+        unit_of_measurement: VAr
+        register: 2
+        count: 2
+        data_type: int
+        register_type: input
+        scale: 1
+        precision: 0
+
+      - name: Ampere InverterActivePower
+        hub: miampere
+        unit_of_measurement: kW
+        register: 4
+        count: 2
+        data_type: int
+        register_type: input
+        scale: 0.001
+        precision: 2        
+
+      - name: Ampere InverterReactivePower
+        hub: miampere
+        unit_of_measurement: VAr
+        register: 6
+        count: 2
+        data_type: int
+        register_type: input
+        scale: 1
+        precision: 0
+
+      - name: Ampere InverterPVPower
+        hub: miampere
+        unit_of_measurement: kW
+        register: 8
+        count: 2
+        data_type: int
+        register_type: input
+        scale: 0.001
+        precision: 2    
+
+      - name: Ampere ExternalPVPower
+        hub: miampere
+        unit_of_measurement: kW
+        register: 10
+        count: 2
+        data_type: int
+        register_type: input
+        scale: 0.001
+        precision: 2             
+
+      - name: Ampere InverterBatteryPower
+        hub: miampere
+        unit_of_measurement: kW
+        register: 12
+        count: 2
+        data_type: int 
+        register_type: input 
+        scale: 0.001
+        precision: 2        
+
+      - name: Ampere BatterySOC
+        hub: miampere
+        unit_of_measurement: '%'
+        register: 14
+        count: 2
+        data_type: int
+        register_type: input 
+        scale: 0.1
+        precision: 1
+        
+      - name: Ampere BatterySOH
+        hub: miampere
+        unit_of_measurement: '%'
+        register: 16
+        count: 2
+        data_type: int
+        register_type: input 
+        scale: 0.1
+        precision: 1        
+
+      - name: Ampere BatteryVoltage
+        hub: miampere
+        unit_of_measurement: 'V'
+        register: 18
+        count: 2
+        data_type: int
+        register_type: input 
+        scale: 0.1
+        precision: 1 
+
+      - name: Ampere MeterGridVoltage
+        hub: miampere
+        unit_of_measurement: 'V'
+        register: 20
+        count: 2
+        data_type: int
+        register_type: input 
+        scale: 0.1
+        precision: 1 
+
+      - name: Ampere MeterGridFrequency
+        hub: miampere
+        unit_of_measurement: 'Hz'
+        register: 22
+        count: 2
+        data_type: int
+        register_type: input 
+        scale: 0.1
+        precision: 1 
+
+      - name: Ampere Temp BattCellMax  # BattCellMax/
+        hub: miampere
+        unit_of_measurement: 'ºC'
+        register: 24
+        count: 2
+        data_type: int
+        register_type: input 
+        scale: 0.1
+        precision: 1 
+
+      - name: Ampere Temp BattCellMin  # BattCellMinT
+        hub: miampere
+        unit_of_measurement: 'ºC'
+        register: 26
+        count: 2
+        data_type: int
+        register_type: input 
+        scale: 0.1
+        precision: 1 
+
+      - name: Ampere Temp Inverter  # InverterT
+        hub: miampere
+        unit_of_measurement: 'ºC'
+        register: 28
+        count: 2
+        data_type: int
+        register_type: input 
+        scale: 0.1
+        precision: 1                 
+
+      - name: Ampere ChargeAvailable
+        hub: miampere
+        unit_of_measurement: kW
+        register: 30
+        count: 2
+        data_type: int
+        register_type: input
+        scale: 0.001
+        precision: 2             
+
+      - name: Ampere DischargeAvailable
+        hub: miampere
+        unit_of_measurement: kW
+        register: 32
+        count: 2
+        data_type: int 
+        register_type: input 
+        scale: 0.001
+        precision: 2  
+
+      - name: Ampere Status
+        hub: miampere
+        # unit_of_measurement: kW
+        register: 34
+        count: 2
+        data_type: int
+        register_type: input
+        # scale: 0.001
+        # precision: 2             
+
+      - name: Ampere Alarms
+        hub: miampere
+        # unit_of_measurement: kW
+        register: 36
+        count: 2
+        data_type: int 
+        register_type: input 
+        # scale: 0.001
+        # precision: 2  
+
+      - name: Ampere InverterPVVoltage
+        hub: miampere
+        unit_of_measurement: 'V'
+        register: 38
+        count: 2
+        data_type: int
+        register_type: input 
+        scale: 0.1
+        precision: 1 
+
+      - name: Ampere WorkingMode
+        hub: miampere
+        # unit_of_measurement: 'V'
+        register: 40
+        count: 2
+        data_type: int
+        register_type: input 
+        # scale: 0.1
+        #precision: 1 
+
+      - name: Ampere Demand
+        hub: miampere
+        unit_of_measurement: 'W'
+        register: 42
+        count: 2
+        data_type: int
+        register_type: input 
+        scale: 0.001
+        precision: 2                 
+
+
+# Si quisiéramos hacer un template:
+#  - platform: template
+#    sensors:
+#      consumo_bateria:
+#        value_template: '{{ (states.sensor.ampere_inv_ap.state | float) - (states.sensor.ampere_inv_pvpow.state | float) - (states.sensor.ampere_meteractivepower.state | float) | round(2) }}'
+#        friendly_name: "Consumo desde batería"
+#        unit_of_measurement: kW
+
+
+input_boolean: # ----------------------------------------------------------------------------------------------------------------------------
+
+  # Pensado para google home. Al activarlo llama a la automatización informa_estado_bateria
+  ejecuta_estado_ampere:
+    name: Ejecuta estado batería
+    initial: off  
+
+
+automation:
+# ------------------------------------------------------------------------------------------------------
+# ------------------------------------- CONTROL TEMPERATURA AMPERE -------------------------------------
+# ------------------------------------------------------------------------------------------------------
+
+- id: temperatura_ampere
+  alias: Alerta temperatura AMPERE
+  trigger:
+  - below: '15.0'
+    entity_id: sensor.temperatura_ampere
+    for: '5'
+    platform: numeric_state
+  - below: '10.0'
+    entity_id: sensor.temperatura_ampere
+    for: '5'
+    platform: numeric_state
+  - above: '30.0'
+    entity_id: sensor.temperatura_ampere
+    for: '5'
+    platform: numeric_state
+  - above: '35.0'
+    entity_id: sensor.temperatura_ampere
+    for: '5'
+    platform: numeric_state
+  - above: '40.0'
+    entity_id: sensor.temperatura_ampere
+    for: '5'
+    platform: numeric_state
+  - above: '45.0'
+    entity_id: sensor.temperatura_ampere
+    for: '5'
+    platform: numeric_state    
+  action:
+  - data:
+      message: 'Temperatura AMPER {{ states.sensor.temperatura_ampere.state
+        }} grados
+
+        '
+      target: 440192507
+    service: telegram_bot.send_message
+
+
+# Para google home assistant
+- id: informa_estado_bateria
+  alias: informa estado baterías
+  trigger:
+    platform: state
+    entity_id: input_boolean.ejecuta_estado_ampere
+    to: 'on'
+  action:
+    - service: script.estado_baterias
+    - delay: 00:00:10
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.ejecuta_estado_ampere
+
+    
+
+# ------------------------------------------------------------------------------------------------------      
+# --------------------------------------------------- INTRUSIÓN AMPERE ---------------------------------
+# ------------------------------------------------------------------------------------------------------
+
+- id: ampere_abierto
+  alias: Ampere abierto
+  trigger:
+    platform: state
+    entity_id: binary_sensor.puerta_ampere
+    from: 'off'
+    to: 'on'
+  action:
+  - service: telegram_bot.send_message
+    data:
+      message: AMPERE ABIERTO!!!!
+      target: 440192507
+- id: ampere_cerrado
+  alias: Ampere cerrado
+  trigger:
+    platform: state
+    entity_id: binary_sensor.puerta_ampere
+    from: 'on'
+    to: 'off'
+  action:
+  - service: telegram_bot.send_message
+    data:
+      message: AMPERE CERRADO!!!!
+      target: 440192507
+
+script:
+
+  estado_baterias:      # Hecho
+    alias: Estado baterías AMPERE
+    sequence:
+    - delay: 00:00:01
+    - service: tts.google_translate_say
+      entity_id: media_player.superyo
+      data:
+        message: Hola como estamos
+            # La carga de la batería es {{ states.sensor.ampere_batterysoc.state }} por ciento y se está generando {{  states.sensor.ampere_inverterpvpower.state  }}. La temperatura es de {{ states.sensor.temperatura_ampere.state }} grados.
+        language: 'es'
+    - service: telegram_bot.send_message
+      data:
+        message: La carga de la batería es {{ states.sensor.ampere_batterysoc.state }} por ciento y se está generando {{  states.sensor.ampere_inverterpvpower.state  }}. La temperatura es de {{ states.sensor.temperatura_ampere.state }} grados.
+        target: 440192507   

@@ -1,0 +1,100 @@
+homeassistant:
+  packages: !include_dir_named packages
+  customize: !include customize.yaml
+
+default_config:
+
+http:
+  base_url: !secret duckdns
+  ssl_certificate: /ssl/fullchain.pem
+  ssl_key: /ssl/privkey.pem
+
+
+# Text to speech
+#    cache: true
+#    cache_dir: /tmp/tts
+#    service_name: google_say
+
+tts:
+  - platform: google_translate
+    service_name: google_say # como llamaremos al servicio desde las funciones. Así, aunque HA cambie el nombre del servicio, podremos seguir usando este
+                             # por defecto es google_translate_say
+    language: 'es'
+    # base_url: https://agui.duckdns.org
+    cache: true
+    #cache_dir:  # si lo dejamos en blanco, los mp3 irán a /config/tts. Así los tenemos controlados
+    time_memory: 300
+
+rest_command:
+  google_backup:
+    url: 'http://localhost:8055/gbdoBackup'
+    timeout: '300'   
+
+telegram_bot:
+  - platform: polling
+    api_key: !secret telegram_api_key
+    allowed_chat_ids:
+      - 440192507
+
+
+xiaomi_aqara:
+  discovery_retry: 10
+  gateways:
+    - key: !secret xiaomi_key
+      mac: !secret xiaomi_mac
+      host: 192.168.1.11      
+
+vacuum:
+  - platform: xiaomi_miio
+    host: 192.168.1.101
+    token: !secret vacuum_token
+    name: Aspirino
+
+
+
+
+
+#********************************************************************************************************************
+#
+#                                                  L U C E S 
+#
+#********************************************************************************************************************
+
+hue:
+  bridges:
+    - host: 192.168.1.23
+      allow_unreachable: true
+      allow_hue_groups: true
+
+
+light:
+
+# Xiaomi Philips light
+# de momento la desactivo, porque siempre está apagada, y entonces da errores constantes
+
+#  - platform: xiaomi_miio
+#    name: Luz Nil
+#    host: 192.168.1.13
+#    token: !secret light_token  
+    
+  - platform: limitlessled  # Leds
+    bridges:
+      - host: 192.168.1.210
+#        version: 6
+#        version: 4 5 6 SI
+#        port: 8899
+        groups:
+        - number: 1
+          name: Mueble
+          type: rgbww
+        - number: 2
+          name: Cortina
+          type: rgbww
+        - number: 3
+          name: Ventana
+          type: rgbww
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml

@@ -1,0 +1,60 @@
+# info y addon: https://community.home-assistant.io/t/created-new-add-on-to-backup-snapshots-to-google-drive/76737/42
+- id: auto_backup
+  alias: Backup sábado a las 6:00
+  initial_state: 'on'
+  trigger:
+    platform: time
+    at: '6:00:00'
+  condition:
+  - condition: time
+    weekday:
+      - sat
+  action:
+  - service: scrpt.full_backup_a_drive
+
+- id: reinicio_HA
+  alias: Notificación reinicio
+  trigger:
+    platform: homeassistant
+    event: start
+  action:
+    - service: telegram_bot.send_message
+      data_template :
+        message: >
+           "HA Reiniciado"
+        target: 440192507
+    - service: xiaomi_aqara.play_ringtone      
+      data:
+        ringtone_id: '12'
+        ringtone_vol: '3'
+    - service: light.turn_on
+      entity_id: light.xiaomi
+      data:
+        rgb_color:
+        - 5
+        - 5
+        - 50
+    - delay: 600
+    - service: light.turn_off
+      entity_id: light.xiaomi
+
+
+# ------------------------------------------------------------------------------------------------------
+# ------------------------------ PRESENCIA ENTRADA -----------------------------------------------------
+# ------------------------------------------------------------------------------------------------------
+
+    
+    
+- id: sonar_simbre
+  alias: Sonar timbre
+  trigger:
+  - entity_id: binary_sensor.puerta_principal
+    from: 'off'
+    platform: state
+    to: 'on'
+    
+  action:
+  - data:
+      ringtone_id: '10'
+      ringtone_vol: '10'
+    service: xiaomi_aqara.play_ringtone

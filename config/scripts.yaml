@@ -1,0 +1,44 @@
+# info y addon: https://community.home-assistant.io/t/created-new-add-on-to-backup-snapshots-to-google-drive/76737/42
+full_backup_a_drive:  
+  alias: Crea backup completo y sube a drive
+  sequence:
+    - service: hassio.snapshot_full
+      data_template:
+        name: Backup automático {{ now().strftime('%Y-%m-%d') }}
+    - service: telegram_bot.send_message
+      data_template:
+        message: Creating backup named Backup automático {{ now().strftime('%Y-%m-%d') }}
+        target: 440192507
+    - delay: "00:30:00"
+    - service: rest_command.google_backup
+    - service: telegram_bot.send_message
+      data:
+        message: Backup finalizado
+        target: 440192507
+#--------------------------------------------------------------------------------------------------------------------
+
+test_telegram:  
+  alias: Testea funcionamiento telegram
+  sequence:
+    - service: telegram_bot.send_message
+      data:
+        message: Testeando telegram
+        target: 440192507
+#--------------------------------------------------------------------------------------------------------------------
+
+test_google_tts:      # Hecho
+  alias: Testea funcionamiento google
+  sequence:
+#  - service: media_player.turn_off
+#    entity_id: media_player.superyo
+#  - delay: 
+#      seconds: 1
+#  - service: media_player.turn_on
+#    entity_id: media_player.superyo
+#  - delay: 
+#      seconds: 1
+  - service: tts.google_say
+    entity_id: media_player.superyo
+    data:
+      message: Testeando google Home
+
