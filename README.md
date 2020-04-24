@@ -1,0 +1,2 @@
+# HomeAssistant
+Mi configuración HA
