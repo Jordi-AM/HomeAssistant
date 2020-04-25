@@ -1,3 +1,2 @@
-#sensor.temp_baterias:
-#  friendly_name: ' '
-[]
+switch.xiaomi: #Para no apagar involuntariamente
+  hidden: true

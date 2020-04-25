@@ -4,13 +4,13 @@
   initial_state: 'on'
   trigger:
     platform: time
-    at: '6:00:00'
+    at: '11:10:00'
   condition:
   - condition: time
     weekday:
       - sat
   action:
-  - service: scrpt.full_backup_a_drive
+  - service: script.full_backup_a_drive
 
 - id: reinicio_HA
   alias: Notificación reinicio
@@ -98,3 +98,116 @@
     service: input_boolean.turn_on
     data:
       entity_id: input_boolean.tomar_pastilla
+
+
+# ------------------------------------------------------------------------------------------------------
+# ----------------------------------------- ACTIVIDAD PC -----------------------------------------------
+# ------------------------------------------------------------------------------------------------------
+- id: pc_pagado
+  alias: PC apagado
+  trigger:
+    platform: state
+    entity_id: binary_sensor.pc_encendido
+    from: 'on'
+    to: 'off'
+    for: 00:02:00
+  action:
+  - service: telegram_bot.send_message
+    data:
+      message: PC apagado
+      target: 440192507
+  - service: input_boolean.turn_off
+    entity_id: input_boolean.encender_ordenador
+      
+      
+- id: PC_encendido
+  alias: PC encendido
+  trigger:
+    platform: state
+    entity_id: binary_sensor.pc_encendido
+    from: 'off'
+    to: 'on'
+    for: 00:02:00
+  action:
+  - service: telegram_bot.send_message
+    data:
+      message: PC encendido
+      target: 440192507
+
+# ------------------------------------------------------------------------------------------------------
+# ---------------------------------- ENCENDER ORDENADOR --------------------------------------------
+# ------------------------------------------------------------------------------------------------------
+
+- id: encender_ordenador
+  alias: Encender ordenador
+  trigger:
+  - entity_id: input_boolean.encender_ordenador
+    platform: state
+    to: 'on'    
+  condition:
+    - condition: state
+      entity_id: binary_sensor.pc_encendido
+      state: 'off'
+      
+  action:
+  - service: switch.turn_off
+    entity_id: switch.enchufe_pc
+  - delay: 00:00:05
+  - service: switch.turn_on
+    entity_id: switch.enchufe_monitor
+  - service: switch.turn_on
+    entity_id: switch.enchufe_pc
+  - delay: 00:00:05
+  - service: switch.turn_on
+    entity_id: switch.wake_on_lan
+  - service: input_boolean.turn_off
+    entity_id: input_boolean.encender_ordenador
+
+
+
+# ------------------------------------------------------------------------------------------------------
+# ---------------------------------- NUEVAS ACTUALIZACIONES --------------------------------------------
+# ------------------------------------------------------------------------------------------------------
+# https://community.home-assistant.io/t/updater-card-to-show-new-version/100923/3
+- id: nuevas_actualizaciones
+  alias: Actualización Disponible
+  trigger:
+    platform: state
+    entity_id: sensor.version_available
+  condition:
+    - condition: template
+      value_template: >-
+        {{
+          states('sensor.version_available')
+          !=
+          states('sensor.version_current')
+        }}
+  action:
+    - service: persistent_notification.create
+      data_template:
+        title: Upgrade time!
+        message: >-
+          There is a Home Assistant upgrade for Hass.io pending!
+          Version {{ states('sensor.version_available') }} just got released!
+        notification_id: hassio_upgrade
+
+    - service: telegram_bot.send_message
+      data:
+        message: Ha salido una nueva actualización de Home Assistant
+        target: 440192507
+
+    - service: notify.correo_jam
+
+      data_template:
+        title: 'HA: IMPORTANTE'
+        target:
+        - jordiaguileram@gmail.com
+        message: >-
+          There is a Home Assistant upgrade for Hass.io pending!
+          Version {{ states('sensor.version_available') }} just got released!
+        data:
+          attachment:
+            content-type: png
+            url: https://raw.githubusercontent.com/home-assistant/home-assistant-assets/master/logo-round-192x192.png
+
+

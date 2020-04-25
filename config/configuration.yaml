@@ -53,7 +53,53 @@ vacuum:
 
 wake_on_lan:
 
+# https://www.home-assistant.io/integrations/webostv/
+webostv:
+  - host: 192.168.1.203
+    name: LG
+    turn_on_action:
+      service: wake_on_lan.send_magic_packet
+      data:
+        # mac: "2c:2b:f9:70:3b:64"   wifi
+        "mac": "A8:23:FE:C1:6A:CE"  # cable
+    customize:
+      sources:
+        - livetv
+        - youtube
+        - netflix
 
+notify:
+  - name: correo_jam
+    platform: smtp
+    server: smtp.gmail.com
+    port: 587
+    timeout: 15
+    sender: !secret user_gmail
+    encryption: starttls
+    username: !secret user_gmail
+    password: !secret pwd_gmail
+    recipient: !include direcciones.yaml
+    sender_name: Notificación Home Assistant
+    #debug: True
+
+# ----------------------- Establece qué grabamos y qué no --------------------
+# https://www.home-assistant.io/components/recorder/
+# https://community.home-assistant.io/t/rpi-hassio-synology-nas-maria-db-for-logging/64012
+
+recorder:
+  db_url: mysql://jordiam:5SCwf9kTyezdGqp@192.168.1.9:3307/ha_2020?charset=utf8
+  purge_keep_days: 21   # días a mantener después del purge
+  purge_interval: 1
+  exclude:
+    event_types:
+      - call_service
+      - hacs/repository
+  include:
+    domains:
+      - sensor
+
+# https://www.home-assistant.io/integrations/history/
+# history: en principio no ponemos nada, entonces lo hará de los mismo elementos del recorder
 
 #********************************************************************************************************************
 #

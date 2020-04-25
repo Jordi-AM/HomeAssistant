@@ -10,3 +10,12 @@ sensor:
         friendly_name: "Enchufe Xiaomi ON"
         value_template: '{{ states.switch.xiaomi.attributes.in_use|default(0) }}'
 
+
+    # Para determinar si hay una nueva versión de HA. Avisa en pantalla inicial y también envía notificacionews
+  - platform: version
+    name: version_available
+    source: hassio
+    image: raspberrypi3
+    
+  - platform: version
+    name: version_current 

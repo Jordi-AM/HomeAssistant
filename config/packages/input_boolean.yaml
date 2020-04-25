@@ -1,4 +1,8 @@
-input_boolean:
+input_boolean: # Si está encendida, aviso pastilla
   tomar_pastilla:
     name: Pastilla
     icon: mdi:pill
+
+  encender_ordenador: # si pasa a on trigger encender_ordenador
+    name: Endender ordenador
+    icon: 'mdi:desktop-classic'

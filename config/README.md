@@ -16,10 +16,8 @@ Mi configuración HA. Subido 4/24/2020 7:50:11 PM
 - **vacuum**: Xiaomi vacuum
 - **hue**: luces Philips
 - **light\limitlessled**: tiras led
-- **webostv**
 - **wake\_on\_lan** 
 - **switch\broadlink mp1**
-- **notify/smtp**
 
 ## 2. Automatizaciones ##
 
@@ -32,7 +30,6 @@ Mi configuración HA. Subido 4/24/2020 7:50:11 PM
 - **tomar\_pastilla:** mientras el input_boolean tomar_pastilla es cierto, y de 22:15 a 23:59, recuerda que hay que tomar pastilla 
 - **pc\_encendido, pc\_apagado**: envian mensajes a telegram de actividad.
 - **encender\_ordenador**: wake on lan del PC 
-- **actualizacion_disponible**: crea notificaciones si hay nuevas actualizaciones (correo, telegram y persistent)
 
 ### Para google home
 - **informa\_estado\_baterias:**: si activamos a input\_boolean.ejecuta\_estado\_ampere, llama a script.estado\_baterias  
