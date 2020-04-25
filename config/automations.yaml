@@ -1,6 +1,6 @@
 # info y addon: https://community.home-assistant.io/t/created-new-add-on-to-backup-snapshots-to-google-drive/76737/42
-- id: auto_backup
-  alias: Backup sábado a las 6:00
+- id: autobackup # Backup sábado a las 6:00
+  alias: backup automático
   initial_state: 'on'
   trigger:
     platform: time
@@ -58,3 +58,43 @@
       ringtone_id: '10'
       ringtone_vol: '10'
     service: xiaomi_aqara.play_ringtone
+
+
+# ------------------------------------------------------------------------------------------------------      
+# --------------------------------------------------- TOMAR PASTILLA ---------------------------------
+# ------------------------------------------------------------------------------------------------------
+#Para desactivar, decir "OK Google, activar pastilla", así se activará la booleana que lo controla 
+- id: recordatorio_pastilla
+  alias: Tomar pastilla
+  trigger:
+    platform: time_pattern
+    # You can also match on interval. This will match every 5 minutes
+    minutes: '/5'
+  condition:
+    - condition: time
+      # At least one of the following is required.
+      after: '22:15:00'
+      before: '23:59:00'
+    - condition: state
+      entity_id: input_boolean.tomar_pastilla
+      state: 'on'
+  action:
+  - service: telegram_bot.send_message
+    data:
+      message: Pastilla!!!!
+      target: 440192507
+  - service: xiaomi_aqara.play_ringtone    
+    data:
+      ringtone_id: '11'
+      ringtone_vol: '3'
+      
+
+- id: activar_recordatorio_pastilla
+  alias: Activar recordatorio pastilla
+  trigger:
+    platform: time
+    at: '21:00'
+  action:
+    service: input_boolean.turn_on
+    data:
+      entity_id: input_boolean.tomar_pastilla

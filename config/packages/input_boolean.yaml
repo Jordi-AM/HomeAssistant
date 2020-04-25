@@ -1,0 +1,4 @@
+input_boolean:
+  tomar_pastilla:
+    name: Pastilla
+    icon: mdi:pill

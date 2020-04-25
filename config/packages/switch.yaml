@@ -1,0 +1,4 @@
+switch:
+  - platform: wake_on_lan
+    mac: "38-2C-4A-72-CB-AB"
+

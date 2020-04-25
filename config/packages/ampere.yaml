@@ -335,6 +335,7 @@ automation:
     data:
       message: AMPERE ABIERTO!!!!
       target: 440192507
+
 - id: ampere_cerrado
   alias: Ampere cerrado
   trigger:
@@ -349,18 +350,15 @@ automation:
       target: 440192507
 
 script:
-
-  estado_baterias:      # Hecho
+  estado_baterias:      
     alias: Estado baterías AMPERE
     sequence:
-    - delay: 00:00:01
-    - service: tts.google_translate_say
+    - service: tts.google_say
       entity_id: media_player.superyo
-      data:
-        message: Hola como estamos
-            # La carga de la batería es {{ states.sensor.ampere_batterysoc.state }} por ciento y se está generando {{  states.sensor.ampere_inverterpvpower.state  }}. La temperatura es de {{ states.sensor.temperatura_ampere.state }} grados.
-        language: 'es'
+      data_template:
+        message: >
+            La carga de la batería es {{ states.sensor.ampere_batterysoc.state }} por ciento y se está generando {{  states.sensor.ampere_inverterpvpower.state  }}. La temperatura es de {{ states.sensor.temperatura_ampere.state }} grados.
     - service: telegram_bot.send_message
-      data:
+      data_template:
         message: La carga de la batería es {{ states.sensor.ampere_batterysoc.state }} por ciento y se está generando {{  states.sensor.ampere_inverterpvpower.state  }}. La temperatura es de {{ states.sensor.temperatura_ampere.state }} grados.
         target: 440192507   

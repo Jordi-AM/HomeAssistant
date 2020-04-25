@@ -1,0 +1,53 @@
+switch:
+
+
+# ---------------------------------- REGLETA 1 ---------------------------------------------
+  - platform: broadlink_mp1
+    host: 192.168.1.22
+    mac: '34:EA:34:C6:D6:F7'
+    type: mp11
+    friendly_name: 'Enchufe Canal plus'
+
+  - platform: broadlink_mp1
+    host: 192.168.1.22
+    mac: '34:EA:34:C6:D6:F7'
+    type: mp12
+    friendly_name: 'Enchufe Pioneer'
+
+  - platform: broadlink_mp1
+    host: 192.168.1.22
+    mac: '34:EA:34:C6:D6:F7'
+    type: mp13
+    friendly_name: 'Enchufe Miniyo'
+
+  - platform: broadlink_mp1
+    host: 192.168.1.22
+    mac: '34:EA:34:C6:D6:F7'
+    type: mp14
+    friendly_name: 'Enchufe nVidia'
+
+# ---------------------------------- REGLETA 2 ---------------------------------------------
+
+  - platform: broadlink_mp1
+    host: 192.168.1.24
+    mac: '34:ea:34:c6:f7:34'
+    type: mp11
+    friendly_name: '1. Regleta PC'
+
+  - platform: broadlink_mp1
+    host: 192.168.1.24
+    mac: '34:ea:34:c6:f7:34'
+    type: mp12
+    friendly_name: '2. Monitor'
+
+  - platform: broadlink_mp1
+    host: 192.168.1.24
+    mac: '34:ea:34:c6:f7:34'
+    type: mp13
+    friendly_name: '3. Bluetooth'
+
+  - platform: broadlink_mp1
+    host: 192.168.1.24
+    mac: '34:ea:34:c6:f7:34'
+    type: mp14
+    friendly_name: '4. Infrarrojos' 
