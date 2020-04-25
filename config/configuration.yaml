@@ -101,6 +101,40 @@ recorder:
 # https://www.home-assistant.io/integrations/history/
 # history: en principio no ponemos nada, entonces lo hará de los mismo elementos del recorder
 
+
+device_tracker:
+    # 51: S6 jordi, 52 Xiaomi Ana  54: Madre Ana  55: pocophone F1
+  - platform: nmap_tracker
+    hosts: 
+      - 192.168.1.52-55
+      - 192.168.1.201  #Tablet Martí
+    interval_seconds: 60
+    consider_home: 180
+
+#********************************************************************************************************************
+#
+#                                              M E D I A   P L A Y E R S 
+#
+#********************************************************************************************************************
+
+media_player: # -----------------------------------------------------------------------------------------------------------------
+  - platform: yamaha_musiccast
+    host: 192.168.1.31
+    port: 5005
+    
+  - platform: yamaha_musiccast
+    host: 192.168.1.32
+    port: 5006
+    
+  - platform: yamaha_musiccast
+    host: 192.168.1.30
+    port: 5007
+
+#https://developer.spotify.com/dashboard/login -> Spotify2020
+spotify:
+  client_id: !secret spotify_client_id
+  client_secret: !secret spotify_client_secret
+
 #********************************************************************************************************************
 #
 #                                                  L U C E S 

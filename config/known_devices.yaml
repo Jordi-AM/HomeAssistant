@@ -1,0 +1,35 @@
+ana: # IP 52
+  icon:
+  mac: AC:C1:EE:36:16:75
+  name: Ana
+  picture: /local/img/personas/ana.jpg
+  track: true
+
+TabletNil: # IP 53
+  icon:
+  mac: 38:2D:D1:16:4A:25
+  name: Nil
+  picture: /local/img/personas/nil.jpg
+  track: true
+
+Jordi:     # IP 55
+  icon:
+  mac: A4:50:46:15:55:73
+  name: Jordi
+  picture: /local/img/personas/jordi.jpg
+  track: true
+
+TabletMarti:  # IP 201
+  icon:
+  mac: 7C:03:AB:98:44:7F
+  name: Martí
+  picture: /local/img/personas/marti.jpg
+  track: true
+
+mari:  # IP 54
+  hide_if_away: true
+  icon:
+  mac: F0:D7:AA:CD:D3:1D
+  name: Mari
+  picture: /local/img/personas/mari.jpg
+  track: true

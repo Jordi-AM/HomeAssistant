@@ -19,7 +19,11 @@ Mi configuración HA. Subido 4/24/2020 7:50:11 PM
 - **webostv**
 - **wake\_on\_lan** 
 - **switch\broadlink mp1**
-- **notify/smtp**
+- **notify\smtp**
+- **device_tracker\nmap**
+- **spotify**
+
+
 
 ## 2. Automatizaciones ##
 
@@ -56,6 +60,6 @@ Mi configuración HA. Subido 4/24/2020 7:50:11 PM
 ## 99. TO-DO
 
 - Cambiar script estado\_baterías para que dé la cantidad de batería adaptado a la app. Probar el script
-- Lo último fue wake on lan. Ahora hay que implementar encender ordenador, pero para ello hace falta regleta broadlink. También está notificaciones ordenador encendido y apagado
+
 
  

@@ -4,3 +4,9 @@ binary_sensor:
     name: PC encendido
     count: 4
     scan_interval: 37
+
+  - platform: ping
+    host: www.google.es
+    name: Online Internet
+    count: 4
+    scan_interval: 100
