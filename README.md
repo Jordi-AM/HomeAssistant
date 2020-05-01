@@ -22,7 +22,10 @@ Mi configuración HA. Subido 4/24/2020 7:50:11 PM
 - **notify\smtp**
 - **device_tracker\nmap**
 - **spotify**
-
+- **weather**
+- **map**: para trackear dispositivos
+- **google\_calender**
+- **vacuum**
 
 
 ## 2. Automatizaciones ##
@@ -37,6 +40,10 @@ Mi configuración HA. Subido 4/24/2020 7:50:11 PM
 - **pc\_encendido, pc\_apagado**: envian mensajes a telegram de actividad.
 - **encender\_ordenador**: wake on lan del PC 
 - **actualizacion_disponible**: crea notificaciones si hay nuevas actualizaciones (correo, telegram y persistent)
+- **alerta\_meteorologica**: alertas de meteoalarm
+- **cuenta\_atras\_tablet**: avisa que hay que apagar la tablet
+- **preaviso\_dormir y aviso_\dormir**: alerta para los niños
+-  
 
 ### Para google home
 - **informa\_estado\_baterias:**: si activamos a input\_boolean.ejecuta\_estado\_ampere, llama a script.estado\_baterias  
@@ -49,6 +56,26 @@ Mi configuración HA. Subido 4/24/2020 7:50:11 PM
 - **test\_telegram**: envía mensaje a telegram
 - **test\_google\_tts**: testea google say en superyo
 
+##4. HACS
+- **[https://github.com/dnguyen800/spotify-playlist-sensor](https://github.com/dnguyen800/spotify-playlist-sensor "Spotify playlist sensor")** Requiere repositorio https://github.com/dnguyen800/spotify-playlist-sensor. Recupera listas de spotify
+- **[https://github.com/dnguyen800/Spotify-Playlist-Card](https://github.com/dnguyen800/Spotify-Playlist-Card "Spotify playlist card")** Requiere añadir el repositorio https://github.com/dnguyen800/spotify-playlist-card. Card para mostrar las listas de spotify 
+- **[https://github.com/maykar/custom-header](https://github.com/maykar/custom-header "Custom header")** Para modo kiosko y más
+- **[https://github.com/thomasloven/lovelace-auto-entities](https://github.com/thomasloven/lovelace-auto-entities "auto_entities")**:  agrupa entitades de diferentes formas
+- **[https://github.com/atomic7777/atomic_calendar](https://github.com/atomic7777/atomic_calendar "atomic_calender")**: muestra calendario google
+- **[https://github.com/benct/lovelace-xiaomi-vacuum-card](https://github.com/benct/lovelace-xiaomi-vacuum-card "Xiaomi Vacuum Card")**
+- **[https://github.com/PiotrMachowski/lovelace-xiaomi-vacuum-map-card](https://github.com/PiotrMachowski/lovelace-xiaomi-vacuum-map-card "Xiaomi Vacuum map card")**: muestra mapa xiaomi. Permite usar zonas
+- **[https://github.com/thomasloven/lovelace-layout-card](https://github.com/thomasloven/lovelace-layout-card "Layout Card")**: control más exhaustivo de la ubicación de las tarjetas
+- **[https://github.com/thomasloven/lovelace-card-mod](https://github.com/thomasloven/lovelace-card-mod "Card-mod")**: permite tunear las tarjetas
+
+ 
+## 5. Addons
+- Samba Share
+- Duck DNS
+- Check Home Assistant configuration
+- Backup Hassio to Google Drive
+- MariaDB
+- Nginx Proxy Manager
+- Dnsmasq
 
 ## 97. Log
 
@@ -58,8 +85,13 @@ Mi configuración HA. Subido 4/24/2020 7:50:11 PM
 
 
 ## 99. TO-DO
+####En configuration.yaml quitar las claves!!!! También google calendars ####
 
+- poner automatizaciones de aspirino en este doc, y que después del aviso permita parar
+
+- Recordar que esta met.no y darksky. Unificar
 - Cambiar script estado\_baterías para que dé la cantidad de batería adaptado a la app. Probar el script
+- GPSLogger: bici
 
 
  
