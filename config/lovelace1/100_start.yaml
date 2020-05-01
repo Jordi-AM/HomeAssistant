@@ -1,0 +1,39 @@
+title: 100_start
+path: start
+icon: mdi:home
+panel: false
+cards:
+      # - type: custom:compact-custom-header  
+  - type: markdown
+    title: MARKDOWN
+
+    content: |
+      Hello world
+
+
+  - type: 'custom:clockwork-card'         # Reloj-------------------------------------------------
+    #title: "My Time"
+    locale: es-ES
+    entity: sensor.date_time_iso
+    other_time:
+      - "America/New_York"
+      - "Asia/Tokyo"
+
+  - type: custom:weather-card               # Tarjeta del tiempo con animación ------------------
+    entity: weather.dark_sky 
+
+  - type: conditional # Muestra si hay alguna actualización de HA ---------------------------------------
+    conditions:
+      - entity: binary_sensor.updater
+        state: "on"
+    card:
+        type: glance
+        show_header_toggle: false  
+        entities: #!include tarjeta.yaml
+
+          - entity: sensor.version_available
+            name: Versión instalada de Hassio
+            icon: mdi:home-assistant
+          - entity: sensor.version_current
+            name: Versión disponible
+            icon: mdi:home-assistant

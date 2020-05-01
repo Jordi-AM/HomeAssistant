@@ -1,0 +1,26 @@
+title: Pruebas
+
+
+# Optional background for all views. Check https://developer.mozilla.org/en-US/docs/Web/CSS/background for more examples.
+#background: center / cover no-repeat url("/local/background-low.jpg") fixed
+background: center / cover no-repeat url("/local/img/background_19.png") fixed
+
+
+custom_header:
+  kiosk_mode: '{{ states.input_boolean.modo_kiosko.state  == "on" }}'
+  background: 'rgba(150, 150, 150, 0.2)'
+  menu_hide: false
+  options_hide: false
+  voice_hide: false
+  clock_format: '24'
+  clock_date: true
+  date_locale: es-ES
+  header_text: '{{ hours24 }}:{{ minutesLZ }}'
+  compact_mode: true
+
+
+# https://www.home-assistant.io/lovelace/views/
+views:
+  - !include /config/lovelace2/b100_start.yaml 
+  - !include /config/lovelace2/b450_xiaomi.yaml
+  - !include /config/lovelace2/b50_main.yaml

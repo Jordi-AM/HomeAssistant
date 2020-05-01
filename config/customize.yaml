@@ -1,2 +1,16 @@
+#https://www.home-assistant.io/docs/configuration/customizing-devices/
 switch.xiaomi: #Para no apagar involuntariamente
   hidden: true
+
+sensor.playlist:
+  hidden: true
+sensor.playlist2:
+  hidden: true
+sensor.playlist3:
+  hidden: true
+sensor.playlist4:
+  hidden: true
+sensor.playlist5:
+  hidden: true
+
+

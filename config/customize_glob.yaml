@@ -1,0 +1,3 @@
+# Customize entities matching a pattern
+"sensor.ampere_*":
+  hidden: true

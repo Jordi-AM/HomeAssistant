@@ -29,16 +29,16 @@ test_telegram:
 test_google_tts:      # Hecho
   alias: Testea funcionamiento google
   sequence:
-#  - service: media_player.turn_off
-#    entity_id: media_player.superyo
-#  - delay: 
-#      seconds: 1
-#  - service: media_player.turn_on
-#    entity_id: media_player.superyo
-#  - delay: 
-#      seconds: 1
   - service: tts.google_say
     entity_id: media_player.superyo
     data:
-      message: Testeando google Home
+      message: Son las {{(as_timestamp (now()) + (states("input_number.sleep_timer_duration") | int) *60) | timestamp_custom ("%H:%M:%S", true)}}
 
+notificacion_google:      # Hecho
+  alias: Notificación google
+  sequence:
+  - service: tts.google_say
+    entity_id: media_player.superyo
+    data_template:
+      message: >
+          {{ mensaje }}

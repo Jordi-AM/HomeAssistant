@@ -10,3 +10,13 @@ binary_sensor:
     name: Online Internet
     count: 4
     scan_interval: 100
+
+  - platform: workday
+    country: ES
+    province: CT
+
+  - platform: meteoalarm
+    country: 'ES'
+    province: 'Litoral de Barcelona'
+    language: es
+

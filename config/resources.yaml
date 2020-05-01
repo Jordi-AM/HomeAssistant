@@ -1,0 +1,48 @@
+  ################################################ H A C S ####################################################################
+  #                                                                                                                           #
+
+- url: /local/community/spotify-playlist-card/spotify-playlist-card.js
+  type: js      
+
+  # Para modo kiosko
+  # https://192.168.1.40:8123/lovelace/0?disable_ch      para mostrarlo desactivado
+- url: /local/community/custom-header/custom-header.js
+  type: module
+
+  # Agrupa entidades de diferentes maneras
+- url: /local/community/lovelace-auto-entities/auto-entities.js
+  type: module
+
+- url: /local/community/atomic_calendar/atomic_calendar.js
+  type: module
+
+  # Xiaomi vacuum  https://github.com/benct/lovelace-xiaomi-vacuum-card
+- url: /local/community/lovelace-xiaomi-vacuum-card/xiaomi-vacuum-card.js?v=3.0.1
+  type: module
+
+  # https://github.com/PiotrMachowski/lovelace-xiaomi-vacuum-map-card
+- url: /local/community/lovelace-xiaomi-vacuum-map-card/xiaomi-vacuum-map-card.js
+  type: module
+
+  #https://github.com/thomasloven/lovelace-layout-card - Get more control over the placement of lovelace cards
+- url: /local/community/lovelace-layout-card/layout-card.js
+  type: module
+
+  #http://homeassistant.local:8123/hacs/repository/190927524 - This is not a new card. Instead it changes the way pretty much any other card works.
+- url: /local/community/lovelace-card-mod/card-mod.js
+  type: module
+
+  #                                                                                                                           #
+  #############################################################################################################################
+
+# https://github.com/robmarkoski/ha-clockwork-card
+- url: /local/plugins/clockwork-card.js?v=0.1.2
+  type: js
+
+# También se podría tener en local
+- url: https://cdn.jsdelivr.net/gh/bramkragten/custom-ui@master/weather-card/weather-card.min.js
+  type: module
+
+
+- url: 'https://fonts.googleapis.com/css?family=Quicksand:300,400'
+  type: css

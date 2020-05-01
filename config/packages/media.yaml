@@ -1,0 +1,38 @@
+sensor:
+    #HACS Spotify Playlist Sensor: recupera listas de la cuenta
+    #App developer spoty dashboard:   Sensor Spotify
+    # https://github.com/dnguyen800/spotify-playlist-sensor
+  - platform: spotify-playlist-sensor
+    client_id: !secret sensor_spoti_client
+    client_secret: !secret sensor_spoti_secret
+    number_of_playlists: 12
+    offset: 0
+    name: playlist
+
+  - platform: spotify-playlist-sensor
+    client_id: !secret sensor_spoti_client
+    client_secret: !secret sensor_spoti_secret
+    number_of_playlists: 18
+    offset: 12
+    name: playlist2
+
+  - platform: spotify-playlist-sensor
+    client_id: !secret sensor_spoti_client
+    client_secret: !secret sensor_spoti_secret
+    number_of_playlists: 18
+    offset: 30
+    name: playlist3
+
+  - platform: spotify-playlist-sensor
+    client_id: !secret sensor_spoti_client
+    client_secret: !secret sensor_spoti_secret
+    number_of_playlists: 18
+    offset: 48
+    name: playlist4
+
+  - platform: spotify-playlist-sensor
+    client_id: !secret sensor_spoti_client
+    client_secret: !secret sensor_spoti_secret
+    number_of_playlists: 18
+    offset: 66
+    name: playlist5

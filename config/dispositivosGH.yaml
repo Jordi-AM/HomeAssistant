@@ -1,0 +1,3 @@
+# He probado con grupos, pero no me funciona, solo con entidades individuales
+input_boolean.modo_kiosko:
+  expose: false

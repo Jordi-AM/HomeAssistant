@@ -1,0 +1,170 @@
+title: home
+icon: 'mdi:home'
+panel: true
+cards:
+  - type: custom:layout-card
+    layout: horizontal
+    column_num: 1
+    max_columns: 1
+    max_width: [100%]
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: picture-elements
+            image: /local/img/lovelace/top.png
+            elements:
+              - type: state-label
+                entity: sensor.time
+                style:
+                  top: 4%
+                  left: 1%
+                  transform: none
+                  color: "#FFFFFF"
+                  font-family: Quicksand
+                  font-size: 18px
+              - type: state-label
+                entity: sensor.dark_sky_hourly_summary
+                style:
+                  top: 48%
+                  left: 1%
+                  transform: none
+                  color: "#FFFFFF"
+                  font-family: Quicksand
+                  font-size: 14px
+        # --- Sunrise ---      
+              - type: conditional
+                conditions:
+                  - entity: sun.sun
+                    state: 'below_horizon'
+                elements:
+                  - type: image
+                    image: /local/img/lovelace/sunrise.svg
+                    style:
+                      top: 50%
+                      left: 84%
+                      width: 5%
+                      pointer-events: none
+                  - type: state-label
+                    entity: sensor.sunrise_tomorrow
+                    style:
+                      top: 50%
+                      left: 92%
+                      color: "#FFFFFF"
+                      font-family: Quicksand
+                      font-size: 14px
+      # --- Sunset ---      
+
+            
+#MAIN SECTION ------------------------------------------------------------------------------------                  
+      - type: horizontal-stack
+        cards:
+          - type: vertical-stack
+            cards:
+              - type: picture-elements
+                style: |
+                  ha-card {
+                    --top: {{ states("input_number.y_pos") }}%;
+                    --left: {{ states("input_number.x_pos") }}%;
+                  }
+                image: "/local/img/lovelace/middle.png"
+                elements:
+                  - type: custom:hui-state-badge-element
+                    entity: light.jordi
+                    style:
+                      top: "var(--top)"
+                      left: "var(--left)"
+
+
+
+                  - type: image
+                    tap_action: 
+                      action: toggle
+                    entity: light.ana
+                    state_image:
+                      "off": /local/img/lovelace/dark_off.svg
+                      "on": /local/img/lovelace/dark_on.svg
+                    style:
+                      top: 31%
+                      left: 75%
+                      width: 4%
+                  - type: image
+                    tap_action: 
+                      action: toggle
+                    entity: light.marti
+                    state_image:
+                      "off": /local/img/lovelace/dark_off.svg
+                      "on": /local/img/lovelace/dark_on.svg
+                    style:
+                      top: 31%
+                      left: 89%
+                      width: 4%
+                  - type: image
+                    tap_action: 
+                      action: toggle
+                    entity: light.uno
+                    state_image:
+                      "off": /local/img/lovelace/dark_off.svg
+                      "on": /local/img/lovelace/dark_on.svg
+                    style:
+                      top: 73%
+                      left: 58%
+                      width: 4%
+                  - type: image
+                    tap_action: 
+                      action: toggle
+                    entity: light.dos
+                    state_image:
+                      "off": /local/img/lovelace/dark_off.svg
+                      "on": /local/img/lovelace/dark_on.svg
+                    style:
+                      top: 73%
+                      left: 63.7%
+                      width: 4%
+                  # --- Room Temperatures ---        
+                  - type: state-label
+                    entity: sensor.temperatura_comedor
+                    style:
+                      top: 73%
+                      left: 75%
+                      color: "#FFFFFF"
+                      font-family: Quicksand
+                      font-size: 48px
+                  - type: state-label
+                    entity: sensor.temperatura_ampere
+                    style:
+                      top: 73%
+                      left: 89%
+                      color: "#FFFFFF"
+                      font-family: Quicksand
+                      font-size: 48px
+
+
+
+
+
+      #PRESENCE SECTION ------------------------------------------------------------------------------------                          
+      - type: horizontal-stack
+        cards:
+          - type: picture-elements
+            image: /local/img/lovelace/top.png
+            elements:
+              - type: image
+                entity: device_tracker.jordi
+                image: /local/img/personas/jordi.jpg
+                state_image:
+                  "home": /local/img/personas/jordi.jpg
+                  "not_home": /local/img/personas/jordi_bn.jpg
+                style:
+                  top: 37%
+                  left: 12%
+                  width: 8%
+              - type: image
+                entity: device_tracker.ana
+                image: /local/img/personas/jordi.jpg
+                state_image:
+                  "home": /local/img/personas/ana.jpg
+                  "not_home": /local/img/personas/ana_bn.jpg
+                style:
+                  top: 37%
+                  left: 37%
+                  width: 8%

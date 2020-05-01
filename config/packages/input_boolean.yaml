@@ -6,3 +6,11 @@ input_boolean: # Si está encendida, aviso pastilla
   encender_ordenador: # si pasa a on trigger encender_ordenador
     name: Endender ordenador
     icon: 'mdi:desktop-classic'
+
+  aviso_tablet: #lanza automatización avisar apagar tablet martí
+    name: Aviso apagado tablet Martí
+    icon: 'mdi:tablet-android'
+
+  modo_kiosko: # indica si queremos usar modo kiosko o no
+    name: Activar modo kiosko
+    icon: 'mdi:cog-outline'

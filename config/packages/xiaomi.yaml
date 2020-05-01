@@ -1,0 +1,107 @@
+
+sensor: 
+
+  - platform: template
+    sensors:
+      vacuum_start_time_weekdays:
+        friendly_name: 'Hora de inicio de limpieza (días laborables)'
+        value_template: '{{ "%0.02d:%0.02d" | format(states("input_number.vacuum_start_hour_weekdays") | int, states("input_number.vacuum_start_minutes_weekdays") | int) }}'
+      vacuum_start_time_weekend:
+        friendly_name: 'Hora de inicio de limpieza (fin de semana)'
+        value_template: '{{ "%0.02d:%0.02d" | format(states("input_number.vacuum_start_hour_weekend") | int, states("input_number.vacuum_start_minutes_weekend") | int) }}'
+
+
+      vacuum_weekdays:
+        friendly_name: "Vacuum - Laborable"
+        value_template: "Día laborable:"
+      vacuum_weekend:
+        friendly_name: "Vacuum - Fin de semana"
+        value_template: "Fin de semana:"
+
+
+#input_datetime:
+#  both_date_and_time:
+#    name: Input with both date and time
+#    has_date: true
+#    has_time: true
+#  only_date:
+#    name: Input with only date
+#    has_date: true
+#    has_time: false
+#  only_time:
+#    name: Input with only time
+#    has_date: false
+#    has_time: true
+
+
+
+input_number: 
+  vacuum_start_minutes_weekend:
+    name: Minuto inicio
+    initial: 0
+    min: 0
+    max: 59
+    step: 1
+    mode: slider
+  vacuum_start_hour_weekend:
+    name: Hora inicio
+    initial: 13
+    min: 0
+    max: 23
+    step: 1
+    mode: slider
+  vacuum_start_minutes_weekdays:
+    name: Minuto inicio
+    initial: 0
+    min: 0
+    max: 59
+    step: 1
+    mode: slider
+  vacuum_start_hour_weekdays:
+    name: Hora inicio
+    initial: 15
+    min: 0
+    max: 23
+    step: 1
+    mode: slider  
+
+automation:
+  - id: cleaning_timer_weekdays
+    alias: Horario de limpieza entre semana
+    trigger:
+    - platform: template
+      value_template: '{{ states.sensor.vacuum_start_time_weekdays.state == states.sensor.time.state
+        }}'
+    condition:
+    - condition: time
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+    action:
+
+    - service: script.notificacion_google
+      data:
+        message: "3 minutos para empezar limpieza aspirino"
+    - delay: '00:03:00'
+    - data:
+        entity_id: vacuum.xiaomi_vacuum_cleaner
+      service: vacuum.start
+
+  - id: cleaning_timer_weekend
+    alias: Horario de limpieza para el fin de semana.
+    trigger:
+    - platform: template
+      value_template: '{{ states.sensor.vacuum_start_time_weekend.state == states.sensor.time.state
+        }}'
+    condition:
+    - condition: time
+      weekday:
+      - sat
+      - sun
+    action:
+    - data:
+        entity_id: vacuum.xiaomi_vacuum_cleaner
+      service: vacuum.start
