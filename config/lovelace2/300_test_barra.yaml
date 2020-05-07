@@ -1,0 +1,12 @@
+title: PruebaBarra
+path: prueba_barra
+icon: mdi:home
+panel: true
+cards:
+
+  - type: vertical-stack             # Fila 1 ------------------------------
+    cards:    
+      - type: custom:gap-card    # margen de la parte superior de la barra
+        height: 4
+        size: 55
+      - !include /config/lovelace1/000_top_bar.yaml

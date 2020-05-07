@@ -1,0 +1,11 @@
+input_select:
+
+  mapas_tiempo:
+    name: Mapas del tiempo a mostrar
+    options:
+      - Mapa1
+      - Mapa2
+      - Mapa3
+      - Mapa4
+    initial: Mapa1
+

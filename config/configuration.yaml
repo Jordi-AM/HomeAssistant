@@ -1,29 +1,49 @@
 homeassistant:
   packages: !include_dir_named packages
   customize: !include customize.yaml
+  customize_glob: !include customize_glob.yaml
 
 default_config:
 
 http:
   base_url: !secret duckdns
-  ssl_certificate: /ssl/fullchain.pem
-  ssl_key: /ssl/privkey.pem
+  # ssl_certificate: /ssl/fullchain.pem
+  # ssl_key: /ssl/privkey.pem
 
 
-# Text to speech
-#    cache: true
-#    cache_dir: /tmp/tts
-#    service_name: google_say
+
+
+# --------------------------------------------------------------------------------------
+# ------------------------------ Google Home -------------------------------------------
+# --------------------------------------------------------------------------------------
+
+# https://domology.es/integracion-de-google-home-en-home-assistant/
+google_assistant:
+  project_id: !secret google_home
+  exposed_domains:
+    - switch
+    - light
+    - input_boolean
+    - media_player
+    - automation  
+    - scene
+    - script      
+    - vacuum
+  entity_config: !include dispositivosGH.yaml
+
+#https://www.home-assistant.io/integrations/calendar.google
+google:
+  client_id: !secret calendar_id
+  client_secret: !secret calendar_secret
 
 tts:
   - platform: google_translate
-    service_name: google_say # como llamaremos al servicio desde las funciones. Así, aunque HA cambie el nombre del servicio, podremos seguir usando este
-                             # por defecto es google_translate_say
-    language: 'es'
-    # base_url: https://agui.duckdns.org
-    cache: true
-    #cache_dir:  # si lo dejamos en blanco, los mp3 irán a /config/tts. Así los tenemos controlados
+    cache: false
+    #cache_dir: /tmp/tts
     time_memory: 300
+    base_url: http://192.168.1.100:8123
+    service_name: google_say
+    language: es
 
 rest_command:
   google_backup:
@@ -35,6 +55,14 @@ telegram_bot:
     api_key: !secret telegram_api_key
     allowed_chat_ids:
       - 440192507
+
+# https://darksky.net/dev/docs
+# si en PLANTILLAS escribo {{ states.weather.dark_sky }}, veré todo lo que ofrece. En la carpeta APUNTS hay
+# un ejemplo de cómo acceder a todos los campos
+weather:
+  - platform: darksky
+    api_key: !secret api_darksy
+    mode: daily   # sino el tiempo de lovelace lo muestra por horas
 
 
 xiaomi_aqara:
@@ -52,6 +80,8 @@ vacuum:
 
 
 wake_on_lan:
+
+
 
 # https://www.home-assistant.io/integrations/webostv/
 webostv:
@@ -82,6 +112,13 @@ notify:
     sender_name: Notificación Home Assistant
     #debug: True
 
+
+#  - name: Pocophone     # lannouncer: instalando app, recibe mensajes de voz
+#    platform: lannouncer
+#    host: 192.168.1.55
+# Con la tablet de martí, a la mínima deja de funcionar. Tampoco auto start up
+
+
 # ----------------------- Establece qué grabamos y qué no --------------------
 # https://www.home-assistant.io/components/recorder/
 # https://community.home-assistant.io/t/rpi-hassio-synology-nas-maria-db-for-logging/64012
@@ -110,6 +147,12 @@ device_tracker:
       - 192.168.1.201  #Tablet Martí
     interval_seconds: 60
     consider_home: 180
+
+# Enables map tracking of devices
+map:
+
+
+
 
 #********************************************************************************************************************
 #
@@ -175,7 +218,35 @@ light:
           name: Ventana
           type: rgbww
 
+
+
+# Enables the frontend themes
+frontend:
+  themes: !include_dir_merge_named themes
+
+sun:
+
+# https://www.home-assistant.io/lovelace/dashboards-and-views/
+# Para gestionar varios paneles
+
+
+
+lovelace:
+  resources: !include resources.yaml
+  mode: yaml
+  dashboards:
+    lovelace-generated: # Needs to contain a hyphen (-)
+      mode: yaml
+      filename: ui-dash2.yaml
+      title: Pruebas
+      icon: mdi:tools
+      show_in_sidebar: true
+
+
+
+
 group: !include groups.yaml
-automation: !include automations.yaml
+#automation: !include automations.yaml
+automation: !include_dir_merge_list automation/   # <-- esto lee todos los ficheros de esta carpeta
 script: !include scripts.yaml
 scene: !include scenes.yaml

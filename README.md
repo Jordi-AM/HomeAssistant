@@ -43,7 +43,9 @@ Mi configuración HA. Subido 4/24/2020 7:50:11 PM
 - **alerta\_meteorologica**: alertas de meteoalarm
 - **cuenta\_atras\_tablet**: avisa que hay que apagar la tablet
 - **preaviso\_dormir y aviso_\dormir**: alerta para los niños
--  
+- **activar\_mapaX y mapa\_ciclico**: para mostrar mapas cíclicos del tiempo
+- **aviso\_lluvia\_xxxxx**: diferentes avisos de lluvia (telegram y luz hub)
+ 
 
 ### Para google home
 - **informa\_estado\_baterias:**: si activamos a input\_boolean.ejecuta\_estado\_ampere, llama a script.estado\_baterias  
@@ -55,8 +57,10 @@ Mi configuración HA. Subido 4/24/2020 7:50:11 PM
 - **full\_backup\_a\_drive**: realiza un FULL SNAPSHOT automático y lo sube a google drive. 
 - **test\_telegram**: envía mensaje a telegram
 - **test\_google\_tts**: testea google say en superyo
+- **elige\escena, control\_leds, encender\_leds, apagar\_leds, apagar\_todas\-luces**: automatizaciones relacionadas con el control de la iluminación
+- **alerta\_luz\_hub**: enciende la luz del hub del color que le pasemos en hexadecimal
 
-##4. HACS
+## 4. HACS
 - **[https://github.com/dnguyen800/spotify-playlist-sensor](https://github.com/dnguyen800/spotify-playlist-sensor "Spotify playlist sensor")** Requiere repositorio https://github.com/dnguyen800/spotify-playlist-sensor. Recupera listas de spotify
 - **[https://github.com/dnguyen800/Spotify-Playlist-Card](https://github.com/dnguyen800/Spotify-Playlist-Card "Spotify playlist card")** Requiere añadir el repositorio https://github.com/dnguyen800/spotify-playlist-card. Card para mostrar las listas de spotify 
 - **[https://github.com/maykar/custom-header](https://github.com/maykar/custom-header "Custom header")** Para modo kiosko y más
@@ -66,7 +70,13 @@ Mi configuración HA. Subido 4/24/2020 7:50:11 PM
 - **[https://github.com/PiotrMachowski/lovelace-xiaomi-vacuum-map-card](https://github.com/PiotrMachowski/lovelace-xiaomi-vacuum-map-card "Xiaomi Vacuum map card")**: muestra mapa xiaomi. Permite usar zonas
 - **[https://github.com/thomasloven/lovelace-layout-card](https://github.com/thomasloven/lovelace-layout-card "Layout Card")**: control más exhaustivo de la ubicación de las tarjetas
 - **[https://github.com/thomasloven/lovelace-card-mod](https://github.com/thomasloven/lovelace-card-mod "Card-mod")**: permite tunear las tarjetas
-
+- **[https://github.com/thomasloven/hass-fontawesome](https://github.com/thomasloven/hass-fontawesome "Font awesome")**: permite usar iconos de font-awesome [Galería](https://fontawesome.com/icons?d=gallery&m=free "Galería")
+- **[https://github.com/custom-cards/button-card](https://github.com/custom-cards/button-card "Button-card")**: botones personalizados
+- **[https://github.com/thomasloven/lovelace-gap-card](https://github.com/thomasloven/lovelace-gap-card "Gap card")**: tarjeta vacía
+- **[https://github.com/fondberg/spotcast](https://github.com/fondberg/spotcast "Spotcast")**: permite reproducir Spotify en altavoces google home
+- **[https://github.com/kalkih/mini-media-player](https://github.com/kalkih/mini-media-player "Mini-media-player")**: player compacto
+- **[https://github.com/thomasloven/lovelace-slider-entity-row](https://github.com/thomasloven/lovelace-slider-entity-row "slider-entity-row")**: barra para volumen
+- **[https://github.com/gurbyz/power-wheel-card](https://github.com/gurbyz/power-wheel-card "power-wheel-card")**: componente para mostrar producción placas solares.
  
 ## 5. Addons
 - Samba Share
@@ -85,7 +95,7 @@ Mi configuración HA. Subido 4/24/2020 7:50:11 PM
 
 
 ## 99. TO-DO
-####En configuration.yaml quitar las claves!!!! También google calendars ####
+####En configuration.yaml quitar las claves!!!! También google calendars. En sensor.yaml esconder coordenadas ####
 
 - poner automatizaciones de aspirino en este doc, y que después del aviso permita parar
 

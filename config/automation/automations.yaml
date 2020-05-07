@@ -1,0 +1,301 @@
+# info y addon: https://community.home-assistant.io/t/created-new-add-on-to-backup-snapshots-to-google-drive/76737/42
+- id: autobackup # Backup sábado a las 6:00
+  alias: backup automático
+  initial_state: 'on'
+  trigger:
+    platform: time
+    at: '11:10:00'
+  condition:
+  - condition: time
+    weekday:
+      - sat
+  action:
+  - service: script.full_backup_a_drive
+
+- id: reinicio_HA
+  alias: Notificación reinicio
+  trigger:
+    platform: homeassistant
+    event: start
+  action:
+    - service: telegram_bot.send_message
+      data_template :
+        message: >
+           "HA Reiniciado"
+        target: 440192507
+    - service: xiaomi_aqara.play_ringtone      
+      data:
+        ringtone_id: '12'
+        ringtone_vol: '3'
+    - service: light.turn_on
+      entity_id: light.xiaomi
+      data:
+        rgb_color:
+        - 5
+        - 5
+        - 50
+    - delay: 600
+    - service: light.turn_off
+      entity_id: light.xiaomi
+
+
+# ------------------------------------------------------------------------------------------------------
+# ------------------------------ PRESENCIA ENTRADA -----------------------------------------------------
+# ------------------------------------------------------------------------------------------------------
+
+    
+    
+- id: sonar_simbre
+  alias: Sonar timbre
+  trigger:
+  - entity_id: binary_sensor.puerta_principal
+    from: 'off'
+    platform: state
+    to: 'on'
+    
+  action:
+  - data:
+      ringtone_id: '10'
+      ringtone_vol: '10'
+    service: xiaomi_aqara.play_ringtone
+
+
+# ------------------------------------------------------------------------------------------------------      
+# --------------------------------------------------- TOMAR PASTILLA ---------------------------------
+# ------------------------------------------------------------------------------------------------------
+#Para desactivar, decir "OK Google, activar pastilla", así se activará la booleana que lo controla 
+- id: recordatorio_pastilla
+  alias: Tomar pastilla
+  trigger:
+    platform: time_pattern
+    # You can also match on interval. This will match every 5 minutes
+    minutes: '/5'
+  condition:
+    - condition: time
+      # At least one of the following is required.
+      after: '22:15:00'
+      before: '23:59:00'
+    - condition: state
+      entity_id: input_boolean.tomar_pastilla
+      state: 'on'
+  action:
+  - service: telegram_bot.send_message
+    data:
+      message: Pastilla!!!!
+      target: 440192507
+  - service: xiaomi_aqara.play_ringtone    
+    data:
+      ringtone_id: '11'
+      ringtone_vol: '3'
+      
+
+- id: activar_recordatorio_pastilla
+  alias: Activar recordatorio pastilla
+  trigger:
+    platform: time
+    at: '21:00'
+  action:
+    service: input_boolean.turn_on
+    data:
+      entity_id: input_boolean.tomar_pastilla
+
+
+# ------------------------------------------------------------------------------------------------------
+# ----------------------------------------- ACTIVIDAD PC -----------------------------------------------
+# ------------------------------------------------------------------------------------------------------
+- id: pc_pagado
+  alias: PC apagado
+  trigger:
+    platform: state
+    entity_id: binary_sensor.pc_encendido
+    from: 'on'
+    to: 'off'
+    for: 00:02:00
+  action:
+  - service: telegram_bot.send_message
+    data:
+      message: PC apagado
+      target: 440192507
+  - service: input_boolean.turn_off
+    entity_id: input_boolean.encender_ordenador
+      
+      
+- id: PC_encendido
+  alias: PC encendido
+  trigger:
+    platform: state
+    entity_id: binary_sensor.pc_encendido
+    from: 'off'
+    to: 'on'
+    for: 00:02:00
+  action:
+  - service: telegram_bot.send_message
+    data:
+      message: PC encendido
+      target: 440192507
+
+# ------------------------------------------------------------------------------------------------------
+# ---------------------------------- ENCENDER ORDENADOR --------------------------------------------
+# ------------------------------------------------------------------------------------------------------
+
+- id: encender_ordenador
+  alias: Encender ordenador
+  trigger:
+  - entity_id: input_boolean.encender_ordenador
+    platform: state
+    to: 'on'    
+  condition:
+    - condition: state
+      entity_id: binary_sensor.pc_encendido
+      state: 'off'
+      
+  action:
+  - service: switch.turn_off
+    entity_id: switch.enchufe_pc
+  - delay: 00:00:05
+  - service: switch.turn_on
+    entity_id: switch.enchufe_monitor
+  - service: switch.turn_on
+    entity_id: switch.enchufe_pc
+  - delay: 00:00:05
+  - service: switch.turn_on
+    entity_id: switch.wake_on_lan
+  - service: input_boolean.turn_off
+    entity_id: input_boolean.encender_ordenador
+
+
+
+# ------------------------------------------------------------------------------------------------------
+# ---------------------------------- NUEVAS ACTUALIZACIONES --------------------------------------------
+# ------------------------------------------------------------------------------------------------------
+# https://community.home-assistant.io/t/updater-card-to-show-new-version/100923/3
+- id: nuevas_actualizaciones
+  alias: Actualización Disponible
+  trigger:
+    platform: state
+    entity_id: sensor.version_available
+  condition:
+    - condition: template
+      value_template: >-
+        {{
+          states('sensor.version_available')
+          !=
+          states('sensor.version_current')
+        }}
+  action:
+    - service: persistent_notification.create
+      data_template:
+        title: Upgrade time!
+        message: >-
+          There is a Home Assistant upgrade for Hass.io pending!
+          Version {{ states('sensor.version_available') }} just got released!
+        notification_id: hassio_upgrade
+
+    - service: telegram_bot.send_message
+      data:
+        message: Ha salido una nueva actualización de Home Assistant
+        target: 440192507
+
+    - service: notify.correo_jam
+
+      data_template:
+        title: 'HA: IMPORTANTE'
+        target:
+        - jordixxxxx@gmail.com
+        message: >-
+          There is a Home Assistant upgrade for Hass.io pending!
+          Version {{ states('sensor.version_available') }} just got released!
+        data:
+          attachment:
+            content-type: png
+            url: https://raw.githubusercontent.com/home-assistant/home-assistant-assets/master/logo-round-192x192.png
+
+
+# ------------------------------------------------------------------------------------------------------
+# -------------------------------------------- A DORMIR  -----------------------------------------------
+# ------------------------------------------------------------------------------------------------------
+
+- id: preaviso_dormir
+  alias: Preaviso dormir
+  trigger:
+  - at: '21:40'
+    platform: time
+   
+  action:
+  - service: tts.google_say  
+    entity_id: media_player.superyo
+    data:  
+      message: Son las 10 menos 20. Preparándose para ir a dormir
+
+
+- id: avisodormir
+  alias: Aviso dormir
+  trigger:
+  - at: '21:50'
+    platform: time
+  action:
+  - service: tts.google_say
+    entity_id: media_player.superyo
+    data:
+      message: Pijama, dientes y a dormir
+
+
+
+- alias: Alerta metereológica
+  trigger:
+    platform: state
+    entity_id: binary_sensor.meteoalarm
+    from: ‘off’
+  action:
+
+    - service: telegram_bot.send_message
+      data_template:
+        message: >-
+            "{{state_attr('binary_sensor.meteoalarm', 'headline')}}"
+            "{{state_attr('binary_sensor.meteoalarm', 'description')}} is effective on {{state_attr('binary_sensor.meteoalarm', 'effective')}}"
+        target: 440192507
+    
+    - service: persistent_notification.create
+      data_template:
+        title: "{{state_attr('binary_sensor.meteoalarm', 'headline')}}"
+        message: >-
+          "{{state_attr('binary_sensor.meteoalarm', 'description')}} is effective on {{state_attr('binary_sensor.meteoalarm', 'effective')}}"
+        notification_id: alerte_metereologica
+
+
+- alias: cuenta atras tablet
+  trigger: 
+    platform: state
+    entity_id: input_boolean.aviso_tablet
+    to: 'on'
+  action:
+    - delay: '00:00:15'
+    - service: script.notificacion_google
+      data:
+        mensaje: "15 minutos para apagar la tablet"
+    - delay: '00:12:00'
+    - service: script.notificacion_google
+      data:
+        mensaje: "3 minutos para apagar la tablet"
+    - delay: '00:03:00'
+    - service: script.notificacion_google
+      data:
+        mensaje: "Apagar la tablet"
+    - service: input_boolean.turn_off
+      data:
+        entity_id: input_boolean.aviso_tablet
+
+
+
+
+#- alias: Llegando a casa home
+#  trigger:
+#  - entity_id: device_tracker.jordi
+#    platform: state
+#    to: home
+#  action:
+#    - service: xiaomi_aqara.play_ringtone      
+#      data:
+#        ringtone_id: '7'
+#        ringtone_vol: '0'
+

@@ -1,0 +1,20 @@
+escenas:
+  name: Escenas
+  entities:
+    - input_boolean.luces_principales
+    - input_boolean.luces_traseras
+    - input_boolean.luces_cruz
+    # - input_boolean.luces_led
+    - input_boolean.luces_todas
+    - input_boolean.luces_cenando
+    - input_boolean.luces_relax
+    - input_boolean.luces_cine
+
+#botones_tiempo:
+#  name: botones mapa tiempo
+#  entities:
+#    - input_boolean.boton1
+#    - input_boolean.boton2
+#    - input_boolean.boton3
+#    - input_boolean.boton4
+

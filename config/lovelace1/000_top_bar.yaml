@@ -1,0 +1,98 @@
+# recordar cambiar también ui-lovelace.yaml
+type: horizontal-stack
+cards:
+
+
+  - type: custom:gap-card
+
+  - type: picture
+    image: /local/img/topbar/old/home.png
+    tap_action:
+      action: navigate
+      navigation_path: start
+
+  - type: picture
+    image: /local/img/topbar/old/bombilla2.png
+    tap_action:
+      action: navigate
+      navigation_path: lights
+
+  - type: picture
+
+    image: /local/img/topbar/old/eltiempo.png
+    tap_action:
+      action: navigate
+      navigation_path: eltiempo
+
+  - type: picture
+    image: /local/img/topbar/old/ampere.png
+    tap_action:
+      action: navigate
+      navigation_path: ampere
+
+  - type: picture
+    image: /local/img/topbar/old/xiaomi.png
+    tap_action:
+      action: navigate
+      navigation_path: xiaomi
+
+  - type: picture
+    image: /local/img/topbar/old/musica.png
+    tap_action:
+      action: navigate
+      navigation_path: musica
+
+  - type: picture
+    image: /local/img/topbar/old/spotify1.png
+    tap_action:
+      action: navigate
+      navigation_path: spotify
+
+
+  - type: picture
+    image: /local/img/topbar/old/tv.png
+    tap_action:
+      action: navigate
+      navigation_path: tv
+
+  - type: picture
+    image: /local/img/topbar/old/tp2.png
+    tap_action:
+      action: navigate
+      navigation_path: tp
+
+  - type: picture
+    image: /local/img/topbar/old/orbea.png
+    tap_action:
+      action: navigate
+      navigation_path: bici
+  
+  - type: picture
+    image: /local/img/topbar/old/pi.png
+    tap_action:
+      action: navigate
+      navigation_path: pi
+
+  - type: picture
+    image: /local/img/topbar/old/ayuda.png
+    tap_action:
+      action: navigate
+      navigation_path: ayuda
+
+  - type: custom:gap-card
+  - type: custom:gap-card
+
+  
+  - type: picture
+    image: /local/img/topbar/old/config.png
+    tap_action:
+      action: navigate
+      navigation_path: config
+
+  - type: picture
+    image: /local/img/topbar/old/index.png
+    tap_action:
+      action: navigate
+      navigation_path: index
+
+  - type: custom:gap-card

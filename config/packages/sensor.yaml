@@ -11,6 +11,31 @@ sensor:
         value_template: '{{ states.switch.xiaomi.attributes.in_use|default(0) }}'
 
 
+      moonphases:
+        entity_id: sensor.moon
+        friendly_name: 'Moon'
+        value_template: >
+          {{ states('sensor.moon').title().replace('_',' ').replace(' ','') }}
+        entity_picture_template: >
+          {% set state = states('sensor.moon').title().replace('_','').replace(' ','') %}
+          {{ '/local/img/MoonPhases/N{}.jpg'.format(state) }}
+
+      # ------------------------------------- El tiempo ---------------------------------------------------------
+      nextsunrise:
+        friendly_name: 'Salida del sol'
+        value_template: >
+          {{ as_timestamp(states.sun.sun.attributes.next_rising) | timestamp_custom(' %I:%M%p') | replace(" 0", "") }}
+        icon_template: mdi:weather-sunset-up
+      nextsunset:
+        friendly_name: 'Puesta de sol'
+        value_template: >
+          {{ as_timestamp(states.sun.sun.attributes.next_setting) | timestamp_custom(' %I:%M%p') | replace(" 0", "") }}
+        icon_template: mdi:weather-sunset-down
+        
+
+
+
+
     # Para determinar si hay una nueva versión de HA. Avisa en pantalla inicial y también envía notificacionews
   - platform: version
     name: version_available
@@ -19,3 +44,30 @@ sensor:
     
   - platform: version
     name: version_current 
+
+  - platform: time_date
+    display_options:
+      - 'time'          # para actualizar algunos sensores
+      - 'date_time_iso' # necesario para reloj primera página
+
+  - platform: moon
+
+#info meteorológica
+#https://www.home-assistant.io/components/darksky/
+  - platform: darksky
+    api_key: !secret api_darksy
+#    name: 'El tiempo'
+    latitude: !secret latitude
+    longitude: !secret longitude
+    forecast:
+      - 0
+      - 1
+    language: es
+    scan_interval: '00:10'
+    monitored_conditions:
+      - temperature
+      - icon
+      - hourly_summary   # <----------------
+      - daily_summary    # <----------------
+
+

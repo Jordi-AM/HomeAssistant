@@ -146,7 +146,7 @@ sensor:
 
       - name: Ampere Temp BattCellMax  # BattCellMax/
         hub: miampere
-        unit_of_measurement: 'ºC'
+        unit_of_measurement: '°C'
         register: 24
         count: 2
         data_type: int
@@ -156,7 +156,7 @@ sensor:
 
       - name: Ampere Temp BattCellMin  # BattCellMinT
         hub: miampere
-        unit_of_measurement: 'ºC'
+        unit_of_measurement: '°C'
         register: 26
         count: 2
         data_type: int
@@ -166,7 +166,7 @@ sensor:
 
       - name: Ampere Temp Inverter  # InverterT
         hub: miampere
-        unit_of_measurement: 'ºC'
+        unit_of_measurement: '°C'
         register: 28
         count: 2
         data_type: int

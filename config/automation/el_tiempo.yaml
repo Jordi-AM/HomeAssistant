@@ -1,0 +1,220 @@
+# ----------------------------- Mostrar mapa tiempo ----------------------------------
+# Si la variable input_boolean.play_pausa_mapa está a on, la automatización 
+# mapa_ciclico se encarga de ir cambiando input_boolean.botonX cíclicamente
+# cuando input_boolean.botonX se pone a true, hay una automatización activar_mapaX 
+# que hace que input_select.mapas_tiempo valga MapaX
+
+
+
+- id: activar_mapa1
+  alias: Activa el primer mapa
+  trigger:
+    platform: state
+    entity_id: input_boolean.boton1
+    to: 'on'
+  action:
+    - service: input_boolean.turn_off
+      data:
+        entity_id: input_boolean.boton2
+    - service: input_boolean.turn_off
+      data:
+        entity_id: input_boolean.boton3
+    - service: input_boolean.turn_off
+      data:
+        entity_id: input_boolean.boton4
+    - service: input_select.select_option
+      data:
+         entity_id: input_select.mapas_tiempo
+         option: 'Mapa1'
+
+
+- id: activar_mapa2
+  alias: Activa el segundo mapa
+  trigger:
+    platform: state
+    entity_id: input_boolean.boton2
+    to: 'on'
+  action:
+    - service: input_boolean.turn_off
+      data:
+        entity_id: input_boolean.boton1
+    - service: input_boolean.turn_off
+      data:
+        entity_id: input_boolean.boton3
+    - service: input_boolean.turn_off
+      data:
+        entity_id: input_boolean.boton4
+    - service: input_select.select_option
+      data:
+         entity_id: input_select.mapas_tiempo
+         option: 'Mapa2'
+
+- id: activar_mapa3
+  alias: Activa el tercer mapa
+  trigger:
+    platform: state
+    entity_id: input_boolean.boton3
+    to: 'on'
+  action:
+    - service: input_boolean.turn_off
+      data:
+        entity_id: input_boolean.boton1
+    - service: input_boolean.turn_off
+      data:
+        entity_id: input_boolean.boton2
+    - service: input_boolean.turn_off
+      data:
+        entity_id: input_boolean.boton4
+    - service: input_select.select_option
+      data:
+         entity_id: input_select.mapas_tiempo
+         option: 'Mapa3'
+
+- id: activar_mapa4
+  alias: Activa el cuarto mapa
+  trigger:
+    platform: state
+    entity_id: input_boolean.boton4
+    to: 'on'
+  action:
+    - service: input_boolean.turn_off
+      data:
+        entity_id: input_boolean.boton1
+    - service: input_boolean.turn_off
+      data:
+        entity_id: input_boolean.boton2
+    - service: input_boolean.turn_off
+      data:
+        entity_id: input_boolean.boton3
+    - service: input_select.select_option
+      data:
+         entity_id: input_select.mapas_tiempo
+         option: 'Mapa4'
+
+# https://community.home-assistant.io/t/data-template-help-please/67648/10
+- id: mapa_ciclico
+  alias: cambia el mapa de forma cíclica
+  trigger:
+    platform: time_pattern
+    seconds: '/5'
+  condition:
+    - condition: state
+      entity_id: 'input_boolean.play_pausa_mapa'
+      state: 'on'
+    
+  action:  
+    service: input_boolean.turn_on
+    data_template:
+      entity_id: >-
+
+          {% if is_state('input_boolean.boton1', 'on') %}
+              input_boolean.boton2 
+          {% elif is_state('input_boolean.boton2', 'on') %}
+              input_boolean.boton3 
+          {% elif is_state('input_boolean.boton3', 'on') %}
+              input_boolean.boton4
+          {% else %}
+              input_boolean.boton1 
+          {% endif %}
+# En la primera versión, en vez de else era  {% elif is_state('input_boolean.boton4', 'on') %}  
+# pero entonces si no havía ningún botón pulsado y el booleano estaba a on, la funcion devolvía null
+# por lo que daba un error de entidad incorrecta, que hacía incrementar el log muchísimo
+  
+
+# --------------------------------------------------------- Avisos de lluvia ----------------------------------------------
+# ---------------------- PROBABILIDAD DE LLUVIA -----------------------
+#valores en https://darksky.net/dev/docs#response-format
+#icon: clear-day, clear-night, rain, snow, sleet (aguanieve), wind, fog, cloudy, partly-cloudy-day, or partly-cloudy-night
+#condition (por observación): rainy, sunny, partlycloudy, 
+
+# Así sería para comprobar un sensor cada X tiempo
+# - id: aviso_lluvia
+#  alias: Aviso de lluvia2
+#  trigger:
+#    platform: time_pattern
+#    minutes: '/61'
+#  condition:
+#    - condition: state
+#      entity_id: sensor.dark_sky_precip
+#      state: 'rain'
+
+# https://community.home-assistant.io/t/dark-sky-sensor-rain-prediction-and-alert/108365
+# Con sensor.dark_sky_precip_probability,  un día de lluvia estaba a 28
+
+
+- id: aviso_lluvia_icon0
+  alias: Aviso de Lluvia 0d
+  trigger:
+    platform: state
+    entity_id: sensor.dark_sky_icon_0d
+    to: rain
+  action:
+    - service: telegram_bot.send_message
+      data:
+        message: "Se prevee lluvia en el día de hoy (icon 0d)"
+        target: 440192507
+    - service: script.alerta_luz_hub
+      data:
+        what_color: "FF0000"
+
+
+- id: aviso_lluvia_icon1
+  alias: Aviso de Lluvia 1d
+  trigger:
+    platform: state
+    entity_id: sensor.dark_sky_icon_1d
+    to: rain
+  action:
+    - service: telegram_bot.send_message
+      data:
+        message: "Se prevee lluvia (icon 1d)"
+        target: 440192507
+    - service: script.alerta_luz_hub
+      data:
+        what_color: "FF0000"
+
+- id: aviso_lluvia_weather
+  alias: Aviso de Lluvia Atributos
+  trigger:
+  - platform: template
+    value_template: "{% if (states.weather.dark_sky.attributes.forecast[0].condition=='rainy') %}true{% endif %}"
+  action:
+    - service: telegram_bot.send_message
+      data:
+        message: "Se prevee lluvia (atributos weather)"
+        target: 440192507
+    - service: script.alerta_luz_hub
+      data:
+        what_color: "FF0000"
+
+- id: aviso_lluvia_weather2
+  alias: Aviso de Lluvia Atributos2
+  trigger:
+  - platform: template
+    value_template: "{% if (states.weather.dark_sky.state=='rainy') %}true{% endif %}"
+  action:
+    - service: telegram_bot.send_message
+      data:
+        message: "Está lloviendo (atributos weather)"
+        target: 440192507
+    - service: script.alerta_luz_hub
+      data:
+        what_color: "FF0000"
+
+# si encuentra las palabras lluvia, llovizna o tormenta en la previsión horaria, avisa'
+- id: aviso_lluvia_proxima
+  alias: Activa lluvia próxima
+  trigger:
+  - platform: template
+    value_template: "{% if ('lluvia' in states.sensor.dark_sky_hourly_summary.state.lower() or 'llovizna' in states.sensor.dark_sky_hourly_summary.state.lower() or  'tormenta' in states.sensor.dark_sky_hourly_summary.state.lower()) %}true{% endif %}"
+
+  action:
+    - service: telegram_bot.send_message
+      data_template:
+        message: "Lluvia próxima:  {{ states.sensor.dark_sky_hourly_summary.state }} "
+        target: 440192507
+
+    - service: script.alerta_luz_hub
+      data:
+        what_color: "FF0000"
+

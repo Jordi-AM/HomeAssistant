@@ -1,0 +1,175 @@
+light: 
+  - platform: group
+    name: Luces piso
+    entities:
+      - light.jordi
+      - light.marti
+      - light.ana
+      - light.dos
+      - light.tres
+      - light.nil
+      - light.uno
+      - light.cortina
+      - light.mueble
+      - light.ventana
+      - light.recibidor
+
+  - platform: group
+    name: Luces cruzadas
+    entities:
+      - light.jordi
+      - light.marti
+      - light.dos
+      - light.tres
+      - light.nil
+
+  - platform: group
+    name: Luces principales
+    entities:
+      - light.jordi
+      - light.marti
+      - light.ana
+
+  - platform: group
+    name: Luces Traseras
+    entities:
+      - light.dos
+      - light.tres
+      - light.nil
+      - light.uno
+
+  - platform: group
+    name: Todas   # las del comedor
+    entities:
+      - light.jordi
+      - light.marti
+      - light.ana
+      - light.dos
+      - light.tres
+      - light.nil
+      - light.uno
+
+  - platform: group
+    name: Luces principales
+    entities:
+      - light.jordi
+      - light.marti
+      - light.ana
+
+  - platform: group
+    name: Leds
+    entities:
+      - light.cortina
+      - light.mueble
+      - light.ventana
+
+# Para activas escenas
+input_boolean:
+
+  luces_principales:
+    name: Luces principales
+    initial: false
+    icon: mdi:lightbulb-group
+
+  luces_traseras:
+    name: Luces traseras
+    initial: false
+    icon: mdi:lightbulb-group
+
+  luces_cruz:
+    name: Luces cruz
+    initial: false
+    icon: mdi:lightbulb-group
+
+  luces_led:
+    name: Luces led
+    initial: false
+    icon: mdi:lightbulb-group
+
+  luces_todas:
+    name: Todas las luces
+    initial: false
+    icon: mdi:lightbulb-group
+
+  luces_cenando:
+    name: Luces principales
+    initial: false
+    icon: mdi:lightbulb-group
+
+  luces_relax:
+    name: Luces principales
+    initial: false
+    icon: mdi:lightbulb-group
+
+  luces_cine:
+    name: Luces principales
+    initial: false
+    icon: mdi:lightbulb-group
+
+script:
+
+  elige_escena:
+    alias: elige escena
+    sequence:
+
+      - service: input_boolean.turn_off
+        data_template:
+          entity_id: group.escenas
+      - service: input_boolean.turn_on
+        data_template:
+          entity_id: "{{ input }}"
+      - service_template: >
+            {% if is_state ('input_boolean.luces_cenando','on') or is_state ('input_boolean.luces_relax','on') or is_state ('input_boolean.luces_cine','on') %}
+                script.apagar_leds
+            {% else %}
+               script.nulo
+            {% endif %}
+      - service: scene.turn_on
+        data_template:
+          entity_id: "{{ entidad }}"
+
+ 
+  nulo:
+    alias: no hace nada # necesario para que no de error el if anterior. Siempre hay que definir las 2 alternativas
+    sequence:
+      - service:  input_number.decrement  
+        entity_id: input_number.x_pos
+
+  control_leds: # No lo hago con un toggle ya que si usamos mando el estado no se actualiza
+    sequence:
+      - service_template: >
+            {% if is_state ('input_boolean.luces_led','on') %}
+                script.apagar_leds
+            {% else %}
+                script.encender_leds
+            {% endif %}
+
+  encender_leds:  
+    sequence:
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.luces_led
+      - service: light.turn_on
+        entity_id: light.leds
+        data:
+          #color_name: white
+          rgb_color: [250,250,250]
+          brightness: 250
+
+  apagar_leds:  
+    sequence:
+      - service: input_boolean.turn_off
+        entity_id: input_boolean.luces_led
+      - service: light.turn_off
+        entity_id: light.leds
+
+  apagar_todas_luces:
+    sequence:
+      - service: light.turn_off
+        entity_id: light.luces_piso
+      - service: input_boolean.turn_off
+        data:
+          entity_id: group.escenas
+      - service: input_boolean.turn_off
+        data_template:
+          entity_id: input_boolean.luces_led
+

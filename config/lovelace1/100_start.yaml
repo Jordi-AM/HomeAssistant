@@ -1,39 +1,85 @@
 title: 100_start
 path: start
-icon: mdi:home
-panel: false
+icon: 'mdi:home'
+panel: true
+
+# Para ubicar elementos, cambiamos top-left por esto
+#                      top: "var(--top)"
+#                      left: "var(--left)"
+
 cards:
-      # - type: custom:compact-custom-header  
-  - type: markdown
-    title: MARKDOWN
+  - type: custom:layout-card
+    layout: horizontal
+    column_num: 1
+    max_columns: 1
+    max_width: [100%]
+    cards:
 
-    content: |
-      Hello world
+      # *****************************************************************************************************************
+      # **************************************************** T O P ******************************************************
+      # *****************************************************************************************************************
+      - !include /config/lovelace1/000_top_barv2.yaml
+
+          # - type: custom:compact-custom-header  
+      - type: horizontal-stack
+        cards:
+          - type: markdown
+            title: MARKDOWN
+
+            content: |
+              Hello world
 
 
-  - type: 'custom:clockwork-card'         # Reloj-------------------------------------------------
-    #title: "My Time"
-    locale: es-ES
-    entity: sensor.date_time_iso
-    other_time:
-      - "America/New_York"
-      - "Asia/Tokyo"
+          - type: 'custom:clockwork-card'         # Reloj-------------------------------------------------
+            #title: "My Time"
+            locale: es-ES
+            entity: sensor.date_time_iso
+            other_time:
+              - "America/New_York"
+              - "Asia/Tokyo"
 
-  - type: custom:weather-card               # Tarjeta del tiempo con animación ------------------
-    entity: weather.dark_sky 
+          - type: custom:weather-card               # Tarjeta del tiempo con animación ------------------
+            entity: weather.dark_sky 
 
-  - type: conditional # Muestra si hay alguna actualización de HA ---------------------------------------
-    conditions:
-      - entity: binary_sensor.updater
-        state: "on"
-    card:
-        type: glance
-        show_header_toggle: false  
-        entities: #!include tarjeta.yaml
+          - type: conditional # Muestra si hay alguna actualización de HA ---------------------------------------
+            conditions:
+              - entity: binary_sensor.updater
+                state: "on"
+            card:
+                type: glance
+                show_header_toggle: false  
+                entities: #!include tarjeta.yaml
 
-          - entity: sensor.version_available
-            name: Versión instalada de Hassio
-            icon: mdi:home-assistant
-          - entity: sensor.version_current
-            name: Versión disponible
-            icon: mdi:home-assistant
+                  - entity: sensor.version_available
+                    name: Versión instalada de Hassio
+                    icon: mdi:home-assistant
+                  - entity: sensor.version_current
+                    name: Versión disponible
+                    icon: mdi:home-assistant
+
+      - type: horizontal-stack
+        cards:
+          - type: picture-elements
+            image: /local/img/lovelace/bottom.svg
+            elements: 
+
+              - type: image
+                entity: device_tracker.jordi
+                image: /local/img/personas/jordi.jpg
+                state_image:
+                  "home": /local/img/personas/jordi.jpg
+                  "not_home": /local/img/personas/jordi_bn.jpg
+                style:
+                  top: 37%
+                  left: 12%
+                  width: 8%
+              - type: image
+                entity: device_tracker.ana
+                image: /local/img/personas/jordi.jpg
+                state_image:
+                  "home": /local/img/personas/ana.jpg
+                  "not_home": /local/img/personas/ana_bn.jpg
+                style:
+                  top: 37%
+                  left: 37%
+                  width: 8%

@@ -42,3 +42,16 @@ notificacion_google:      # Hecho
     data_template:
       message: >
           {{ mensaje }}
+
+# Enciende la luz del HUB Xiaomi segun color en formato hexadecimal
+alerta_luz_hub:
+  sequence:
+    - service: light.turn_on
+      entity_id: light.xiaomi
+      data_template:
+        rgb_color:
+          - '{{ what_color[0:2]|int(0,16) }}'
+          - '{{ what_color[2:4]|int(0,16) }}'
+          - '{{ what_color[4:6]|int(0,16) }}'
+
+

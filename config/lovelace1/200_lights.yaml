@@ -1,0 +1,284 @@
+title: home
+icon: 'fas:lightbulb'
+path: lights
+panel: true
+
+# Para ubicar elementos, cambiamos top-left por esto
+#                      top: "var(--top)"
+#                      left: "var(--left)"
+
+cards:
+  - type: custom:layout-card
+    layout: horizontal
+    column_num: 1
+    max_columns: 1
+    max_width: [100%]
+    cards:
+
+      # *****************************************************************************************************************
+      # **************************************************** T O P ******************************************************
+      # *****************************************************************************************************************
+      - !include /config/lovelace1/000_top_barv2.yaml
+
+      # *****************************************************************************************************************
+      # *********************************************   M I D D L E  ****************************************************
+      # *****************************************************************************************************************      
+      - type: horizontal-stack
+        cards:
+          - type: vertical-stack
+            cards:
+              - type: picture-elements
+                style: |
+                  ha-card {
+                    --top: {{ states("input_number.y_pos") }}%;
+                    --left: {{ states("input_number.x_pos") }}%;
+                  }
+                image: "/local/img/lovelace/200_lights/fondo_luces_alfa.png"
+                elements:
+
+                  - type: image
+                    entity: light.jordi
+                    image: /local/img/lovelace/200_lights/jordi.png
+                    tap_action:
+                      action: toggle
+                    style:
+
+                      top: 62%
+                      left: 24%
+                      width: 4%
+                    state_filter:
+                      "on": brightness(110%) saturate(1.2)
+                      "off": brightness(50%) hue-rotate(45deg)
+
+                  - type: image
+                    entity: light.ana
+                    image: /local/img/lovelace/200_lights/ana.png
+                    tap_action:
+                      action: toggle
+                    style:
+                      top: 46%
+                      left: 25%
+                      width: 4%
+                    state_filter:
+                      "on": brightness(110%) saturate(1.2)
+                      "off": brightness(50%) hue-rotate(45deg)
+
+
+                  - type: image
+                    entity: light.marti
+                    image: /local/img/lovelace/200_lights/marti.png
+                    tap_action:
+                      action: toggle
+                    style:
+                      top: 31%
+                      left: 26%  
+                      width: 4%
+                    state_filter:
+                      "on": brightness(110%) saturate(1.2)
+                      "off": brightness(50%) hue-rotate(45deg)
+
+
+
+                  - type: image
+                    entity: light.uno
+                    image: /local/img/lovelace/200_lights/uno.png
+                    tap_action:
+                      action: toggle
+                    style:
+                      top: 62%
+                      left: 36%
+                      width: 4%
+                    state_filter:
+                      "on": brightness(110%) saturate(1.2)
+                      "off": brightness(50%) hue-rotate(45deg)
+
+                  - type: image
+                    entity: light.dos
+                    image: /local/img/lovelace/200_lights/dos.png
+                    tap_action:
+                      action: toggle
+                    style:
+                      top: 46%
+                      left: 36%
+                      width: 4%
+                    state_filter:
+                      "on": brightness(110%) saturate(1.2)
+                      "off": brightness(50%) hue-rotate(45deg)
+
+                  - type: image
+                    entity: light.tres
+                    image: /local/img/lovelace/200_lights/tres.png
+                    tap_action:
+                      action: toggle
+                    style:
+                      top: 62%
+                      left: 48%
+                      width: 4%
+                    state_filter:
+                      "on": brightness(110%) saturate(1.2)
+                      "off": brightness(50%) hue-rotate(45deg)
+
+                  - type: image
+                    entity: light.nil
+                    image: /local/img/lovelace/200_lights/nil.png
+                    tap_action:
+                      action: toggle
+                    style:
+                      top: 20%
+                      left: 45%
+                      width: 4%
+                    state_filter:
+                      "on": brightness(110%) saturate(1.2)
+                      "off": brightness(50%) hue-rotate(45deg)
+
+#------------------------------------------------------------------------------------------------------------------------------
+#                                                   E S C E N A S 
+#------------------------------------------------------------------------------------------------------------------------------            
+ 
+                  - type: state-icon
+                    entity: input_boolean.luces_principales
+                    tap_action: 
+                      action: call-service
+                      service: script.elige_escena
+                      service_data:
+                        entidad: "scene.luces_principales"
+                        input: "input_boolean.luces_principales"
+                    style:
+                      top: 6%
+                      left: 81%
+                      transform: scale(2,2)
+
+
+                  - type: state-icon
+                    entity: input_boolean.luces_traseras
+                    tap_action: 
+                      action: call-service
+                      service: script.elige_escena
+                      service_data:
+                        entidad: "scene.luces_traseras"
+                        input: "input_boolean.luces_traseras"
+                    style:
+                      top: 17%
+                      left: 81%
+                      transform: scale(2,2)
+
+                  - type: state-icon
+                    entity: input_boolean.luces_cruz
+                    tap_action: 
+                      action: call-service
+                      service: script.elige_escena
+                      service_data:
+                        entidad: "scene.luz_cruzada"
+                        input: "input_boolean.luces_cruz"
+                    style:
+                      top: 29%
+                      left: 81%
+                      transform: scale(2,2)
+
+
+                  - type: state-icon
+                    entity: input_boolean.luces_led
+                    tap_action: 
+                      action: call-service
+                      service: script.control_leds
+                    style:
+                      top: 41%
+                      left: 81%
+                      transform: scale(2,2)
+
+                  - type: state-icon
+                    entity: input_boolean.luces_todas
+                    tap_action: 
+                      action: call-service
+                      service: script.elige_escena
+                      service_data:
+                        entidad: "scene.todas_las_luces"
+                        input: "input_boolean.luces_todas"
+                    style:
+                      top: 52%
+                      left: 81%
+                      transform: scale(2,2)
+
+                  - type: state-icon
+                    entity: input_boolean.luces_cenando
+                    tap_action: 
+                      action: call-service
+                      service: script.elige_escena
+                      service_data:
+                        entidad: "scene.cenando"
+                        input: "input_boolean.luces_cenando"
+                    style:
+                      top: 64%
+                      left: 81%
+                      transform: scale(2,2)
+
+                  - type: state-icon
+                    entity: input_boolean.luces_relax
+                    tap_action: 
+                      action: call-service
+                      service: script.elige_escena
+                      service_data:
+                        entidad: "scene.relax"
+                        input: "input_boolean.luces_relax"
+                    style:
+                      top: 76%
+                      left: 81%
+                      transform: scale(2,2)
+
+                  - type: state-icon
+                    entity: input_boolean.luces_cine
+                    tap_action: 
+                      action: call-service
+                      service: script.elige_escena
+                      service_data:
+                        entidad: "scene.cine"
+                        input: "input_boolean.luces_cine"
+                    style:
+                      top: 88%
+                      left: 81%
+                      transform: scale(2,2)
+
+                    
+
+ 
+ 
+
+                  - type: image
+                    image: /local/img/lovelace/200_lights/power.png
+                    tap_action: 
+                      action: call-service
+                      service: script.apagar_todas_luces
+                    style:
+                      top: 12%
+                      left: 5%
+
+                  # --- Room Temperatures ---        
+                  - type: state-label
+                    entity: sensor.temperatura_comedor
+                    style:
+                      top: 10%
+                      left: 70%
+
+                      color: "#FFFFFF"
+                      font-family: Quicksand
+                      font-size: 48px
+                  - type: state-label
+                    entity: sensor.temperatura_ampere
+                    style:
+                      top: 21%
+                      left: 67%
+
+                      color: "#FFFFFF"
+                      font-family: Quicksand
+                      font-size: 24px
+
+
+      # *****************************************************************************************************************
+      # *********************************************   B O T T O M  ****************************************************
+      # *****************************************************************************************************************      
+      - type: horizontal-stack
+        cards:
+          - type: picture-elements
+            image: /local/img/lovelace/bottom.svg
+            elements: []
+

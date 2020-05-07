@@ -1,0 +1,97 @@
+  type: horizontal-stack
+  cards:
+    - type: picture-elements
+      image: /local/img/topv8.png
+      elements:
+        - type: image
+          image: /local/img/topbar/old/home.png
+          tap_action:
+            action: navigate
+            navigation_path: start
+          style:
+            top: 50%
+            left: 7%
+            width: 5.5%
+            border-radius: 10px
+            border: solid 1px rgba(100,100,100,0.3)
+            color: "#999999"
+            box-shadow: 3px 3px rgba(0,0,0,0.4)
+
+        - type: image
+          image: /local/img/topbar/old/bombilla2.png
+          tap_action:
+            action: navigate
+            navigation_path: lights
+          style:
+            top: 50%
+            left: 15%
+            width: 5.5%
+            border-radius: 10px
+            border: solid 1px rgba(100,100,100,0.3)
+            color: "#999999"
+            box-shadow: 3px 3px rgba(0,0,0,0.4)
+
+        - type: image
+          image: /local/img/topbar/old/eltiempo.png
+          tap_action:
+            action: navigate
+            navigation_path: eltiempo
+          style:
+            top: 50%
+            left: 23%
+            width: 5.5%
+            border-radius: 10px
+            border: solid 1px rgba(100,100,100,0.3)
+            color: "#999999"
+            box-shadow: 3px 3px rgba(0,0,0,0.4)
+
+        - type: image
+          image: /local/img/topbar/old/spotify1.png
+          tap_action:
+            action: navigate
+            navigation_path: spotify
+          style:
+            top: 50%
+            left: 31%
+            width: 5.5%
+            border-radius: 10px
+            border: solid 1px rgba(100,100,100,0.3)
+            color: "#999999"
+            box-shadow: 3px 3px rgba(0,0,0,0.4)
+
+        - type: image
+          image: /local/img/topbar/old/ampere.png
+          tap_action:
+            action: navigate
+            navigation_path: ampere
+          style:
+            top: 50%
+            left: 39%
+            width: 5.5%
+            border-radius: 10px
+            border: solid 1px rgba(100,100,100,0.3)
+            color: "#999999"
+            box-shadow: 3px 3px rgba(0,0,0,0.4)
+
+
+
+
+#- type:picture
+#  image: /local/graa.png
+#  entity: script.switchmedia #script is working
+#  tap_action:
+#    action: navigate
+#    navigation_path: "main"
+
+
+        - type: state-icon
+          entity: input_boolean.modo_kiosko
+          tap_action:
+            action: toggle
+          style: 
+            top: 40%
+            left: 90%
+            transform: scale(2,2)
+
+
+

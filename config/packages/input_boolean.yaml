@@ -13,4 +13,57 @@ input_boolean: # Si está encendida, aviso pastilla
 
   modo_kiosko: # indica si queremos usar modo kiosko o no
     name: Activar modo kiosko
-    icon: 'mdi:cog-outline'
+    icon: fas:desktop
+
+
+  # --------------------- Asociados a las pantallas --------------------------------
+  screen_home: 
+    name: pantalla home
+    icon: fas:house-user
+
+  screen_lights: # panta
+    name: pantalla luces
+    icon: fas:lightbulb
+
+  screen_weather:
+    name: pantalla meteo
+    icon: fas:cloud-sun
+
+
+
+# --------------------------------- Mapa del tiempo -------------------------------------
+
+# Para determinar qué mapa del tiempo mostramos
+  boton1:
+    name: Ver mapa 1
+    initial: true
+  boton2:
+    name: Ver mapa 2
+    initial: false
+  boton3:
+    name: Ver mapa 3
+    initial: false
+  boton4:
+    name: Ver mapa 4
+    initial: false    
+
+  play_pausa_mapa:
+    name: Play/Pausa mapas_tiempo
+    initial: true
+
+  lluvia_proxima:
+    name: Lluvia proxima
+    initial: false
+
+
+  # para las páginas de carátulas
+  caratulas1:
+    icon: mdi:home-circle
+  caratulas2:
+    icon: mdi:numeric-2-circle
+  caratulas3:
+    icon: mdi:numeric-3-circle
+  caratulas4:
+    icon: mdi:numeric-4-circle
+  caratulas5:
+    icon: mdi:numeric-5-circle

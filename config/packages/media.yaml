@@ -1,3 +1,15 @@
+# https://community.home-assistant.io/t/spotcast-custom-component-to-start-playback-on-an-idle-chromecast-device/114232
+# https://github.com/fondberg/spotcast
+# La activación de la música con el chromecast no funciona como con los altavoces Yamaha. Este componente lo permite
+
+# Por política de spotify, ha dejado de funcionar en may-2020
+# https://github.com/enriquegh/spotify-webplayer-token/issues/6
+# https://github.com/fondberg/spotcast/issues/84
+#spotcast:
+#  username: !secret username_web_spoty
+#  password: !secret password_web_spoty
+
+
 sensor:
     #HACS Spotify Playlist Sensor: recupera listas de la cuenta
     #App developer spoty dashboard:   Sensor Spotify
@@ -36,3 +48,275 @@ sensor:
     number_of_playlists: 18
     offset: 66
     name: playlist5
+
+
+group:
+  lista_players:
+    name: Booleanos de los players de música
+    entities:
+      - input_boolean.musica_nil
+      - input_boolean.musica_lavabo
+      - input_boolean.musica_cocina
+      - input_boolean.comedor
+
+  caratulas:
+    name: Páginas de carátulas
+    entities:
+      - input_boolean.caratulas1
+      - input_boolean.caratulas2
+      - input_boolean.caratulas3
+      - input_boolean.caratulas4
+      - input_boolean.caratulas5
+
+input_boolean:
+
+  musica_lavabo:
+    name: Música lavabo
+    icon: 'mdi:speaker-wireless'
+  musica_cocina:
+    name: Música cocina
+    icon: 'mdi:speaker-wireless'
+  musica_nil:
+    name: Música cocina
+    icon: 'mdi:speaker-wireless'
+  comedor:
+    name: Música comedor
+    icon: 'mdi:speaker-wireless'
+
+
+script:
+
+  #--------------------------------------------------------------------------------------------------------------------------
+  # Llamada desde view Spotify. Recibe parámetro entidad con input_boolean.musica_NomAltavoz
+  #--------------------------------------------------------------------------------------------------------------------------
+  activa_spotify8:
+    alias: Activa Spotify
+    sequence:
+      - service: input_boolean.turn_off
+        entity_id: group.lista_players
+      - service: input_boolean.turn_on
+        data_template: 
+          entity_id: >
+            {{ entidad }}
+        # enciende el media_player. Tiene que estar activo antes de seleccionarlo en Spoty
+      - service: media_player.turn_on
+        data_template: 
+           entity_id: >
+              {% if is_state ('input_boolean.musica_cocina','on') %}
+                  media_player.altavoz_cocina_main
+              {% elif is_state ('input_boolean.musica_nil','on') %}
+                  media_player.altavoz_nil_main
+              {% elif is_state ('input_boolean.musica_lavabo','on') %}
+                  media_player.altavoz_lavabo_main
+              {% elif is_state ('input_boolean.comedor','on') %}
+                  media_player.superyo
+              {% endif %}
+
+      - delay: 00:00:02
+
+        # Seleccionamos altavoces Spotify
+      - service_template: media_player.select_source
+        data_template:
+          entity_id: media_player.spotify_bitmap
+          source: >     
+              {% if is_state ('input_boolean.musica_cocina','on') %}
+                  Altavoz cocina
+              {% elif is_state ('input_boolean.musica_nil','on') %}
+                  Altavoz Nil
+              {% elif is_state ('input_boolean.musica_lavabo','on') %}
+                  Altavoz lavabo
+              {% elif is_state ('input_boolean.comedor','on') %}
+                  SuperYo
+              {% endif %}
+
+        # Pasamos al siguiente tema, para no oir siempre el mismo
+      - service: media_player.media_play
+        entity_id: media_player.spotify_bitmap
+      - delay: 00:00:02
+      - service: media_player.shuffle_set
+        data:
+          entity_id: media_player.spotify_bitmap
+          shuffle: true
+
+  pon_radio:
+  #--------------------------------------------------------------------------------------------------------------
+  # Recibe la entidad donde queremos poner la radio, y el input boolean asociado para saber que está sonando
+  #--------------------------------------------------------------------------------------------------------------
+    alias: Pone radio con Hold
+    sequence:
+    - service: input_boolean.turn_on
+      data_template:
+        entity_id: >
+            {{ booleano }} 
+    # Primero encendemos/apagamos altavoz
+    - service: media_player.turn_on
+      data_template: 
+        entity_id: >
+          {{ entidad }}
+    - delay: 00:00:01
+    - service: media_player.select_source
+      data_template: 
+        entity_id: >
+          {{ entidad }}
+        source: "net_radio"  
+
+
+  radio_comedor:
+    alias: Pone radio comedor
+    sequence:
+        - service: media_player.play_media
+          data_template:
+            entity_id: media_player.superyo
+            media_content_id: >
+              {{ url }} 
+            media_content_type: 'audio/mp4'
+
+
+
+  paginacaratula:
+    sequence:
+        - service: input_boolean.turn_off
+          data:
+            entity_id: group.caratulas
+        - service: input_boolean.turn_on
+          data_template:
+            entity_id: >
+              {{ lista }}  
+
+
+automation:
+
+###############################################################################################################################
+# Si los altavoces están en idle durante más de 10 segundos, apaga los inputs (no los altavoces)
+###############################################################################################################################
+- id: idle_to_off_cocina
+  alias: Pasar altavoces de idle a off (cocina)
+  trigger:
+    - platform: state
+      entity_id: media_player.altavoz_cocina_main
+      to: 'idle'    
+      for:          
+        seconds: 10 
+  action:
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.musica_cocina
+
+
+- id: idle_to_off_cocina_tiempo
+  trigger:
+    platform: time_pattern
+    # You can also match on interval. This will match every 5 minutes
+    seconds: '8'
+  condition:
+    - condition: state
+      entity_id: media_player.altavoz_cocina_main
+      state: 'idle'
+  action:
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.musica_cocina
+
+
+
+- id: idle_to_off_lavabo
+  alias: Pasar altavoces de idle a off (lavabo)
+  trigger:
+    - platform: state
+      entity_id: media_player.altavoz_lavabo_main
+      to: 'idle'    
+      for:
+        seconds: 10
+  action:
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.musica_lavabo
+
+      
+- id: idle_to_off_nil
+  alias: Pasar altavoces de idle a off (Nil)
+  trigger:
+    - platform: state
+      entity_id: media_player.altavoz_nil_main
+      to: 'idle'    
+      for:
+        seconds: 10
+  action:
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.musica_nil
+
+- id: idle_to_off_comedor
+  alias: Pasar altavoces de idle a off (Comedor)
+  trigger:
+    - platform: state
+      entity_id: media_player.superyo
+      to: 'idle'    
+      for:
+        seconds: 10
+  action:
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.comedor
+
+
+
+###############################################################################################################################
+# Actualizar estado de los botones de la pantalla si los atavoces se encienden/apagan desde el exterior de HA
+###############################################################################################################################
+- id: lavabo_on      
+  alias: Actualizar estado altavoz lavabo on # si se enciende desde fuera de los controles de HA, activa el booleano
+  trigger:
+    - platform: state
+      entity_id: media_player.altavoz_lavabo_main
+      to: 'playing'    
+  action:
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.musica_lavabo
+
+- id: cocina_on      
+  alias: Actualizar estado altavoz cocina on # si se enciende desde fuera de los controles de HA, activa el booleano
+  trigger:
+    - platform: state
+      entity_id: media_player.altavoz_cocina_main
+      to: 'playing'    
+  action:
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.musica_cocina
+
+- id: nil_on      
+  alias: Actualizar estado altavoz Nil on # si se enciende desde fuera de los controles de HA, activa el booleano
+  trigger:
+    - platform: state
+      entity_id: media_player.altavoz_nil_main
+      to: 'playing'    
+  action:
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.musica_nil
+
+- id: lavabo_off      
+  alias: Actualizar estado altavoz lavabo off # si se enciende desde fuera de los controles de HA, activa el booleano
+  trigger:
+    - platform: state
+      entity_id: media_player.altavoz_lavabo_main
+      to: 'off'    
+  action:
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.musica_lavabo
+
+- id: cocina_off     
+  alias: Actualizar estado altavoz cocina off # si se enciende desde fuera de los controles de HA, activa el booleano
+  trigger:
+    - platform: state
+      entity_id: media_player.altavoz_cocina_main
+      to: 'off'    
+  action:
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.musica_cocina
+
+- id: nil_off      
+  alias: Actualizar estado altavoz Nil off # si se enciende desde fuera de los controles de HA, activa el booleano
+  trigger:
+    - platform: state
+      entity_id: media_player.altavoz_nil_main
+      to: 'off'    
+  action:
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.musica_nil
+###############################################################################################################################
+###############################################################################################################################

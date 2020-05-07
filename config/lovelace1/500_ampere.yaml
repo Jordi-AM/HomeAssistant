@@ -1,0 +1,220 @@
+title: 400_ampere
+path: ampere
+icon: mdi:flash
+panel: true
+cards:
+
+  - type: vertical-stack           
+    cards:    
+      - !include /config/lovelace1/000_top_barv2.yaml
+
+      #- type: markdown
+      #  content: |
+            # Datos producción solar (AMPERE)
+      
+      - type: horizontal-stack
+        cards:
+
+
+
+          - type: history-graph
+            title: 'My Graph'
+            entities:
+              - entity: sensor.temperatura_ampere
+                name: Temperatura armario
+              - entity: sensor.temp_baterias
+                name: Temperatura baterías
+              - entity: sensor.temp_inverter
+                name: Temperatura inverter
+
+          - type: custom:power-wheel-card
+            solar_power_entity: sensor.ampere_inverterpvpower
+            grid_power_consumption_entity: sensor.ampere_meteractivepower
+            grid_power_production_entity: sensor.ampere_inverteractivepower
+            auto_toggle_view_period: 5
+            power_decimals: 2
+
+
+           # production_is_positive: false
+
+          # https://github.com/gurbyz/custom-cards-lovelace/tree/master/power-wheel-card
+#          - type: custom:power-wheel-card
+#            title_power: "Power distribution"
+            #title_energy: "Energy distribution"
+            # title_money: "Energy costs/savings"
+
+
+          # meter_ap, inv_ap, inv_pvpow, inv_batpow
+            
+#            solar_power_entity: sensor.ampere_inverterpvpower  # sensor.YOUR_SOLAR_POWER_SENSOR
+#            grid_power_consumption_entity: sensor.ampere_meteractivepower # sensor.YOUR_GRID_POWER_CONSUMPTION_SENSOR
+#            grid_power_production_entity: sensor.ampere_inverteractivepower # sensor.YOUR_GRID_POWER_PRODUCTION_SENSOR
+
+            # solar_energy_entity: sensor.ampere_inverterpvpower # sensor.YOUR_SOLAR_ENERGY_SENSOR
+            # grid_energy_consumption_entity: sensor.ampere_meteractivepower # sensor.YOUR_GRID_ENERGY_CONSUMPTION_SENSOR
+            # grid_energy_production_entity: sensor.ampere_inverteractivepower # sensor.YOUR_GRID_ENERGY_PRODUCTION_SENSOR
+
+            # energy_consumption_rate: 0.20
+            # energy_production_rate: 0.15
+#            money_unit: "€"
+#            solar_icon: "mdi:white-balance-sunny"
+#            grid_icon: "mdi:flash"
+#            home_icon: "mdi:home-assistant"
+#            power_decimals: 2
+            #energy_decimals: 2
+            #money_decimals: 1
+#            color_icons: true
+#            consuming_color: "#33ff33"
+#            producing_color: "#dd5500"
+#            initial_view: "energy"
+            #initial_auto_toggle_view: true
+#            auto_toggle_view_period: 5
+            
+#      - type: horizontal-stack
+#        cards:
+
+
+
+
+      - type: horizontal-stack
+        cards:
+          # -------------------------------------- AMPERE W (8) -------------------------------------                            
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - type: section
+                label: ENERGÍA
+              - entity: sensor.ampere_meteractivepower   # energía de red a casa (validado sin batería y sin sol)
+                name: Meter ActPow (red a casa?)
+                secondary_info: last-changed
+                icon: mdi:solar-power
+              - entity: sensor.ampere_inverteractivepower  # del sol a casa?
+                name: Inverter ActPow (sol/ampere a casa?)
+                secondary_info: last-changed
+                icon: mdi:solar-power
+              - entity: sensor.ampere_inverterpvpower  # producción total sol?
+                name: Inverter PV Pow (prod. total sol)
+                secondary_info: last-changed
+                icon: mdi:solar-power
+              - entity: sensor.ampere_externalpvpower
+                name: External PV Power
+                secondary_info: last-changed
+                icon: mdi:solar-power
+              - entity: sensor.ampere_inverterbatterypower
+                name: Inverter batt Pow (+:bat->casa -:sol->bat)
+                secondary_info: last-changed
+                icon: mdi:solar-power
+              - entity: sensor.ampere_chargeavailable   # lo que queda por cargar??
+                name: Charge avail (? 2.46)
+                secondary_info: last-changed
+                icon: mdi:solar-power
+              - entity: sensor.ampere_dischargeavailable
+                name: Discharge available
+                secondary_info: last-changed                
+                icon: mdi:solar-power
+              - entity: sensor.ampere_demand
+                name: Demand
+                secondary_info: last-changed                   
+                icon: mdi:solar-power
+
+          # -------------------------------------- AMPERE %(2) + ºC (3) -------------------------------------                            
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - type: section
+                label: DATOS BATERÍA
+              - entity: sensor.ampere_batterysoc
+                name: SoC
+                secondary_info: last-changed
+                icon: mdi:battery-charging-50
+              - entity: sensor.ampere_batterysoh
+                name: SoH
+                secondary_info: last-changed
+                icon: mdi:cards-heart
+
+              - entity: sensor.ampere_temp_battcellmax
+                name: Temperatura BattCellMax
+                secondary_info: last-changed
+                icon: mdi:oil-temperature
+              - entity: sensor.ampere_temp_battcellmin
+                name: Temperatura BattCellMin
+                secondary_info: last-changed
+                icon: mdi:oil-temperature
+              - entity: sensor.ampere_temp_inverter
+                name: Temperatura inverter
+                secondary_info: last-changed
+                icon: mdi:oil-temperature
+
+          # -------------------------------------- AMPERE V(3) + ---(3) + VAr(2) -------------------------------------                            
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - type: section
+                label: OTROS DATOS
+              - entity: sensor.ampere_batteryvoltage
+                name: Battery voltage
+                secondary_info: last-changed
+                icon: mdi:flash-outline
+              - entity: sensor.ampere_metergridvoltage
+                name: Metergrid voltage
+                secondary_info: last-changed
+                icon: mdi:flash-outline
+              - entity: sensor.ampere_inverterpvvoltage
+                name: Inverter PV voltage
+                secondary_info: last-changed
+                icon: mdi:flash-outline
+
+              - entity: sensor.ampere_status
+                name: Status
+                secondary_info: last-changed
+                icon: mdi:flag
+              - entity: sensor.ampere_alarms
+                name: Alarms
+                secondary_info: last-changed
+                icon: mdi:alarm-light-outline
+              - entity: sensor.ampere_workingmode
+                name: Working mode
+                secondary_info: last-changed
+                icon: mdi:facebook-workplace
+
+              - entity: sensor.ampere_meterreactivepower
+                name: Meter reactive power
+                secondary_info: last-changed
+                icon: mdi:power-plug
+              - entity: sensor.ampere_inverterreactivepower
+                name: Inverter reactive power
+                secondary_info: last-changed
+                icon: mdi:power-plug
+
+#          - type: history-graph  # gráfico por defecto de hassio
+#            title: Temperatura AMPERE
+#            hours_to_show: 24  # 96
+#            refresh_interval: 30
+#            entities:
+#              - sensor.temperature_158d00019c91ca
+#              - sensor.dark_sky_temperature 
+#              - sensor.ampere_temp_battcellmax
+#              - sensor.ampere_temp_inverter 
+
+#          - type: custom:mini-graph-card  # minigráfico
+#            name: Temperaturas AMPERE
+#            icon: mdi:server
+#            hours_to_show: 96
+#            points_per_hour: 0.25
+#            lower_bound: 15
+#            upper_bound: 65
+#            line_width: 1
+#            show:
+#              - labels: true
+#              - extrema: true
+#            entities:
+#              - entity: sensor.temperature_158d00019c91ca
+#                name: Sensor 
+#              - entity: sensor.dark_sky_temperature 
+#                name: Exterior
+#              - entity: sensor.ampere_temp_battcellmax
+#                name: Batt Cell
+#              - entity: sensor.ampere_temp_inverter 
+#                name: Inverter
+
+

@@ -1,0 +1,94 @@
+#---------------------------------------------------------------------------------------------------------------------------
+#                                                 LUCES
+#---------------------------------------------------------------------------------------------------------------------------
+
+- name: luces principales
+  entities:
+    light.luces_principales:
+      state: on
+      brightness_pct: 100
+      color_temp: 220
+    light.luces_traseras:
+      state: off
+
+
+- name: luces traseras
+  entities:
+    light.luces_principales:
+      state: off
+    light.luces_traseras:
+      state: on
+      brightness_pct: 100
+      color_temp: 220
+
+- name: luces led
+  entities:
+    light.leds:
+      state: on
+      rgb_color: [250,250,250]
+
+- name: luces apagadas
+  entities:
+    light.leds:
+      state: off
+    light.todas:
+      state: off
+
+- name: cenando
+  entities:
+    light.luces_principales:
+      state: on
+      brightness_pct: 100
+      color_temp: 220
+    light.luces_traseras:
+      state: off
+          
+    light.cortina:
+      state: on
+      transition: 2
+      brightness_pct: 100
+      color_temp: 200
+    light.mueble:
+      state: off
+    light.ventana:
+      state: off
+
+- name: luz cruzada
+  entities: 
+    light.luces_cruzadas:
+      state: on
+      brightness_pct: 100
+      color_temp: 220
+    light.ana:
+      state: off
+    light.uno:
+      state: off
+
+- name: todas las luces
+  entities:
+    light.todas:
+      state: on
+      brightness_pct: 100
+      color_temp: 220
+
+
+- name: relax
+  entities:
+    light.luces_cruzadas:
+      state: on
+      brightness_pct: 2
+      color_temp: 500
+    light.leds:
+      state: off      
+    light.ana:
+      state: off
+    light.uno:
+      state: off
+
+- name: cine
+  entities:
+    light.mueble:
+      state: on
+      rgb_color: [0,222,0]
+    light.todas:
+      state: off

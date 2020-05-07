@@ -1,0 +1,54 @@
+              #*****************************************   C O M E D O R     **********************************************
+            - type: conditional                                                 # ************** SIN SONAR ***************
+              conditions:
+                - entity: media_player.superyo
+                  state_not: "playing"
+              card:
+                  type: picture-entity
+                  image: /local/img/lovelace/comedorv2.png
+                  #entity: media_player.altavoz_nil_main
+                  entity: input_boolean.comedor
+                  show_name: false
+                  show_state: false
+                  tap_action:
+                    action: call-service
+                    service: script.activa_spotify_superyo
+                    service_data: {"entidad":"input_boolean.comedor"}
+                  hold_action:
+                    action: call-service
+                    service: script.pon_radio
+                    service_data:
+                      entidad: "media_player.superyo"
+                      booleano: "input_boolean.comedor"
+
+            - type: conditional                                                 # ************** SONANDO  ****************
+              conditions:
+                - entity: media_player.superyo
+                  state: "playing"
+              card:
+                  type: custom:mini-media-player
+                  entity: media_player.superyo
+                  artwork: cover  # cover  full-cover none full-cover-fit
+                  source: icon   # full  icon
+                  more_info: true 
+                  info: scroll   #short scroll   
+
+
+
+-------------------------------------------------------------
+
+Y también el script:
+
+  activa_spotify_superyo:
+    alias: Activar Spotify en el comedor
+    sequence:
+      - service: input_boolean.turn_off
+        entity_id: group.lista_players
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.comedor
+
+      - service: spotcast.start
+        data_template:
+            entity_id: media_player.superyo
+            random_song: true
+            shuffle: true

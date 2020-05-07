@@ -22,24 +22,11 @@ custom_header:
 # https://www.home-assistant.io/lovelace/views/
 views:
   
-
-  - !include /config/lovelace1/100_start.yaml    
-#  - !include /config/lovelace/200_lights.yaml
-#  - !include /config/lovelace/300_eltiempo.yaml
-#  - !include /config/lovelace/400_ampere.yaml
-#  - !include /config/lovelace/450_xiaomi.yaml
-#  - !include /config/lovelace/500_musica.yaml    
-#  - !include /config/lovelace/520_spotify.yaml
-#  - !include /config/dash2/30_media_pruebas.yaml
-#  - !include /config/lovelace/550_tv.yaml  
-#  - !include /config/lovelace/575_tp.yaml    
-#  - !include /config/lovelace/600_bici.yaml      
-#  - !include /config/lovelace/700_pi.yaml
-#  - !include /config/lovelace/800_ayuda.yaml
-#  - !include /config/lovelace/900_config.yaml
-#  - !include /config/lovelace/250_lights2d.yaml 
-#  - !include /config/lovelace/050_index.yaml
-#  - !include /config/lovelace/510_musica.yaml  
+  - !include /config/lovelace1/100_start.yaml  
+  - !include /config/lovelace1/200_lights.yaml    
+  - !include /config/lovelace1/300_eltiempo.yaml    
+  - !include /config/lovelace1/400_spotify.yaml
+  - !include /config/lovelace1/500_ampere.yaml
 
 
     
