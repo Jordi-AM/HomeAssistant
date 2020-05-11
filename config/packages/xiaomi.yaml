@@ -19,22 +19,6 @@ sensor:
         value_template: "Fin de semana:"
 
 
-#input_datetime:
-#  both_date_and_time:
-#    name: Input with both date and time
-#    has_date: true
-#    has_time: true
-#  only_date:
-#    name: Input with only date
-#    has_date: true
-#    has_time: false
-#  only_time:
-#    name: Input with only time
-#    has_date: false
-#    has_time: true
-
-
-
 input_number: 
   vacuum_start_minutes_weekend:
     name: Minuto inicio
@@ -70,37 +54,44 @@ automation:
     alias: Horario de limpieza entre semana
     trigger:
     - platform: template
-      value_template: '{{ states.sensor.vacuum_start_time_weekdays.state == states.sensor.time.state
-        }}'
+      value_template: >
+          {{ states.sensor.vacuum_start_time_weekdays.state == states.sensor.time.state }}
     condition:
-    - condition: time
-      weekday:
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
+    - condition: state
+      entity_id: 'binary_sensor.workday_sensor' 
+      state: 'on'
+ #   condition:
+ #   - condition: time
+ #     weekday:
+ #     - mon
+ #     - tue
+ #     - wed
+ #     - thu
+ #     - fri
     action:
 
-    - service: script.notificacion_google
+    - service: persistent_notification.create
       data:
-        message: "3 minutos para empezar limpieza aspirino"
-    - delay: '00:03:00'
-    - data:
-        entity_id: vacuum.xiaomi_vacuum_cleaner
-      service: vacuum.start
+        message: Limpiando v2
+#    - service: script.notificacion_google
+#      data:
+#        message: "3 minutos para empezar limpieza aspirino"
+#    - delay: '00:03:00'
+#    - data:
+#        entity_id: vacuum.xiaomi_vacuum_cleaner
+#      service: vacuum.start
 
   - id: cleaning_timer_weekend
     alias: Horario de limpieza para el fin de semana.
     trigger:
     - platform: template
-      value_template: '{{ states.sensor.vacuum_start_time_weekend.state == states.sensor.time.state
-        }}'
+      value_template: >
+        {{ states.sensor.vacuum_start_time_weekend.state == states.sensor.time.state }}
     condition:
-    - condition: time
-      weekday:
-      - sat
-      - sun
+    - condition: state
+      entity_id: 'binary_sensor.workday_sensor' 
+      state: 'off'
+
     action:
     - data:
         entity_id: vacuum.xiaomi_vacuum_cleaner

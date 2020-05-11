@@ -66,9 +66,21 @@ group:
       - input_boolean.caratulas2
       - input_boolean.caratulas3
       - input_boolean.caratulas4
-      - input_boolean.caratulas5
+     # - input_boolean.caratulas5
 
 input_boolean:
+
+  # para las páginas de carátulas
+  caratulas1:
+    icon: mdi:home-circle
+  caratulas2:
+    icon: mdi:numeric-2-circle
+  caratulas3:
+    icon: mdi:numeric-3-circle
+  caratulas4:
+    icon: mdi:numeric-4-circle
+#  caratulas5:
+#    icon: mdi:numeric-5-circle
 
   musica_lavabo:
     name: Música lavabo
@@ -161,7 +173,7 @@ script:
         source: "net_radio"  
 
 
-  radio_comedor:
+  radio_comedor: # y cocina
     alias: Pone radio comedor
     sequence:
         - service: media_player.play_media
@@ -170,7 +182,13 @@ script:
             media_content_id: >
               {{ url }} 
             media_content_type: 'audio/mp4'
-
+ 
+        - service: media_player.play_media
+          data_template:
+            entity_id: media_player.miniyo
+            media_content_id: >
+              {{ url }} 
+            media_content_type: 'audio/mp4'
 
 
   paginacaratula:

@@ -55,3 +55,9 @@ alerta_luz_hub:
           - '{{ what_color[4:6]|int(0,16) }}'
 
 
+
+test_popup:      
+  sequence:
+  - service: persistent_notification.create
+    data:
+      message: Popup

@@ -27,6 +27,10 @@ views:
   - !include /config/lovelace1/300_eltiempo.yaml    
   - !include /config/lovelace1/400_spotify.yaml
   - !include /config/lovelace1/500_ampere.yaml
+  - !include /config/lovelace1/600_xiaomi.yaml
+  - !include /config/lovelace1/700_tv-radio.yaml
+  - !include /config/lovelace1/800_location.yaml
+  - !include /config/lovelace1/850_config.yaml
 
 
     

@@ -1,0 +1,48 @@
+title: 800_location
+path: location
+icon: mdi:map-marker
+panel: true
+cards:
+  - type: vertical-stack           
+    cards:    
+      - !include /config/lovelace1/000_top_barv2.yaml
+
+      - type: markdown
+        content: |
+            ### Longitud: {{ state_attr("device_tracker.bici","longitude") | round(7) }} -  Latitud: {{ state_attr("device_tracker.bici","latitude") | round(7) }}   |   Batería:  {{ state_attr("device_tracker.bici","battery_level") }} %    |      Si no aparece el mapa, puedes pulsar [aquí](https://live-tracking.locusmap.app/online-trackers')  |  
+            ### Última actualización (sensor): {{ as_timestamp(states("sensor.movil_ultima_actualizacion")) | timestamp_custom('%H:%M:%S   %d/%m') }}   |  Última actualización (device): {{ as_timestamp(states.device_tracker.bici.last_updated) | timestamp_custom('%H:%M:%S   %d/%m') }}  |   Última cambio: {{ as_timestamp(states.device_tracker.bici.last_changed) | timestamp_custom('%H:%M:%S   %d/%m') }}  
+
+
+      - type: custom:layout-card
+        layout: horizontal # auto vertical horizontal
+        column_num: 3
+        # max_columns: 6
+        # column_width: 50
+        max_width: [50%, 50%]
+        #min_height: 100
+        #rebuild: 1000
+        cards:
+
+          - type: map
+            aspect_ratio: 16:9
+            default_zoom: 14
+            hours_to_show: 48
+            entities:
+              - device_tracker.jordigps
+              - zone.home
+              - device_tracker.anagps
+              - device_tracker.bici
+        
+          - type: iframe
+            # url: https://www.gpsies.com/liveTracking.do?username=JordiA
+            # url: 'https://www.gpsies.com/liveTrackingOnly.do?username=JordiA'
+            url: 'https://live-tracking.locusmap.app/online-trackers'
+            aspect_ratio: 100%
+
+
+  ## Coordenadas: {{ state_attr("device_tracker.honor7","longitude") }} ,  [[ device_tracker.honor7.attributes.latitude ]] - Batería:  [[ device_tracker.honor7.attributes.battery_level ]]%   |    Si no aparece el mapa, puedes pulsar [aquí](https://live-tracking.locusmap.app/online-trackers')  |  [[ sensor.movil_ultima_actualizacion ]]     
+
+
+            #### Batería:  {{ state_attr("device_tracker.honor7","battery_level"}} %
+            ### Si no aparece el mapa, puedes pulsar [aquí](https://live-tracking.locusmap.app/online-trackers')  |  
+            ### Última actualización: {{ states("sensor.movil_ultima_actualizacion") }}     

@@ -9,3 +9,11 @@ input_select:
       - Mapa4
     initial: Mapa1
 
+
+  hay_cole:
+    name: Hay cole?
+    options:
+      - 'Si'
+      - 'No'
+    initial: 'Si'
+    icon: mdi:school

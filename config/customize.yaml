@@ -14,3 +14,5 @@ sensor.playlist5:
   hidden: true
 
 
+sensor.temperatura_ampere:
+  friendly_name: ' ' # para que no aparezca en el picture-element

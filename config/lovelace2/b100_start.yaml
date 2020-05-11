@@ -12,34 +12,29 @@ cards:
     entities:
       - input_number.x_pos
       - input_number.y_pos
-  - type: "custom:atomic-calendar"
-    title: "Calendario"
-    entities:
-      - entity: calendar.jordiaguileram_gmail_com
-      - entity: calendar.emav_emav
-      - entity: calendar.marti
-    defaultMode: 1 # evento
-    untilText: 'Until'
-    showColors: true
-    maxDaysToShow: 15
-    showLocation: false
-    showMonth: false
-    showCurrentEventLine: false
-    dateColor: white
-    dateSize: 90
-    timeColor: yellow
-    timeSize: 90
-    titleColor: white
-    titleSize: 100
-    locationIconColor: 'rgb(230, 124, 115)'
-    locationLinkColor: black
-    locationTextSize: 90
-    dimFinishedEvents: true
-    finishedEventOpacity: 0.6
-    finishedEventFilter: 'grayscale(100%)'
-    dayWrapperLineColor: black
-    eventBarColor: blue
-    showProgressBar: true
-    progressBarColor: blue
-    showDescription:  true 
-    fullDayEventText: Todo el día
+  - type: picture
+    image: local/img/lovelace/cocinav2.png
+    tap_action: 
+      #action: call-service
+      #service: script.test_popup
+
+      action: call-service
+      service: browser_mod.command
+
+      service_data:
+        command: popup
+        title: Garage Options
+        deviceID:
+          - this
+        large: true
+        card:
+          type: horizontal-stack
+          cards:
+            - type: custom:light-entity-card
+              entity: light.leds
+            - type: custom:light-entity-card
+              entity: light.cortina
+            - type: custom:light-entity-card
+              entity: light.luces_comedor
+
+

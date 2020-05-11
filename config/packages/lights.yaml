@@ -63,6 +63,19 @@ light:
       - light.mueble
       - light.ventana
 
+
+# para establecer brillo luces 
+input_number:
+  principales:
+    min: 0
+    max: 255
+    step: 5
+  traseras:
+    min: 0
+    max: 255
+    step: 5
+
+
 # Para activas escenas
 input_boolean:
 
@@ -173,3 +186,47 @@ script:
         data_template:
           entity_id: input_boolean.luces_led
 
+
+automation:
+# ------------------------------------------------------------------------------------------------------
+# ------------------------------ PRESENCIA ENTRADA -----------------------------------------------------
+# ------------------------------------------------------------------------------------------------------
+
+   
+- id: presencia_pasillo_on
+  alias: Presencia pasillo encender
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.pir_entrada 
+    to: 'on'
+  - platform: state
+    entity_id: binary_sensor.puerta_principal
+    to: 'on'    
+    
+  action:
+  - service: light.turn_on
+    entity_id: light.recibidor
+  - service: light.turn_on
+    entity_id: light.xiaomi
+    data:
+      rgb_color:
+      - 100
+      - 255
+      - 100
+      
+- id: presencia_pasillo_off
+  alias: Presencia pasillo apagar
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.pir_entrada
+    to: 'off'
+    
+  - platform: state
+    entity_id: binary_sensor.puerta_principal
+    to: 'off'   
+    
+  action:
+  - service: light.turn_off
+    entity_id: light.recibidor
+  - service: light.turn_off
+    entity_id: light.xiaomi

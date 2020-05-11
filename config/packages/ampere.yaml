@@ -7,16 +7,34 @@ modbus:
 sensor:
   - platform: template
     sensors:
+
+      carga_bateria_app:
+        value_template: >
+            {% set v =  (states.sensor.ampere_batterysoc.state | float *1.5 -25) | round(1) %}
+            {% if v<100 %}
+            {{ v }}
+            {% else %}
+            100
+            {% endif %}
+        unit_of_measurement: '%'
+
+
       # tuve que hacer un sensor template e igualarlo al de ampere, porque en el de ampere (modbus) no podía establecer el friendly_name
       temp_baterias:
         value_template: "{{ states.sensor.ampere_temp_battcellmax.state|float }}"
         unit_of_measurement: "°C"
-        friendly_name: ' '
+        friendly_name: ' '  # para que no aparezca en el picture-element
 
       temp_inverter:
         value_template: "{{ states.sensor.ampere_temp_inverter.state|float }}"
         unit_of_measurement: "°C"
         friendly_name: ' '  
+
+  #https://community.home-assistant.io/t/updating-a-template-sensor-value-every-24rs-using-automation-to-retrieve-a-switch-attribute-value/58585
+
+
+
+
 
 # --------------------------------------------------------------------------------------
 # -------------------------------- SENSORES AMPERE  3.2 --------------------------------
@@ -26,7 +44,7 @@ sensor:
     registers:
       - name: Ampere MeterActivePower
         hub: miampere
-        unit_of_measurement: kW
+        unit_of_measurement: 'kW'
         register: 0
         count: 2
         data_type: int
@@ -36,7 +54,7 @@ sensor:
         
       - name: Ampere MeterReactivePower
         hub: miampere
-        unit_of_measurement: VAr
+        unit_of_measurement: 'VAr'
         register: 2
         count: 2
         data_type: int
@@ -46,7 +64,7 @@ sensor:
 
       - name: Ampere InverterActivePower
         hub: miampere
-        unit_of_measurement: kW
+        unit_of_measurement: 'kW'
         register: 4
         count: 2
         data_type: int
@@ -56,7 +74,7 @@ sensor:
 
       - name: Ampere InverterReactivePower
         hub: miampere
-        unit_of_measurement: VAr
+        unit_of_measurement: 'VAr'
         register: 6
         count: 2
         data_type: int
@@ -66,7 +84,7 @@ sensor:
 
       - name: Ampere InverterPVPower
         hub: miampere
-        unit_of_measurement: kW
+        unit_of_measurement: 'kW'
         register: 8
         count: 2
         data_type: int
@@ -76,7 +94,7 @@ sensor:
 
       - name: Ampere ExternalPVPower
         hub: miampere
-        unit_of_measurement: kW
+        unit_of_measurement: 'kW'
         register: 10
         count: 2
         data_type: int
@@ -86,7 +104,7 @@ sensor:
 
       - name: Ampere InverterBatteryPower
         hub: miampere
-        unit_of_measurement: kW
+        unit_of_measurement: 'kW'
         register: 12
         count: 2
         data_type: int 
@@ -176,7 +194,7 @@ sensor:
 
       - name: Ampere ChargeAvailable
         hub: miampere
-        unit_of_measurement: kW
+        unit_of_measurement: 'kW'
         register: 30
         count: 2
         data_type: int
@@ -186,7 +204,7 @@ sensor:
 
       - name: Ampere DischargeAvailable
         hub: miampere
-        unit_of_measurement: kW
+        unit_of_measurement: 'kW'
         register: 32
         count: 2
         data_type: int 
@@ -196,23 +214,17 @@ sensor:
 
       - name: Ampere Status
         hub: miampere
-        # unit_of_measurement: kW
         register: 34
         count: 2
         data_type: int
         register_type: input
-        # scale: 0.001
-        # precision: 2             
 
       - name: Ampere Alarms
         hub: miampere
-        # unit_of_measurement: kW
         register: 36
         count: 2
         data_type: int 
         register_type: input 
-        # scale: 0.001
-        # precision: 2  
 
       - name: Ampere InverterPVVoltage
         hub: miampere
@@ -226,32 +238,20 @@ sensor:
 
       - name: Ampere WorkingMode
         hub: miampere
-        # unit_of_measurement: 'V'
         register: 40
         count: 2
         data_type: int
         register_type: input 
-        # scale: 0.1
-        #precision: 1 
 
       - name: Ampere Demand
         hub: miampere
-        unit_of_measurement: 'W'
+        unit_of_measurement: 'kW'
         register: 42
         count: 2
         data_type: int
         register_type: input 
         scale: 0.001
         precision: 2                 
-
-
-# Si quisiéramos hacer un template:
-#  - platform: template
-#    sensors:
-#      consumo_bateria:
-#        value_template: '{{ (states.sensor.ampere_inv_ap.state | float) - (states.sensor.ampere_inv_pvpow.state | float) - (states.sensor.ampere_meteractivepower.state | float) | round(2) }}'
-#        friendly_name: "Consumo desde batería"
-#        unit_of_measurement: kW
 
 
 input_boolean: # ----------------------------------------------------------------------------------------------------------------------------

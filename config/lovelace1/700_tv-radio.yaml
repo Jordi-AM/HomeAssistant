@@ -1,0 +1,166 @@
+title: 700_tv-radio
+path: tv_radio
+icon: mdi:radio
+panel: true
+cards:
+  - type: vertical-stack           
+    cards:    
+      - !include /config/lovelace1/000_top_barv2.yaml
+
+
+      - type: custom:layout-card
+        layout: horizontal # auto vertical horizontal
+        column_num: 2
+        # max_columns: 6
+        # column_width: 50
+        max_width: [50%, 50%]
+        #min_height: 100
+        #rebuild: 1000
+        cards:
+
+
+          - type: custom:mini-media-player
+            entity: media_player.superyo
+            artwork: cover  # cover  full-cover none full-cover-fit
+            source: icon   # full  icon
+            more_info: true 
+            info: scroll   #short scroll    
+            scale: 1.1
+
+          - type: custom:mini-media-player
+            entity: media_player.miniyo
+            artwork: cover  # cover  full-cover none full-cover-fit
+            source: icon   # full  icon
+            more_info: true 
+            info: scroll   #short scroll    
+            scale: 1.1
+
+
+      - type: custom:layout-card
+        layout:  horizontal # auto vertical horizontal
+        column_width: 150px
+        min_columns: 8
+        max_columns: 8
+
+
+          # -------------------------------------------------------------------------------------------------------------------
+          # --------------------------------- TERCERA COLUMNA: Emisoras de radio ----------------------------------------------
+          # -------------------------------------------------------------------------------------------------------------------
+
+          # directorios de radios
+          # https://directory.shoutcast.com/Search
+          # http://nowsat.info/foro/viewtopic.php?t=7425
+          # http://www.radio-browser.info/gui/#!/
+          # https://github.com/home-assistant/home-assistant/blob/dev/homeassistant/components/media_player/const.py
+          
+# http://www.radio-espana.es/us/beam-fm-adult-hits       #http://shoutcast.beamfm.net:8512/; 
+      
+        cards:
+          - type: picture
+            image: /local/img/radio/r_los40.png
+            tap_action:
+              action: call-service
+              service: script.radio_comedor
+              service_data:
+                url: http://playerservices.streamtheworld.com/api/livestream-redirect/Los40.mp3
+
+          - type: picture
+            image: /local/img/radio/r_m80.png
+            tap_action:
+              action: call-service
+              service: script.radio_comedor
+              service_data:
+                url: http://playerservices.streamtheworld.com/api/livestream-redirect/M80RADIO.mp3
+
+
+          - type: picture
+            image: /local/img/radio/flaixbac.png
+            tap_action:
+              action: call-service
+              service: script.radio_comedor
+              service_data:
+                url: https://flaixbac.streaming-pro.com:8005/flaixbac.mp3
+
+          - type: picture
+            image: /local/img/radio/r_cadenadial.png
+            tap_action:
+              action: call-service
+              service: script.radio_comedor
+              service_data:
+                url: http://playerservices.streamtheworld.com/api/livestream-redirect/CADENADIAL.mp3
+          
+          - type: picture
+            image: /local/img/radio/r_kissfm.png
+            tap_action:
+              action: call-service
+              service: script.radio_comedor
+              service_data:
+                url: http://kissfm.kissfmradio.cires21.com/kissfm.mp3
+
+          - type: picture
+            image: /local/img/radio/r_rockfm.png
+            tap_action:
+              action: call-service
+              service: script.radio_comedor
+              service_data:
+                url: https://flucast-b02-01.flumotion.com/cope/rockfm.mp3 
+
+          - type: picture
+            image: /local/img/radio/r_melodiafm.png
+            tap_action:
+              action: call-service
+              service: script.radio_comedor
+              service_data:
+                url: http://icecast-streaming.nice264.com/melodiafm 
+
+          - type: picture
+            image: /local/img/radio/r_maximafm.png
+            tap_action:
+              action: call-service
+              service: script.radio_comedor
+              service_data:
+                url: http://playerservices.streamtheworld.com/api/livestream-redirect/MAXIMAFM.mp3
+
+          - type: picture
+            image: /local/img/radio/dance_elec/housenation.png
+            tap_action:
+              action: call-service
+              service: script.radio_comedor
+              service_data:
+                url: http://radio.housenationuk.com:9000/;
+
+          - type: picture
+            image: /local/img/radio/dance_elec/mix.png
+            tap_action:
+              action: call-service
+              service: script.radio_comedor
+              service_data:
+                url: http://radio.streemlion.com:3590/stream
+
+          - type: picture
+            image: /local/img/radio/dance_elec/nexus.png
+            tap_action:
+              action: call-service
+              service: script.radio_comedor
+              service_data:
+                url: http://stream4.nexus.radio/nexusdance.mp3
+
+          - type: picture
+            image: /local/img/radio/costadelmar.png
+            tap_action:
+              action: call-service
+              service: script.radio_comedor
+              service_data:
+                url: http://stream.cdm-chillout.com:8020/stream-mp3-Chill
+        
+          - type: picture
+            image: /local/img/radio/klassic_radio.png
+            tap_action:
+              action: call-service
+              service: script.radio_comedor
+              service_data:
+                url: http://stream.klassikradio.de/live/mp3-128/stream.klassikradio.de/
+
+
+          - type: custom:gap-card
+          - type: custom:gap-card

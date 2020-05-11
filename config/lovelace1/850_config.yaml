@@ -1,0 +1,80 @@
+title: 850_config
+path: config
+icon: mdi:cog
+panel: true
+cards:
+  - type: vertical-stack           
+    cards:    
+      - !include /config/lovelace1/000_top_barv2.yaml
+
+      - type: markdown
+        content: |
+           Pantalla de configuración
+
+      - type: horizontal-stack             # Fila 1 ------------------------------
+        cards:
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - type: section
+                label: INTRFICIE
+              - entity: input_boolean.solo_bateria_baja
+              - entity: input_boolean.aleatorio_automatico
+          - type: vertical-stack
+            cards:
+              - type: glance
+                title: Restore
+                entities:
+                  #- entity: zone.home
+                  #  icon: 'mdi:restart'
+                  #  name: Lovelace
+                  #  tap_action:
+                  #    action: call-service
+                  #    service: frontend.reload_themes
+                  - entity: zone.home  # no sirve para nada, pero es obligatorio indicar una entidad
+                    icon: 'mdi:restart'
+                    name: Home Assistant (Soft)
+                    tap_action:
+                      action: call-service
+                      service: homeassistant.restart
+                  - entity: zone.home
+                    icon: 'mdi:restart'
+                    name: Server (Hard)
+                    tap_action:
+                      action: call-service
+                      service: hassio.host_reboot
+
+                # Muestra entidades "ROTAS" (unknow)
+              - type: custom:auto-entities
+                card:
+                  type: entities
+                  title: Entidades rotas
+                  show_header_toggle: false
+                filter:
+                  include:
+                    - state: "unknown"
+                  exclude:
+                    - entity_id: group.*
+
+
+          - type: entities
+            # title: ENTITIES 
+            show_header_toggle: false
+            entities:
+              - type: section
+                label: TAREAS
+              - entity: script.full_backup_a_drive
+                secondary_info: last-changed
+
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - type: section
+                label: ENTIDADES
+              - entity: input_select.hay_cole
+              - entity: input_boolean.tomar_pastilla
+              - entity: automation.sonar_timbre
+              - entity: input_select.mapas_tiempo
+              - entity: input_boolean.iguala_luces
+              - entity: input_boolean.encender_ordenador
+              #- entity: input_select.quien_en_casa

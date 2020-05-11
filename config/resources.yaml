@@ -44,6 +44,15 @@
 - url: /local/community/lovelace-slider-entity-row/slider-entity-row.js
   type: module
 
+ #- url: /local/community/power-wheel-card/power-wheel-card.js
+ #  type: module
+
+- url: /local/community/mini-graph-card/mini-graph-card-bundle.js?v=0.9.3
+  type: module
+
+- url: /local/community/light-entity-card/light-entity-card.js
+  type: js
+
   #                                                                                                                           #
   #############################################################################################################################
 

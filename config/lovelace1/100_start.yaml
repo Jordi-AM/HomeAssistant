@@ -23,12 +23,37 @@ cards:
           # - type: custom:compact-custom-header  
       - type: horizontal-stack
         cards:
-          - type: markdown
-            title: MARKDOWN
-
-            content: |
-              Hello world
-
+          - type: "custom:atomic-calendar"
+            title: "Calendario"
+            entities:
+              - entity: calendar.jordiaguileram_gmail_com
+              - entity: calendar.emav_emav
+              - entity: calendar.marti
+            defaultMode: 1 # evento
+            untilText: 'Until'
+            showColors: true
+            maxDaysToShow: 15
+            showLocation: false
+            showMonth: false
+            showCurrentEventLine: false
+            dateColor: white
+            dateSize: 90
+            timeColor: yellow
+            timeSize: 90
+            titleColor: white
+            titleSize: 100
+            locationIconColor: 'rgb(230, 124, 115)'
+            locationLinkColor: black
+            locationTextSize: 90
+            dimFinishedEvents: true
+            finishedEventOpacity: 0.6
+            finishedEventFilter: 'grayscale(100%)'
+            dayWrapperLineColor: black
+            eventBarColor: blue
+            showProgressBar: true
+            progressBarColor: blue
+            showDescription:  true 
+            fullDayEventText: Todo el día
 
           - type: 'custom:clockwork-card'         # Reloj-------------------------------------------------
             #title: "My Time"
@@ -82,4 +107,20 @@ cards:
                 style:
                   top: 37%
                   left: 37%
+                  width: 8%
+
+              - type: state-label
+                entity: binary_sensor.movil_ana
+                title: ANA
+                style:
+                  top: 37%
+                  left: 50%
+                  width: 8%
+
+              - type: state-label
+                entity: binary_sensor.movil_jordi
+                title: Jordi
+                style:
+                  top: 37%
+                  left: 24%
                   width: 8%

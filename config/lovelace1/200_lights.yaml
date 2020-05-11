@@ -238,19 +238,64 @@ cards:
                       left: 81%
                       transform: scale(2,2)
 
-                    
-
- 
- 
-
                   - type: image
                     image: /local/img/lovelace/200_lights/power.png
                     tap_action: 
                       action: call-service
                       service: script.apagar_todas_luces
                     style:
-                      top: 12%
-                      left: 5%
+                      top: 0%
+                      left: 2%
+                      transform: scale(.65,.65)
+
+                  - type: image
+                    image: /local/img/lovelace/200_lights/wheel2.png
+                    tap_action: 
+                      action: call-service
+                      service: browser_mod.command
+
+                      service_data:
+                        command: popup
+                        title: Configuración luces
+                        deviceID:
+                          - this
+                        large: true
+                        style:
+                            border-radius: 20px
+                            --ha-card-border-radius: 20px
+                            --ha-card-background: grey
+                        card:
+                          type: horizontal-stack
+                          cards:
+                            - type: custom:light-entity-card
+                              entity: light.leds
+                            - type: vertical-stack
+                              cards:
+                                - type: custom:light-entity-card
+                                  entity: light.luces_principales
+                                - type: custom:light-entity-card
+                                  entity: light.luces_traseras
+                            - type: entities
+                              show_header_toggle: false
+                              entities:
+                                - light.jordi
+                                - light.ana
+                                - light.marti   
+                                - type: divider
+                                - light.uno
+                                - light.dos
+                                - light.tres
+                                - light.nil
+                                - type: divider
+                                - light.mueble
+                                - light.cortina
+                                - light.ventana
+
+
+                    style:
+                      top: 18%
+                      left: 2%
+                      transform: scale(.65,.65)
 
                   # --- Room Temperatures ---        
                   - type: state-label
@@ -278,7 +323,16 @@ cards:
       # *****************************************************************************************************************      
       - type: horizontal-stack
         cards:
-          - type: picture-elements
-            image: /local/img/lovelace/bottom.svg
-            elements: []
+#          - type: picture-elements
+#            image: /local/img/lovelace/bottom.svg
+#            elements: []
+
+          - type: custom:slider-entity-row
+            entity: input_number.principales
+
+          - type: custom:slider-entity-row
+            entity: input_number.traseras
+
+  
+
 

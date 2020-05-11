@@ -1,6 +1,6 @@
 title: 520_spotify
 path: spotify
-#icon: mdi:home-circle
+icon: mdi:spotify
 panel: true
 cards:
 
@@ -42,7 +42,7 @@ cards:
                     service: script.activa_spotify8
                     service_data: {"entidad":"input_boolean.musica_cocina"}
                       #entidad: "media_player.altavoz_cocina_main" 
-                  hold_action:
+                  double_tap_action:
                     action: call-service
                     service: script.pon_radio
                     service_data:
@@ -92,7 +92,7 @@ cards:
                     service: script.activa_spotify8
                     service_data: {"entidad":"input_boolean.musica_lavabo"}
 
-                  hold_action:
+                  double_tap_action:
                     action: call-service
                     service: script.pon_radio
                     service_data:
@@ -140,7 +140,7 @@ cards:
                     action: call-service
                     service: script.activa_spotify8
                     service_data: {"entidad":"input_boolean.musica_nil"}
-                  hold_action:
+                  double_tap_action:
                     action: call-service
                     service: script.pon_radio
                     service_data:
@@ -150,7 +150,7 @@ cards:
             - type: conditional                                                 # ************** SONANDO  ****************
               conditions:
                 - entity: media_player.altavoz_nil_main
-                  state: "pplaying"
+                  state: "playing"
               card:
                   type: custom:mini-media-player
                   entity: media_player.altavoz_nil_main
@@ -172,6 +172,7 @@ cards:
                   more_info: true 
                   info: scroll   #short scroll  
 
+ 
         # El código para el altavoz del lavabo venía aquí. Se ha guardado en 400_spotify_comedor.txt hasta que se arregle spotcast
 
         #****************************************************************************************************************
@@ -196,7 +197,7 @@ cards:
 
             filter:
               include:
-                - entity_id: "*caratulas*"
+                - entity_id: "*caratulas*"  # muestra todos los input_boolean.caratulas? que encuentre
                   options:
                     tap_action:
                       action: call-service
@@ -244,18 +245,6 @@ cards:
 
           - type: conditional
             conditions:
-              - entity: input_boolean.comedor
-                state: "on"
-            card:
-              type: entities
-              entities:
-                - type: custom:slider-entity-row
-                  entity: media_player.superyo
-                  #full_row: true
-
-
-          - type: conditional
-            conditions:
               - entity: media_player.spotify_bitmap
                 state: "unavailable"
             card:
@@ -263,8 +252,6 @@ cards:
               name: Error SPOTIFY
               # icon: 'mdi:alert-circle'  Si lo pongo, sale muy grande
               icon_height: 40
-
-
 
         #****************************************************************************************************************
         #****************************************************************************************************************
@@ -336,167 +323,4 @@ cards:
         conditions:
           - entity: input_boolean.caratulas5
             state: "on"
-        card:
-          type: vertical-stack
-          cards:
-
-            - type: custom:layout-card
-              layout: horizontal # auto vertical horizontal
-              column_num: 5
-              # max_columns: 6
-              # column_width: 50
-              #max_width: [25%, 30%, 30%, 15%]
-              max_width: [20%, 20%, 20%, 20%, 20%]
-              min_height: 100
-              max_height: 150
-              rebuild: 1000
-
-                # -------------------------------------------------------------------------------------------------------------------
-                # --------------------------------- TERCERA COLUMNA: Emisoras de radio ----------------------------------------------
-                # -------------------------------------------------------------------------------------------------------------------
-
-                # directorios de radios
-                # https://directory.shoutcast.com/Search
-                # http://nowsat.info/foro/viewtopic.php?t=7425
-                # http://www.radio-browser.info/gui/#!/
-                # https://github.com/home-assistant/home-assistant/blob/dev/homeassistant/components/media_player/const.py
-                
-
-            
-              cards:
-                - type: picture
-                  image: /local/img/radio/r_los40.png
-                  tap_action:
-                    action: call-service
-                    service: script.radio_comedor
-                    service_data:
-                      url: http://playerservices.streamtheworld.com/api/livestream-redirect/Los40.mp3
-
-                - type: picture
-                  image: /local/img/radio/r_m80.png
-                  tap_action:
-                    action: call-service
-                    service: script.radio_comedor
-                    service_data:
-                      url: http://playerservices.streamtheworld.com/api/livestream-redirect/M80RADIO.mp3
-
-                - type: picture
-                  image: /local/img/radio/r_cadenadial.png
-                  tap_action:
-                    action: call-service
-                    service: script.radio_comedor
-                    service_data:
-                      url: http://playerservices.streamtheworld.com/api/livestream-redirect/CADENADIAL.mp3
-
-                - type: picture
-                  image: /local/img/radio/r_kissfm.png
-                  tap_action:
-                    action: call-service
-                    service: script.radio_comedor
-                    service_data:
-                      url: http://kissfm.kissfmradio.cires21.com/kissfm.mp3
-
-                - type: picture
-                  image: /local/img/radio/r_rockfm.png
-                  tap_action:
-                    action: call-service
-                    service: script.radio_comedor
-                    service_data:
-                      url: http://104.156.244.180:8484/stream
-
-                - type: picture
-                  image: /local/img/radio/r_melodiafm.png
-                  tap_action:
-                    action: call-service
-                    service: script.radio_comedor
-                    service_data:
-                      url: http://icecast-streaming.nice264.com/melodiafm 
-
-                - type: picture
-                  image: /local/img/radio/r_maximafm.png
-                  tap_action:
-                    action: call-service
-                    service: script.radio_comedor
-                    service_data:
-                      url: http://playerservices.streamtheworld.com/api/livestream-redirect/MAXIMAFM.mp3
-                  
-            - type: custom:layout-card
-              layout: horizontal # auto vertical horizontal
-              column_num: 7
-              # max_columns: 6
-              # column_width: 50
-              #max_width: [25%, 30%, 30%, 15%]
-              # max_width: [140%, 20%, 20%, 20%, 20%]
-              min_height: 100
-              max_height: 150
-              rebuild: 1000
-
-                # -------------------------------------------------------------------------------------------------------------------
-                # --------------------------------- TERCERA COLUMNA: Emisoras de radio ----------------------------------------------
-                # -------------------------------------------------------------------------------------------------------------------
-
-                # directorios de radios
-                # https://directory.shoutcast.com/Search
-                # http://nowsat.info/foro/viewtopic.php?t=7425
-                # http://www.radio-browser.info/gui/#!/
-                # https://github.com/home-assistant/home-assistant/blob/dev/homeassistant/components/media_player/const.py
-                
-
-            
-              cards:
-                - type: picture
-                  image: /local/img/radio/r_los40.png
-                  tap_action:
-                    action: call-service
-                    service: script.radio_comedor
-                    service_data:
-                      url: http://playerservices.streamtheworld.com/api/livestream-redirect/Los40.mp3
-
-                - type: picture
-                  image: /local/img/radio/r_m80.png
-                  tap_action:
-                    action: call-service
-                    service: script.radio_comedor
-                    service_data:
-                      url: http://playerservices.streamtheworld.com/api/livestream-redirect/M80RADIO.mp3
-
-                - type: picture
-                  image: /local/img/radio/r_cadenadial.png
-                  tap_action:
-                    action: call-service
-                    service: script.radio_comedor
-                    service_data:
-                      url: http://playerservices.streamtheworld.com/api/livestream-redirect/CADENADIAL.mp3
-
-                - type: picture
-                  image: /local/img/radio/r_kissfm.png
-                  tap_action:
-                    action: call-service
-                    service: script.radio_comedor
-                    service_data:
-                      url: http://kissfm.kissfmradio.cires21.com/kissfm.mp3
-
-                - type: picture
-                  image: /local/img/radio/r_rockfm.png
-                  tap_action:
-                    action: call-service
-                    service: script.radio_comedor
-                    service_data:
-                      url: http://104.156.244.180:8484/stream
-
-                - type: picture
-                  image: /local/img/radio/r_melodiafm.png
-                  tap_action:
-                    action: call-service
-                    service: script.radio_comedor
-                    service_data:
-                      url: http://icecast-streaming.nice264.com/melodiafm 
-
-                - type: picture
-                  image: /local/img/radio/r_maximafm.png
-                  tap_action:
-                    action: call-service
-                    service: script.radio_comedor
-                    service_data:
-                      url: http://playerservices.streamtheworld.com/api/livestream-redirect/MAXIMAFM.mp3
-              
+        card: []

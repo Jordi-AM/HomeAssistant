@@ -201,7 +201,7 @@
       data_template:
         title: 'HA: IMPORTANTE'
         target:
-        - jordixxxxx@gmail.com
+        - jordiaguileram@gmail.com
         message: >-
           There is a Home Assistant upgrade for Hass.io pending!
           Version {{ states('sensor.version_available') }} just got released!
@@ -288,14 +288,154 @@
 
 
 
-#- alias: Llegando a casa home
-#  trigger:
-#  - entity_id: device_tracker.jordi
-#    platform: state
-#    to: home
-#  action:
-#    - service: xiaomi_aqara.play_ringtone      
-#      data:
-#        ringtone_id: '7'
-#        ringtone_vol: '0'
+- alias: Llegando a casa home
+  trigger:
+  - entity_id: device_tracker.ana
+    platform: state
+    to: home
+  - entity_id: binary_sensor.movil_ana
+    platform: state
+    to: 'on'
+  action:
+    - service: xiaomi_aqara.play_ringtone      
+      data:
+        ringtone_id: '7'
+        ringtone_vol: '0'
 
+
+
+# ------------------------------------------------------------------------------------------------------
+# ---------------------------------- A DESPERTARSE  ---------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------
+
+
+- id: a_despertarse
+  alias: Establece escena DESPIERTO (wifi)
+  trigger:
+    - platform: state
+      entity_id: device_tracker.jordi
+      to: 'home'
+  condition:
+    - condition: state
+      entity_id: input_select.quien_en_casa
+      state: 'Durmiendo'
+    - condition: time
+      after: '06:00:00'
+      before: '10:00:00'
+  action:
+    - service: telegram_bot.send_message
+      data:
+        message: Despierto? 
+        target: 440192507
+    - service: scene.turn_on
+      entity_id: scene.despierto 
+
+- id: a_despertarse2
+  alias: Establece escena DESPIERTO (presencia)
+  trigger:
+    - platform: state
+      entity_id: input_select.quien_en_casa
+      from: 'Durmiendo'      
+  condition:
+    - condition: time
+      after: '06:00:00'
+      before: '10:00:00'
+  action:
+    - service: telegram_bot.send_message
+      data:
+        message: Despierto 2? 
+        target: 440192507
+    - service: scene.turn_on
+      entity_id: scene.despierto 
+
+
+# ------------------------------------------------------------------------------------------------------      
+# ----------------------------------------------- AL COLE ----------------------------------------------   
+# ------------------------------------------------------------------------------------------------------
+- id: preaviso_cole
+  alias: Pre aviso cole
+  trigger:
+  - at: 08:30
+    platform: time
+  condition:
+    - condition: state
+      entity_id: 'binary_sensor.workday_sensor' 
+      state: 'on'
+    - condition: state
+      entity_id: 'input_select.hay_cole' 
+      state: Si
+  action:
+  - service: media_player.volume_set
+    data_template:
+      entity_id: media_player.superyo
+      volume_level: 0.7
+  - service: tts.google_say  
+    data:  
+      entity_id: media_player.superyo
+      message: "Son las 8:30. A lavarse los dientes y preparar la mochila" 
+  - service: media_player.volume_set
+    data_template:
+      entity_id: media_player.superyo
+      volume_level: 0.5
+
+- id: aviso_cole1
+  alias: Primer aviso cole
+  trigger:
+  - at: 08:40
+    platform: time
+  condition:
+    - condition: state
+      entity_id: 'binary_sensor.workday_sensor' 
+      state: 'on'
+    - condition: state
+      entity_id: 'input_select.hay_cole' 
+      state: Si
+    
+  action:
+  - service: media_player.volume_set
+    data_template:
+      entity_id: media_player.superyo
+      volume_level: 0.7
+  - service: tts.google_say  
+    data:  
+      entity_id: media_player.superyo
+      message: "Son las 8:40. Faltan 5 minutos para ir al cole" 
+  - service: media_player.volume_set
+    data_template:
+      entity_id: media_player.superyo
+      volume_level: 0.5
+      
+      
+- id: aviso_cole2
+  alias: Segundo aviso cole
+  trigger:
+  - at: 08:45
+    platform: time
+  condition:
+    - condition: state
+      entity_id: 'binary_sensor.workday_sensor' 
+      state: 'on'
+    - condition: state
+      entity_id: 'input_select.hay_cole' 
+      state: Si
+  action:
+  - service: media_player.volume_set
+    data_template:
+      entity_id: media_player.superyo
+      volume_level: 0.7
+  - service: tts.google_say  
+    data:  
+      entity_id: media_player.superyo
+      message: "Son las 8:45. Hora de ir al cole. Apagando la tele en 15 segundos" 
+  - delay: 00:00:45
+  - service: media_player.turn_off
+    entity_id: media_player.lg
+  - delay: 00:00:15
+  - service: tts.google_say  
+    data:  
+      entity_id: media_player.superyo
+      message: "Que tengáis todos un buen día"       
+  - service: media_player.volume_set
+    data_template:
+      entity_id: media_player.superyo
+      volume_level: 0.5

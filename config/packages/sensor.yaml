@@ -58,7 +58,7 @@ sensor:
     api_key: !secret api_darksy
 #    name: 'El tiempo'
     latitude: !secret latitude
-    longitude: !secret longitude
+    longitude: !secret longitude 
     forecast:
       - 0
       - 1

@@ -1,0 +1,91 @@
+title: 450_xiaomi
+path: aspirino
+icon: mdi:robot-vacuum
+panel: true
+cards:
+  - type: vertical-stack           
+    cards:    
+      - !include /config/lovelace1/000_top_barv2.yaml
+      - type: horizontal-stack
+        cards:
+          - type: custom:xiaomi-vacuum-card # https://github.com/benct/lovelace-xiaomi-vacuum-card
+            entity: vacuum.aspirino
+            name: Aspirino
+            image: /local/img/lovelace/vacuum.png
+
+          - type: custom:xiaomi-vacuum-map-card #http://homeassistant.local:8123/hacs/repository/193372044
+            entity: vacuum.aspirino
+            map_image: '/local/img/lovelace/plano.jpg'
+            modes: 
+              - go_to_target
+              - zoned_cleanup
+              - predefined_zones
+            default_mode: predefined_zones
+            calibration_points:
+              - vacuum:
+                  x: 25186
+                  y: 29090
+                map:
+                  x: 227
+                  y: 69
+              - vacuum:
+                  x: 25186
+                  y: 18690
+                map:
+                  x: 20
+                  y: 888
+              - vacuum:
+                  x: 32136
+                  y: 29090
+                map:
+                  x: 641
+                  y: 157
+            zones:
+              - [[25500, 25950, 28850, 23150]]
+              - [[27955, 26917, 24325, 22958]]
+
+          - type: vertical-stack   #https://community.home-assistant.io/t/xiaomi-vacuum-cleaner-card/64456/5
+            cards:
+              - type: entities
+                show_header_toggle: false
+                entities:
+                  - entity: automation.horario_de_limpieza_para_el_fin_de_semana
+                    name: Limpiar festivos
+                  - type: divider
+                    style:
+                      height: 1px
+                      width: 80%
+                      margin-left: auto
+                      margin-right: auto
+                      background: '#62717b'
+                  - entity: automation.horario_de_limpieza_entre_semana
+                    name: Limpiar laborables
+
+              - type: conditional
+                conditions:
+                  - entity: automation.horario_de_limpieza_para_el_fin_de_semana
+                    state: "on"
+                card:
+                  type: entities
+                  entities:
+                    #- automation.horario_de_limpieza_para_el_fin_de_semana
+                    - entity: sensor.vacuum_start_time_weekend
+                      name: 'INICIO FESTIVOS:'
+                    - input_number.vacuum_start_hour_weekend
+                    - input_number.vacuum_start_minutes_weekend
+                    
+
+              - type: conditional
+                conditions:
+                  - entity: automation.horario_de_limpieza_entre_semana
+                    state: "on"
+                card:
+                  type: entities
+                  entities:
+                    #- automation.horario_de_limpieza_entre_semana
+                    - entity: sensor.vacuum_start_time_weekdays
+                      name: 'INICIO LABORABLES:'
+                    - input_number.vacuum_start_hour_weekdays
+                    - input_number.vacuum_start_minutes_weekdays
+
+          - type: custom:gap-card

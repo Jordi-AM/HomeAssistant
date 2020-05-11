@@ -1,0 +1,43 @@
+sensor:
+# Ejemplo de como crear sensores con los datos de una entidad
+# https://www.home-assistant.io/components/sensor.template/
+
+# si quiero ver fecha y hora:
+# "{{ as_timestamp(now()) | timestamp_custom('%H:%M   %d/%m') }}"
+
+  - platform: template
+    sensors:
+      # info de estados en https://www.home-assistant.io/docs/configuration/state_object/
+      # templating en https://www.home-assistant.io/docs/configuration/templating/
+      # Template sensor: https://www.home-assistant.io/components/template/
+
+      # Avoid using states.sensor.temperature, instead use states('sensor.temperature'). It is strongly advised to use the states(), is_state(), state_attr() and is_state_attr() as much as possible, to avoid errors and error message when the entity isn’t ready yet (e.g., during Home Assistant startup).
+
+      # Para mostrar precisión GPS con un solo decimal
+      # movil_precision_gps:
+      #   value_template: "{{ states.device_tracker.honor7.attributes.gps_accuracy| float | round(1) }}"
+      movil_precision_gps:
+         value_template: "{{ state_attr('device_tracker.honor7','gps_accuracy') | float | round(1) }}"
+      movil_bateria:
+        value_template: "{{ state_attr('device_tracker.honor7', 'battery_level') }}"
+      movil_encendido2: 
+        value_template: "{{ states('device_tracker.honor7') }}"   # unknow si no existe
+      # da hora en UTC 0, no en zona horaria correcta
+      # movil_ultima_actualizacion: # https://www.php.net/manual/es/function.strftime.php
+      #   value_template: "{{ states.device_tracker.honor7.last_changed.strftime('%d de %b a las %H:%M') }}"
+
+      # con last_changed no actualizaba, sólo al reiniciar hassio
+      movil_ultima_actualizacion:
+        value_template: "{{ as_timestamp(states.device_tracker.honor7.last_updated) | timestamp_local }}"
+        entity_id: sensor.time
+      movil_tiempo_ultima_actualizacion:
+        value_template: "{{ relative_time(states.device_tracker.honor7.last_updated) }}"
+        entity_id: sensor.time  # así forzamos que se actualice cada minuto. con sensor.date sería cada día
+
+# Muestra el tiempo que hace que cambió en minutos como un float: 0.06793594360351562
+#      movil_ultima_actualizacion3:
+#        value_template: "{{ as_timestamp(now()) - as_timestamp(states.device_tracker.honor7.last_changed) }}"
+# No consigo que pille el formato correctamente
+#      movil_ultima_actualizacion4:
+#              value_template: "{{ strptime((as_timestamp(states.device_tracker.honor7.last_changed) | timestamp_local), '%A-%b-%d') }}"
+

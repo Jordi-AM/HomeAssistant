@@ -22,5 +22,4 @@ custom_header:
 # https://www.home-assistant.io/lovelace/views/
 views:
   - !include /config/lovelace2/b100_start.yaml 
-  - !include /config/lovelace2/b450_xiaomi.yaml
   - !include /config/lovelace2/300_test_barra.yaml  

@@ -45,6 +45,9 @@ Mi configuración HA. Subido 4/24/2020 7:50:11 PM
 - **preaviso\_dormir y aviso_\dormir**: alerta para los niños
 - **activar\_mapaX y mapa\_ciclico**: para mostrar mapas cíclicos del tiempo
 - **aviso\_lluvia\_xxxxx**: diferentes avisos de lluvia (telegram y luz hub)
+- **presencia\_pasillo\_on, presencia\_pasillo\_off**: control luces entrada
+- **pre\_aviso\_cole, primer\_aviso\_cole. segundo\_aviso\_cole**
+
  
 
 ### Para google home
@@ -76,7 +79,9 @@ Mi configuración HA. Subido 4/24/2020 7:50:11 PM
 - **[https://github.com/fondberg/spotcast](https://github.com/fondberg/spotcast "Spotcast")**: permite reproducir Spotify en altavoces google home
 - **[https://github.com/kalkih/mini-media-player](https://github.com/kalkih/mini-media-player "Mini-media-player")**: player compacto
 - **[https://github.com/thomasloven/lovelace-slider-entity-row](https://github.com/thomasloven/lovelace-slider-entity-row "slider-entity-row")**: barra para volumen
-- **[https://github.com/gurbyz/power-wheel-card](https://github.com/gurbyz/power-wheel-card "power-wheel-card")**: componente para mostrar producción placas solares.
+- **[https://github.com/kalkih/mini-graph-card](https://github.com/kalkih/mini-graph-card "mini-graph-card")**: gráficos
+- **[https://github.com/thomasloven/hass-browser_mod](https://github.com/thomasloven/hass-browser_mod "browser-mod")**: acceder al navegador
+- **[https://github.com/ljmerza/light-entity-card](https://github.com/ljmerza/light-entity-card "light-entity-card")**: tarjeta luces
  
 ## 5. Addons
 - Samba Share

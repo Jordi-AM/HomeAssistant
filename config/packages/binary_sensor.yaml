@@ -11,6 +11,18 @@ binary_sensor:
     count: 4
     scan_interval: 100
 
+  - platform: ping
+    host: 192.168.1.52
+    name: Móvil Ana
+    count: 4
+    scan_interval: 77
+
+  - platform: ping
+    host: 192.168.1.55
+    name: Móvil Jordi
+    count: 4
+    scan_interval: 105
+
   - platform: workday
     country: ES
     province: CT

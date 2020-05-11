@@ -19,7 +19,7 @@ http:
 
 # https://domology.es/integracion-de-google-home-en-home-assistant/
 google_assistant:
-  project_id: !secret google_home
+  project_id: !secret google_home 
   exposed_domains:
     - switch
     - light
@@ -31,10 +31,11 @@ google_assistant:
     - vacuum
   entity_config: !include dispositivosGH.yaml
 
+
 #https://www.home-assistant.io/integrations/calendar.google
 google:
-  client_id: !secret calendar_id
-  client_secret: !secret calendar_secret
+  client_id: !secret calendar_id 
+  client_secret: !secret calendar_secret 
 
 tts:
   - platform: google_translate
@@ -152,7 +153,12 @@ device_tracker:
 map:
 
 
-
+browser_mod:
+  devices:
+    03a926fb-96f2f8b6:
+      name: pccasa
+    d60ff5dc-07b2a0df:
+      name: dashboard
 
 #********************************************************************************************************************
 #
