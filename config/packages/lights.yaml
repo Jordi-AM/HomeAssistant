@@ -65,15 +65,15 @@ light:
 
 
 # para establecer brillo luces 
-input_number:
-  principales:
-    min: 0
-    max: 255
-    step: 5
-  traseras:
-    min: 0
-    max: 255
-    step: 5
+#input_number:
+#  principales:
+#    min: 0
+#    max: 255
+#    step: 5
+#  traseras:
+#    min: 0
+#    max: 255
+#    step: 5
 
 
 # Para activas escenas

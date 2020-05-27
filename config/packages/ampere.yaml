@@ -5,6 +5,31 @@ modbus:
   port: 502
 
 sensor:
+
+
+  - platform: statistics
+    entity_id: sensor.temp_baterias
+    name: Estadisticas temperatura baterias
+    sampling_size: 1000
+    max_age:
+      hours: 24
+
+  - platform: statistics
+    entity_id: sensor.temp_inverter
+    name: Estadisticas temperatura inverter
+    sampling_size: 1000
+    max_age:
+      hours: 24
+
+  - platform: statistics
+    entity_id: sensor.temperatura_ampere
+    name: Estadisticas temperatura armario ampere
+    sampling_size: 1000
+    max_age:
+      hours: 24
+
+
+
   - platform: template
     sensors:
 
@@ -30,7 +55,76 @@ sensor:
         unit_of_measurement: "°C"
         friendly_name: ' '  
 
-  #https://community.home-assistant.io/t/updating-a-template-sensor-value-every-24rs-using-automation-to-retrieve-a-switch-attribute-value/58585
+        # https://community.home-assistant.io/t/updating-a-template-sensor-value-every-24rs-using-automation-to-retrieve-a-switch-attribute-value/58585
+
+      
+      # Los valores originales no son recuperables para el històrico, no sé porqué
+      miampere_demand:
+        value_template:  '{{ states("sensor.ampere_demand") | float }}'
+        unit_of_measurement: 'kW'
+      miampere_externalpvpower:
+        value_template: "{{ states('sensor.ampere_externalpvpower') | float }}"
+        unit_of_measurement: 'kW'
+      miampere_inverteractivepower:
+        value_template: "{{ states('sensor.ampere_inverteractivepower') | float}}"
+        unit_of_measurement: 'kW'
+
+      miampere_inverterbatterypower:
+        value_template:  "{{ states('sensor.ampere_inverterbatterypower') | float}}"
+        unit_of_measurement: 'kW'
+      miampere_inverterpvpower:
+        value_template: "{{ states('sensor.ampere_inverterpvpower') | float}}"
+        unit_of_measurement: 'kW'
+      miampere_meteractivepower:
+        value_template: "{{ states('sensor.ampere_meteractivepower') | float}}"
+        unit_of_measurement: 'kW'
+
+
+      #Estos son los sensores que obtienen los mismos valores que la APP del móvil
+      miampere_solacasa:
+        value_template: >
+            {% set a3 = states('sensor.ampere_inverterpvpower') | float %}
+            {% set a8 = states('sensor.ampere_demand') | float %}
+            {% if (a8>=a3) %} {{ a3 }} {% else%} {{ a8 }} {% endif %}
+        unit_of_measurement: 'kW'
+      miampere_solaampere:
+        value_template: >
+            {% set a3 = states('sensor.ampere_inverterpvpower') | float %}
+            {% set a8 = states('sensor.ampere_demand') | float %}
+            {% if (a3>a8) %} {{ (a3-a8) | round (3) }} {% else %} 0 {% endif %}
+        unit_of_measurement: 'kW'
+
+      miampere_ampereared:
+        value_template: >
+            {% set a1 = states('sensor.ampere_meteractivepower') | float %} 
+            {% if (a1<0) %} {{ -a1 }} {% else %} 0 {% endif %}
+        unit_of_measurement: 'kW'
+
+      miampere_redacasa:
+        value_template: >
+            {% set a1 = states('sensor.ampere_meteractivepower') | float %}
+            {% set a8 = states('sensor.ampere_demand') | float %}
+            {% set solacasa = states('sensor.miampere_solacasa') | float %}
+            {% if (a1>0 and a8 > solacasa) %}{{ (a8-solacasa) | round (3) }} {% else %} 0 {% endif %}
+        unit_of_measurement: 'kW'
+
+
+      miampere_redaampere:
+        value_template: >
+          {% set a1 = states('sensor.ampere_meteractivepower') | float %} 
+          {% set redacasa = states('sensor.miampere_redacasa') | float %} 
+          {% set redaampere = (a1 - redacasa) | round (3) %} 
+          {% if (redaampere < 0) %}{% set redaampere = 0 %} {% endif %}
+          {{ redaampere }}
+        unit_of_measurement: 'kW'
+
+      miampere_ampereacasa:
+        value_template: >
+          {% set a8 = states('sensor.ampere_demand') | float %}
+          {% set solacasa = states('sensor.miampere_solacasa') | float %} 
+          {% set redacasa = states('sensor.miampere_redacasa') | float %} 
+          {{ (a8-solacasa-redacasa) | round (3) }}
+        unit_of_measurement: 'kW'
 
 
 
@@ -304,7 +398,7 @@ automation:
     service: telegram_bot.send_message
 
 
-# Para google home assistant
+# Para google home assistant: "ACTIVAR ESTADO BATERÍAS"
 - id: informa_estado_bateria
   alias: informa estado baterías
   trigger:
@@ -349,16 +443,25 @@ automation:
       message: AMPERE CERRADO!!!!
       target: 440192507
 
+- id: alerta_consumo
+  alias: Alerta consumo eléctrico alto
+  trigger:
+    platform: numeric_state
+    entity_id: sensor.ampere_demand
+    above: 4.0
+  action:
+    - service: script.notificacion_google
+      data_template:
+        mensaje: >
+           Consumo eléctrico elevado, {{ states ("sensor.ampere_demand") }} kilowatios
+
 script:
   estado_baterias:      
     alias: Estado baterías AMPERE
     sequence:
+    - delay: 00:00:03  # para que no se una mensaje de google (de acuerdo, ejecuto...) y el de las baterías
     - service: tts.google_say
-      entity_id: media_player.superyo
+      entity_id:  "all" # media_player.superyo  
       data_template:
         message: >
-            La carga de la batería es {{ states.sensor.ampere_batterysoc.state }} por ciento y se está generando {{  states.sensor.ampere_inverterpvpower.state  }}. La temperatura es de {{ states.sensor.temperatura_ampere.state }} grados.
-    - service: telegram_bot.send_message
-      data_template:
-        message: La carga de la batería es {{ states.sensor.ampere_batterysoc.state }} por ciento y se está generando {{  states.sensor.ampere_inverterpvpower.state  }}. La temperatura es de {{ states.sensor.temperatura_ampere.state }} grados.
-        target: 440192507   
+            La carga de la batería es {{ states.sensor.carga_bateria_app.state }} por ciento y se está generando {{  states.sensor.ampere_inverterpvpower.state  }}. La temperatura es de {{ states.sensor.temperatura_ampere.state }} grados.

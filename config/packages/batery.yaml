@@ -1,0 +1,70 @@
+sensor:
+  
+
+    # Recoge dispositivos con batería por debajo de threshold, para ser notificados por la automatización Battery Alert
+    # Si incluimos algún sensor en plataformas diferentes a las especificadas, habrá que indicarlo
+    # no creo necesario que monitorice las baterías de los móviles (device_trackers)
+  - platform: template
+    sensors:
+      battery_status:
+        friendly_name: "Battery Status"
+        entity_id:
+        - input_boolean.battery_status_update
+        value_template: >
+          {%- set threshold = 10 -%}
+          {%- set domains = ['binary_sensor', 'sensor','switch','vacuum'] -%}  
+          {%- for domain in domains -%}
+          {%- for item in states[domain] if ((item.attributes.battery_level is defined and item.attributes['battery_level'] | int < threshold) or ("battery" in item.name | lower and ((item.state | int < threshold and item.state|int != 0) or item.state | lower == "low" or item.state | lower == "unknown"))) -%}
+          {%- if (item.attributes.battery_level is defined and item.attributes['battery_level'] | int < threshold) -%}
+          {{ item.name }} ({{ item.attributes['battery_level'] }}){%- if not loop.last %}, {% endif -%}{% endif -%}
+          {%- endfor -%}
+          {%- endfor -%}
+
+
+       # Creo mi sensor porque el del mando philips tiene el valor de la batería en el estado, y no en battery_level
+      mi_sensor_bateria_mando_philips:
+        friendly_name: Batería mando Philips
+        value_template: >
+          "Mando"
+        attribute_templates:
+          battery_level: >
+              {{ states('sensor.hue_dimmer_switch_1_battery_level') }}
+
+input_boolean:
+  battery_status_update:  # determina si se envían notificaciones de alerta
+    name: Battery Status Update
+
+
+automation:
+
+  # https://community.home-assistant.io/t/howto-create-battery-alert-without-creating-a-template-for-every-device/30576/12   1-oct-17  
+- alias: Battery Status Update  # Actualiza estado baterías
+  trigger:
+    platform: time_pattern
+    minutes: '/60'
+  action:
+  - alias: Battery Status Update
+    service: input_boolean.toggle
+    data:
+      entity_id: input_boolean.battery_status_update
+#---------------------------------------------------------------------------------------------------------------------------
+- alias: 'Battery Alert'        # Envía alertas baterías bajas1
+  trigger:
+    - platform: time
+      at: '08:00:00'
+
+  condition:
+    condition: template
+    value_template: "{% if states('sensor.battery_status') %}{{ true }}{% else %}{{ false }}{% endif %}"
+  action:
+    - service: persistent_notification.create
+      data_template:
+        title: Low Battery levels
+        message: "{{ states('sensor.battery_status') }}"
+        notification_id: low-battery-alert
+
+    - service: telegram_bot.send_message
+      data_template:
+        message: >
+          "Alerta batería baja: {{ states('sensor.battery_status') }}"
+        target: 440192507

@@ -1,0 +1,173 @@
+# ---------------------------------------------- REGLETA 1 ----------------------------------------------
+- type: picture-elements
+  image: /local/img/lovelace/regleta1v2.png
+  elements:
+    - type: state-icon
+      icon: mdi:power
+      entity: switch.enchufe_canal_plus
+      tap_action:
+        action: toggle
+      style:
+        top: 26%
+        left: 16%
+        "--paper-item-icon-color": red
+        "--paper-item-icon-active-color": green
+        "--iron-icon-height": 35px
+        "--iron-icon-width": 35px
+
+    - type: state-icon
+      icon: mdi:power
+      entity: switch.enchufe_pioneer
+      tap_action:
+        action: toggle
+      style:
+        top: 26%
+        left: 35%
+        "--paper-item-icon-color": red
+        "--paper-item-icon-active-color": green
+        "--iron-icon-height": 35px
+        "--iron-icon-width": 35px                      
+
+    - type: state-icon
+      icon: mdi:power
+      entity: switch.enchufe_libre
+      tap_action:
+        action: toggle
+      style:
+        top: 26%
+        left: 53%
+        "--paper-item-icon-color": red
+        "--paper-item-icon-active-color": green
+        "--iron-icon-height": 35px
+        "--iron-icon-width": 35px
+
+    - type: state-icon
+      icon: mdi:power
+      entity: switch.enchufe_nvidia
+      tap_action:
+        action: toggle
+      style:
+        top: 26%
+        left: 72%
+        "--paper-item-icon-color": red
+        "--paper-item-icon-active-color": green
+        "--iron-icon-height": 35px
+        "--iron-icon-width": 35px            
+
+    # -------- Todos los enchufes ---------------
+
+    - type: icon
+      icon: mdi:power
+      tap_action:
+        action: call-service
+        service: homeassistant.turn_off
+        service_data:
+          entity_id: group.regleta1                
+      style:
+        top: 69%
+        left: 85%
+        --iron-icon-fill-color: "red"
+        --iron-icon-height: "35px"
+        --iron-icon-width: "35px"            
+
+    - type: icon
+      icon: mdi:power
+      tap_action:
+        action: call-service
+        service: homeassistant.turn_on
+        service_data:
+          entity_id: group.regleta1                
+      style:
+        top: 69%
+        left: 92%
+        --iron-icon-fill-color: "green"
+        --iron-icon-height: "35px"
+        --iron-icon-width: "35px"      
+
+
+
+# ---------------------------------------------- REGLETA 2 ----------------------------------------------
+- type: picture-elements
+  image: /local/img/lovelace/regleta2v2.png
+  elements:
+    - type: state-icon
+      icon: mdi:power
+      entity: switch.enchufe_pc
+      tap_action:
+        action: toggle
+      style:
+        top: 26%
+        left: 16%
+        "--paper-item-icon-color": red
+        "--paper-item-icon-active-color": green
+        "--iron-icon-height": 35px
+        "--iron-icon-width": 35px
+
+    - type: state-icon
+      icon: mdi:power
+      entity: switch.enchufe_monitor
+      tap_action:
+        action: toggle
+      style:
+        top: 26%
+        left: 35%
+        "--paper-item-icon-color": red
+        "--paper-item-icon-active-color": green
+        "--iron-icon-height": 35px
+        "--iron-icon-width": 35px                      
+
+    - type: state-icon
+      icon: mdi:power
+      entity: switch.enchufe_bluetooth
+      tap_action:
+        action: toggle
+      style:
+        top: 26%
+        left: 53%
+        "--paper-item-icon-color": red
+        "--paper-item-icon-active-color": green
+        "--iron-icon-height": 35px
+        "--iron-icon-width": 35px
+
+    - type: state-icon
+      icon: mdi:power
+      entity: switch.enchufe_infrarrojos
+      tap_action:
+        action: toggle
+      style:
+        top: 26%
+        left: 72%
+        "--paper-item-icon-color": red
+        "--paper-item-icon-active-color": green
+        "--iron-icon-height": 35px
+        "--iron-icon-width": 35px    
+
+    # -------- Todos los enchufes ---------------
+
+    - type: icon
+      icon: mdi:power
+      tap_action:
+        action: call-service
+        service: homeassistant.turn_off
+        service_data:
+          entity_id: group.regleta2                
+      style:
+        top: 69%
+        left: 85%
+        --iron-icon-fill-color: "red"
+        --iron-icon-height: "35px"
+        --iron-icon-width: "35px"            
+
+    - type: icon
+      icon: mdi:power
+      tap_action:
+        action: call-service
+        service: homeassistant.turn_on
+        service_data:
+          entity_id: group.regleta2                
+      style:
+        top: 68%
+        left: 93%
+        --iron-icon-fill-color: "green"
+        --iron-icon-height: "35px"
+        --iron-icon-width: "35px"      

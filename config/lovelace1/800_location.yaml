@@ -26,12 +26,12 @@ cards:
           - type: map
             aspect_ratio: 16:9
             default_zoom: 14
-            hours_to_show: 48
+            hours_to_show: 24
             entities:
-              - device_tracker.jordigps
-              - zone.home
-              - device_tracker.anagps
-              - device_tracker.bici
+              #- device_tracker.jordigps
+              #- zone.home
+              #7- device_tracker.anagps
+              - device_tracker.bici # la entidad debe estar en el recorder
         
           - type: iframe
             # url: https://www.gpsies.com/liveTracking.do?username=JordiA

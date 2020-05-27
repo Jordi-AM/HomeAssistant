@@ -1,6 +1,5 @@
 title: PruebaBarra
 path: prueba_barra
-icon: mdi:home
 panel: true
 cards:
 
@@ -10,3 +9,40 @@ cards:
         height: 4
         size: 55
       - !include /config/lovelace1/000_top_bar.yaml
+
+
+
+
+      - type: custom:plan-coordinates                    
+      - type: picture-elements
+        image: /local/img/lovelace/bottom.svg
+        elements:
+          - type: state-badge
+            entity: sensor.spain_coronavirus_deaths
+            tap_action: toggle
+            style:
+              top: 31%
+              left: 66%
+
+      - type: horizontal-stack
+        cards:
+          - type: "custom:atomic-calendar-revive"
+            defaultMode: 1
+            entities:
+            - entity: calendar.jordiaguileram_gmail_com
+              titleColor: red
+            - entity: calendar.emav_emav
+              titleColor: blue
+            - entity: calendar.marti
+              titleColor: green
+
+          - type: "custom:atomic-calendar-revive"
+            defaultMode: 2
+            entities:
+            - entity: calendar.jordiaguileram_gmail_com
+              titleColor: red
+            - entity: calendar.emav_emav
+              titleColor: blue
+            - entity: calendar.marti
+              titleColor: green
+

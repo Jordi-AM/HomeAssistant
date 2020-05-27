@@ -1,34 +1,52 @@
-# A partir de 0.94, broadlink MP1 dejó de funcionar
-# issue: https://github.com/home-assistant/home-assistant/issues/24338 
-# resuelto si se trata como custom component: https://github.com/af950833/Home-Assistant-Broadlink-MP1-Custom-Component
-# descargar todos los ficheros en \\hassio\config\custom_components\broadlink_mp1 y renombrar correctamente
-# configuración antigua en fichero "broadlink enchufes antiguo.txt"
-# El oficial: https://www.home-assistant.io/integrations/broadlink/
-# RESUELTO. Instalado el original. En broadlink.bak la configuración antigua
-
 switch:
-  - platform: broadlink
+
+# ---------------------------------- REGLETA 1 ---------------------------------------------
+  - platform: broadlink_mp1
     host: 192.168.1.22
     mac: '34:EA:34:C6:D6:F7'
-    type: mp1
-    friendly_name: 'Regleta 2'
-    slots:
-      # friendly name of slots - optional
-      # if not set, slot name will be switch's friendly_name + 'slot {slot_index}'. e.g 'MP1 slot 1'
-      slot_1: 'Enchufe Canal Plus'
-      slot_2: 'Enchufe Pioneer'
-      slot_3: 'Enchufe libre'
-      slot_4: 'Enchufe nVidia'
+    type: mp11
+    friendly_name: 'Enchufe Canal plus'
 
-  - platform: broadlink
+  - platform: broadlink_mp1
+    host: 192.168.1.22
+    mac: '34:EA:34:C6:D6:F7'
+    type: mp12
+    friendly_name: 'Enchufe Pioneer'
+
+  - platform: broadlink_mp1
+    host: 192.168.1.22
+    mac: '34:EA:34:C6:D6:F7'
+    type: mp13
+    friendly_name: 'Enchufe libre'
+
+  - platform: broadlink_mp1
+    host: 192.168.1.22
+    mac: '34:EA:34:C6:D6:F7'
+    type: mp14
+    friendly_name: 'Enchufe nVidia'
+
+# ---------------------------------- REGLETA 2 ---------------------------------------------
+
+  - platform: broadlink_mp1
     host: 192.168.1.24
     mac: '34:ea:34:c6:f7:34'
-    type: mp1
-    friendly_name: 'Regleta 1'
-    slots:
-      # friendly name of slots - optional
-      # if not set, slot name will be switch's friendly_name + 'slot {slot_index}'. e.g 'MP1 slot 1'
-      slot_1: 'Enchufe PC'
-      slot_2: 'Enchufe monitor'
-      slot_3: 'Enchufe bluetooth'
-      slot_4: 'Enchufe infrarrojos'
+    type: mp11
+    friendly_name: 'Enchufe PC'
+
+  - platform: broadlink_mp1
+    host: 192.168.1.24
+    mac: '34:ea:34:c6:f7:34'
+    type: mp12
+    friendly_name: 'Enchufe monitor'
+
+  - platform: broadlink_mp1
+    host: 192.168.1.24
+    mac: '34:ea:34:c6:f7:34'
+    type: mp13
+    friendly_name: 'Enchufe bluetooth'
+
+  - platform: broadlink_mp1
+    host: 192.168.1.24
+    mac: '34:ea:34:c6:f7:34'
+    type: mp14
+    friendly_name: 'Enchufe infrarrojos' 

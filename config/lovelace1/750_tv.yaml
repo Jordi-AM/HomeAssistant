@@ -1,0 +1,229 @@
+title: 750_tv
+path: tv
+icon: mdi:radio
+panel: true
+cards:
+  - type: vertical-stack           
+    cards:    
+      - !include /config/lovelace1/000_top_barv2.yaml
+      - type: horizontal-stack
+        cards:
+          - type: custom:layout-card
+            layout: horizontal # auto vertical horizontal
+            column_num: 3
+            max_width: [46%, 46%, 8%]
+            cards: 
+
+              - type: vertical-stack           
+                cards: 
+                  - type: custom:mini-media-player
+                    entity: media_player.lg
+                    artwork: cover  # cover  full-cover none full-cover-fit
+                    source: icon   # full  icon
+                    more_info: true 
+                    info: scroll   #short scroll    
+                  - type: custom:layout-card
+                    layout: horizontal # auto vertical horizontal
+                    column_num: 4
+                    max_width: [30%, 30%, 40%]
+                    cards: []
+
+              - type: vertical-stack           
+                cards: 
+                  - type: conditional
+                    conditions:
+                      - entity: binary_sensor.satelite_conectado
+                        state: "off"
+                    card:
+                      type: picture
+                      image: /local/img/movistar2/movistar_bn.png
+                      tap_action:
+                        action: call-service
+                        service: script.enciende_movistar
+                  - type: conditional
+                    conditions:
+                      - entity: binary_sensor.satelite_conectado
+                        state: "on"
+                      - entity: media_player.vusolose
+                        state: "off"
+                    card:
+                      type: picture
+                      image: /local/img/movistar2/movistar.png
+                      tap_action:
+                        action: call-service
+                        service: script.activa_movistar
+
+                  - type: conditional
+                    conditions:
+                      - entity: binary_sensor.satelite_conectado
+                        state: "on"
+                      - entity: media_player.vusolose
+                        state: "on"
+                    card:
+                      type: custom:mini-media-player
+                      entity: media_player.vusolose
+                      artwork: cover  
+                      source: icon   
+                      more_info: true 
+                      info: scroll  
+                      #scale: 1.5
+
+                  - type: custom:layout-card
+                    layout: horizontal # auto vertical horizontal
+                    column_num: 4
+                    cards: 
+
+
+                        #************************************************ FILA 1 ***************************************************************
+                      - type: picture
+                        image: /local/img/movistar2/90-BABYtv.png
+                        tap_action:
+                          action: call-service
+                          service: media_player.select_source
+                          service_data:  
+                            source: "BABY TV"
+                            entity_id: media_player.vusolose
+
+                      - type: picture
+                        image: /local/img/movistar2/92-canalpanda.png
+                        tap_action:
+                          action: call-service
+                          service: media_player.select_source
+                          service_data:  
+                            source: "CANAL PANDA"
+                            entity_id: media_player.vusolose
+
+                      - type: picture
+                        image: /local/img/movistar2/91-disneyjunior.png
+                        tap_action:
+                          action: call-service
+                          service: media_player.select_source
+                          service_data:  
+                            source: "DISNEY JR"
+                            entity_id: media_player.vusolose
+
+
+                      - type: picture
+                        image: /local/img/movistar2/93-NICKJR.png
+                        tap_action:
+                          action: call-service
+                          service: media_player.select_source
+                          service_data:  
+                            source: "NICK JR"
+                            entity_id: media_player.vusolose
+
+                        #************************************************ FILA 2 ***************************************************************
+                      - type: picture
+                        image: /local/img/movistar2/94-nickelodeon.png
+                        tap_action:
+                          action: call-service
+                          service: media_player.select_source
+                          service_data:  
+                            source: "NICKELODEONHD"
+                            entity_id: media_player.vusolose
+
+                      - type: picture
+                        image: /local/img/movistar2/96-disneychannel.png
+                        tap_action:
+                          action: call-service
+                          service: media_player.select_source
+                          service_data:  
+                            source: "DISNEY CH HD"
+                            entity_id: media_player.vusolose
+
+
+                      - type: picture
+                        image: /local/img/movistar2/97-BOING.png
+                        tap_action:
+                          action: call-service
+                          service: media_player.select_source
+                          service_data:  
+                            source: "BOING"
+                            entity_id: media_player.vusolose
+
+                      - type: picture
+                        image: /local/img/movistar2/98-CLANTV.png
+                        tap_action:
+                          action: call-service
+                          service: media_player.select_source
+                          service_data:  
+                            source: "CLAN  TVE"
+                            entity_id: media_player.vusolose
+
+                        #************************************************ FILA 3 ***************************************************************
+       
+                      - type: picture
+                        image: /local/img/movistar2/07-logo-cero-desk.png
+                        tap_action:
+                          action: call-service
+                          service: media_player.select_source
+                          service_data:  
+                            source: "#0 HD"
+                            entity_id: media_player.vusolose
+
+                      - type: picture
+                        image: /local/img/movistar2/11-CPSERIES.png
+                        tap_action:
+                          action: call-service
+                          service: media_player.select_source
+                          service_data:  
+                            source: "M. SERIES HD"
+                            entity_id: media_player.vusolose
+
+                      - type: picture
+                        image: /local/img/movistar2/12-seriesmania.png
+                        tap_action:
+                          action: call-service
+                          service: media_player.select_source
+                          service_data:  
+                            source: "M.Seriesmania HD"
+                            entity_id: media_player.vusolose
+
+                      - type: picture
+                        image: /local/img/movistar2/13-FOXGE.png
+                        tap_action:
+                          action: call-service
+                          service: media_player.select_source
+                          service_data:  
+                            source: "FOX HD"
+                            entity_id: media_player.vusolose
+
+
+
+              - type: picture
+                image: /local/img/lovelace/200_lights/wheel2.png
+                tap_action: 
+                  action: call-service
+                  service: browser_mod.command
+
+                  service_data:
+                    command: popup
+                    title: Configuración luces
+                    deviceID:
+                      - this
+                    large: true
+                    style:
+                        border-radius: 20px
+                        --ha-card-border-radius: 20px
+                        --ha-card-background: grey
+                    card:
+
+
+
+    #              - type: vertical-stack           
+    #                cards: 
+                      # ------------------------------------------- MOVISTAR ------------------------------------------------
+                      # http://www.movistarplus.es/programacion-tv?_ga=2.134331957.579580016.1568156687-2139365553.1568156687
+
+                        type: iframe
+                        # url: https://www.gpsies.com/liveTracking.do?username=JordiA
+                        url: 'https://www.movistarplus.es/guiamovil' 
+                        aspect_ratio: 200%
+
+
+
+
+
+
+
+

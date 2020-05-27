@@ -26,11 +26,13 @@ Mi configuración HA. Subido 4/24/2020 7:50:11 PM
 - **map**: para trackear dispositivos
 - **google\_calender**
 - **vacuum**
+- **logger**
+- **enigma2**
+- **browser-mod**
 
 
 ## 2. Automatizaciones ##
 
-- **alerta\_temperatura\_ampere**: envía telegram si la temperatura sube por encima de 35ºC o baja de los 15ºC
 - **backup\_automatico**: llama script full\_backup\_a\_drive cada sábado a las 6:00 am 
 - **ampere\_abierto, ampere\_cerrado:** mensaje a telegram si se abre/cierra la puerta del ampere 
 - **notificacion\_reinicio**: envía mensaje a telegram, suena notificación y enciende luz 10 minutos
@@ -47,6 +49,14 @@ Mi configuración HA. Subido 4/24/2020 7:50:11 PM
 - **aviso\_lluvia\_xxxxx**: diferentes avisos de lluvia (telegram y luz hub)
 - **presencia\_pasillo\_on, presencia\_pasillo\_off**: control luces entrada
 - **pre\_aviso\_cole, primer\_aviso\_cole. segundo\_aviso\_cole**
+- **red\_electrica\_apagada y red\_electrica\_encendida**: avisa apagón y también recuperación. Cuando vuelve, apaga las luces (por defecto se encienden automáticamente)
+- **cleaning\_timer\_weekdays, cleaning_timer_weekend**: programación vacuum
+- **idle_to_off_xxxxxx**: si los altavoces pasan a idle, apaga el input_boolean asociado
+- ***altavoz*\_on, *altavoz*_off**: actualiza el estado en HA si se encienden/apagan desde fuera del sistema
+- **siguiente\_tema, anterior\_tema, cambia\_volumen, siguiente\_mediaplayer**: automatismos asociados al magic cube de xiaomi
+- **battery\_status\_update, battery\_alert**: asociado a las alertas de dispositivos con baterías bajas
+- **alerta_temperatura\_ampere, informa\_estado\_bateria, ampere\_abierto, ampere\_cerrado, alerta\_consumo**: asociados a las baterías ampere
+ 
 
  
 
@@ -62,6 +72,10 @@ Mi configuración HA. Subido 4/24/2020 7:50:11 PM
 - **test\_google\_tts**: testea google say en superyo
 - **elige\escena, control\_leds, encender\_leds, apagar\_leds, apagar\_todas\-luces**: automatizaciones relacionadas con el control de la iluminación
 - **alerta\_luz\_hub**: enciende la luz del hub del color que le pasemos en hexadecimal
+- **pasar\_aspirino**: activar vacuum
+- **activa\_spotify8, pon\_radio, radio\_comedor, musica\_server, pagina\_caratula**: scripts relacionados con poner música
+- **enciende\_movistar, activa\_movistar**: activar satélite
+- **control\_volumen**: llamado por los automatismos del magic cube de xiaomi
 
 ## 4. HACS
 - **[https://github.com/dnguyen800/spotify-playlist-sensor](https://github.com/dnguyen800/spotify-playlist-sensor "Spotify playlist sensor")** Requiere repositorio https://github.com/dnguyen800/spotify-playlist-sensor. Recupera listas de spotify
@@ -82,6 +96,11 @@ Mi configuración HA. Subido 4/24/2020 7:50:11 PM
 - **[https://github.com/kalkih/mini-graph-card](https://github.com/kalkih/mini-graph-card "mini-graph-card")**: gráficos
 - **[https://github.com/thomasloven/hass-browser_mod](https://github.com/thomasloven/hass-browser_mod "browser-mod")**: acceder al navegador
 - **[https://github.com/ljmerza/light-entity-card](https://github.com/ljmerza/light-entity-card "light-entity-card")**: tarjeta luces
+- **[https://github.com/maxwroc/battery-state-card](https://github.com/maxwroc/battery-state-card "Battery State Card")**: per veure estat de les bateries
+- **[https://github.com/custom-cards/bar-card](https://github.com/custom-cards/bar-card "Bar-card")**: usado en estado baterías
+- **[https://github.com/AmoebeLabs/flex-horseshoe-card](https://github.com/AmoebeLabs/flex-horseshoe-card "flex-horseshoe-card")**: gráficos en forma de herradura
+- **[https://github.com/ofekashery/vertical-stack-in-card](https://github.com/ofekashery/vertical-stack-in-card "vertical-stack-in-card")**: similar a vertical-stack u horizontal-stack, pero sin bordes
+- **[https://github.com/custom-cards/plan-coordinates](https://github.com/custom-cards/plan-coordinates "Plan-coordinates")**: para obtener coordenadas em picture-elements 
  
 ## 5. Addons
 - Samba Share

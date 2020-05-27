@@ -18,3 +18,19 @@ escenas:
 #    - input_boolean.boton3
 #    - input_boolean.boton4
 
+
+regleta1:
+  name: Regleta 1
+  entities:
+    - switch.enchufe_canal_plus
+    - switch.enchufe_libre
+    - switch.enchufe_nvidia
+    - switch.enchufe_pioneer
+
+regleta2:
+  name: Regleta 2
+  entities:
+    - switch.enchufe_pc
+    - switch.enchufe_monitor
+    - switch.enchufe_bluetooth
+    - switch.enchufe_infrarrojos

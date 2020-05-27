@@ -15,7 +15,9 @@ input_boolean: # Si está encendida, aviso pastilla
     name: Activar modo kiosko
     icon: fas:desktop
 
-
+  avisar_pastillas_movil: # el aviso diario de la pastilla, lo envía al móvil? Útil en vacaciones
+    name: Avisar pastillas móvil
+    icon: mdi:pill
   # --------------------- Asociados a las pantallas --------------------------------
   screen_home: 
     name: pantalla home

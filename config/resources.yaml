@@ -16,6 +16,9 @@
 - url: /local/community/atomic_calendar/atomic_calendar.js
   type: module
 
+- url: /local/community/atomic-calendar-revive/atomic-calendar-revive.js
+  type: module
+
   # Xiaomi vacuum  https://github.com/benct/lovelace-xiaomi-vacuum-card
 - url: /local/community/lovelace-xiaomi-vacuum-card/xiaomi-vacuum-card.js?v=3.0.1
   type: module
@@ -28,10 +31,11 @@
 - url: /local/community/lovelace-layout-card/layout-card.js
   type: module
 
-  #http://homeassistant.local:8123/hacs/repository/190927524 - This is not a new card. Instead it changes the way pretty much any other card works.
+  # This is not a new card. Instead it changes the way pretty much any other card works.
 - url: /local/community/lovelace-card-mod/card-mod.js
   type: module
 
+  # Para los botones de los mapas del tiempo
 - url: /local/community/button-card/button-card.js
   type: module
 
@@ -52,6 +56,23 @@
 
 - url: /local/community/light-entity-card/light-entity-card.js
   type: js
+
+# Al final lo hago "a mano"
+#- url: /local/community/battery-state-card/battery-state-card.js
+#  type: module
+
+- url: /local/community/bar-card/bar-card.js
+  type: module
+  
+  # problemas de compatibilidad. Substituido el js por el encontrado en https://github.com/Lau-ie/flex-horseshoe-card/tree/0.106.x-compatibility
+- url: /local/community/flex-horseshoe-card/flex-horseshoe-card.js
+  type: module
+  
+- url: /local/community/vertical-stack-in-card/vertical-stack-in-card.js?v=0.3.2
+  type: js  
+
+- url: /local/community/plan-coordinates/plan-coordinates.js
+  type: module
 
   #                                                                                                                           #
   #############################################################################################################################

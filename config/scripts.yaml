@@ -61,3 +61,16 @@ test_popup:
   - service: persistent_notification.create
     data:
       message: Popup
+
+
+# Si el switch está activado, también avisa de recordatorio pastilla al móvil
+telegram_pastilla:
+  alias: telegram recordatorio pastilla
+  sequence:
+    - condition: state
+      entity_id: input_boolean.avisar_pastillas_movil
+      state: 'on'
+    - service: telegram_bot.send_message
+      data:
+        message: Pastilla!!!!
+        target: 440192507

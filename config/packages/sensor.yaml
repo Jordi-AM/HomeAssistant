@@ -10,6 +10,16 @@ sensor:
         friendly_name: "Enchufe Xiaomi ON"
         value_template: '{{ states.switch.xiaomi.attributes.in_use|default(0) }}'
 
+      wemo_consumo:
+        unit_of_measurement: 'kW'
+        friendly_name: "Consumo Wemo"
+        #value_template: '{{ (states.switch.enchufe_aire.attributes.current_power_w | float / 1000)  | round(3) }}'
+        value_template: '{{ (state_attr("switch.enchufe_aire","current_power_w") | float / 1000)  | round(3) }}'
+
+      wemo_consumo_diario:
+        unit_of_measurement: 'kWh'
+        friendly_name: "Consumo diario Wemo"
+        value_template: '{{ (state_attr("switch.enchufe_aire","today_energy_kwh") | float)  | round(3) }}'
 
       moonphases:
         entity_id: sensor.moon
@@ -34,7 +44,34 @@ sensor:
         
 
 
-
+      alertas_synology:
+        value_template: >
+          {% set alertas = 0 %}
+          {% if (not is_state("sensor.synology_below_min_remaining_life_sda","False")) %}
+          {% set alertas = alertas + 1 %}
+          {% endif %}
+          {% if (not is_state("sensor.synology_below_min_remaining_life_sda","False")) %}
+          {% set alertas = alertas + 1 %}
+          {% endif %}
+          {% if (not is_state("sensor.synology_below_min_remaining_life_sdb","False")) %}
+          {% set alertas = alertas + 1 %}
+          {% endif %}
+          {% if (not is_state("sensor.synology_exceeded_max_bad_sectors_sda","False")) %}
+          {% set alertas = alertas + 1 %}
+          {% endif %}
+          {% if (not is_state("sensor.synology_exceeded_max_bad_sectors_sdb","False")) %}
+          {% set alertas = alertas + 1 %}
+          {% endif %}
+          {% if (not is_state("sensor.synology_status_sda","normal")) %}
+          {% set alertas = alertas + 1 %}
+          {% endif %}
+          {% if (not is_state("sensor.synology_status_sdb","normal")) %}
+          {% set alertas = alertas + 1 %}
+          {% endif %}
+          {% if (not is_state("sensor.synology_status_volume_1","normal")) %}
+          {% set alertas = alertas + 1 %}
+          {% endif %}
+          {{ alertas }}
 
     # Para determinar si hay una nueva versión de HA. Avisa en pantalla inicial y también envía notificacionews
   - platform: version
@@ -69,5 +106,145 @@ sensor:
       - icon
       - hourly_summary   # <----------------
       - daily_summary    # <----------------
+
+
+#-----------------------------------------------------------------------------------------------------------------------
+#--------------------------------               S I S T E M A                       ------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------
+
+  - platform: systemmonitor
+    resources:
+      - type: disk_use_percent
+        arg: /
+      - type: disk_use
+        arg: /
+      - type: disk_free
+        arg: /
+      - type: memory_use_percent
+      - type: memory_use
+      - type: memory_free
+#      - type: swap_use_percent
+#      - type: swap_use
+#      - type: swap_free
+      - type: load_1m
+      - type: load_5m
+#      - type: load_15m
+      - type: network_in
+        arg: wlan0
+      - type: network_out
+        arg: wlan0
+      - type: packets_in
+        arg: wlan0
+      - type: packets_out
+        arg: wlan0
+      - type: ipv4_address
+        arg: wlan0
+      - type: processor_use
+      - type: last_boot
+
+#-----------------------------------------------------------------------------------------------------------------------
+#--------------------------------              E S T A D I S T I C A S              ------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------
+
+
+  - platform: template
+    sensors:
+      # En el value template pongo [] porque si no bar-code muestra barra con porcentajes; así no lo considerará un número
+      sensor_count:
+        friendly_name: 'Sensores'
+        value_template: >
+          {%- set domains = ['sensor'] -%}
+          {%- for domain in domains -%}
+            {%- for item in states[domain] -%}
+              {% if loop.first %}
+                [ {{loop.length}} ]     
+              {% endif %}
+            {%- endfor -%}
+          {%- endfor -%}
+
+          
+      automation_count:
+        friendly_name: 'Automatizacones'
+        value_template: >
+          {%- set domains = ['automation'] -%}
+          {%- for domain in domains -%}
+            {%- for item in states[domain] -%}
+              {% if loop.first %}
+                [ {{loop.length}} ]     
+              {% endif %}
+            {%- endfor -%}
+          {%- endfor -%}
+
+      script_count:
+        friendly_name: 'Scripts'
+        value_template: >
+          {%- set domains = ['script'] -%}
+          {%- for domain in domains -%}
+            {%- for item in states[domain] -%}
+              {% if loop.first %}
+                [ {{loop.length}} ]     
+              {% endif %}
+            {%- endfor -%}
+          {%- endfor -%}
+
+      switch_count:
+        friendly_name: 'Switches'
+        value_template: >
+          {%- set domains = ['switch'] -%}
+          {%- for domain in domains -%}
+            {%- for item in states[domain] -%}
+              {% if loop.first %}
+                [ {{loop.length}} ]     
+              {% endif %}
+            {%- endfor -%}
+          {%- endfor -%}
+
+      binary_sensor_count:
+        friendly_name: 'Binary Sensors'
+        value_template: >
+          {%- set domains = ['binary_sensor'] -%}
+          {%- for domain in domains -%}
+            {%- for item in states[domain] -%}
+              {% if loop.first %}
+                [ {{loop.length}} ]     
+              {% endif %}
+            {%- endfor -%}
+          {%- endfor -%}
+
+      lights_count:
+        friendly_name: 'Luces'
+        value_template: >
+          {%- set domains = ['light'] -%}
+          {%- for domain in domains -%}
+            {%- for item in states[domain] -%}
+              {% if loop.first %}
+                [ {{ loop.length }} ]     
+              {% endif %}
+            {%- endfor -%}
+          {%- endfor -%}
+
+      tracker_count:
+        friendly_name: 'Trackers'
+        value_template: >
+          {%- set domains = ['device_tracker'] -%}
+          {%- for domain in domains -%}
+            {%- for item in states[domain] -%}
+              {% if loop.first %}
+                  [ {{loop.length}} ]     
+              {% endif %}
+            {%- endfor -%}
+          {%- endfor -%}
+      
+      media_player_count:
+        friendly_name: 'Media Players'
+        value_template: >
+          {%- set domains = ['media_player'] -%}
+          {%- for domain in domains -%}
+            {%- for item in states[domain] -%}
+              {% if loop.first %}
+                [ {{loop.length}} ]     
+              {% endif %}
+            {%- endfor -%}
+          {%- endfor -%}
 
 

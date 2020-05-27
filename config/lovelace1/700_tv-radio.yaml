@@ -152,7 +152,25 @@ cards:
               service: script.radio_comedor
               service_data:
                 url: http://stream.cdm-chillout.com:8020/stream-mp3-Chill
-        
+
+
+          - type: picture
+            image: /local/img/radio/smooth_chill.png
+            tap_action:
+              action: call-service
+              service: script.radio_comedor
+              service_data:
+                url: http://media-the.musicradio.com/Chill 
+
+          - type: picture
+            image: /local/img/radio/calm_radio_zen.png
+            tap_action:
+              action: call-service
+              service: script.radio_comedor
+              service_data:
+                url: http://streams.calmradio.com:14028/stream
+
+      
           - type: picture
             image: /local/img/radio/klassic_radio.png
             tap_action:
@@ -163,4 +181,94 @@ cards:
 
 
           - type: custom:gap-card
+
+            # ***************************************************** PONER MÚSICA SERVER ***************************************************
+
+          - type: vertical-stack
+            cards:
+              - type: conditional
+                conditions:
+                  - entity: media_player.altavoz_cocina_main
+                    state: 'playing'
+                card:
+                  type: picture
+                  image: /local/img/radio/cocina.png
+                  tap_action:
+                    action: call-service
+                    service: media_player.media_stop
+                    service_data:  
+                      entity_id: media_player.altavoz_cocina_main
+
+              - type: conditional
+                conditions:
+                  - entity: media_player.altavoz_cocina_main
+                    state_not: 'playing'
+                card:
+                  type: picture
+                  image: /local/img/radio/cocina_off.png
+                  tap_action:
+                    action: call-service
+                    service: script.musica_server
+                    service_data:  
+                      altavoz: "media_player.altavoz_cocina_main"
+
+            # ----------------------------------------------------------------------------------------------------------------------
+          - type: vertical-stack
+            cards:
+              - type: conditional
+                conditions:
+                  - entity: media_player.altavoz_lavabo_main
+                    state: 'playing'
+                card:
+                  type: picture
+                  image: /local/img/radio/lavabo.png
+                  tap_action:
+                    action: call-service
+                    service: media_player.media_stop
+                    service_data:  
+                      entity_id: media_player.altavoz_lavabo_main
+
+              - type: conditional
+                conditions:
+                  - entity: media_player.altavoz_lavabo_main
+                    state_not: 'playing'
+                card:
+                  type: picture
+                  image: /local/img/radio/lavabo_off.png
+                  tap_action:
+                    action: call-service
+                    service: script.musica_server
+                    service_data:  
+                      altavoz: "media_player.altavoz_lavabo_main"
+
+            # ----------------------------------------------------------------------------------------------------------------------
+          - type: vertical-stack
+            cards:
+              - type: conditional
+                conditions:
+                  - entity: media_player.altavoz_nil_main
+                    state: 'playing'
+                card:
+                  type: picture
+                  image: /local/img/radio/nil.png
+                  tap_action:
+                    action: call-service
+                    service: media_player.media_stop
+                    service_data:  
+                      entity_id: media_player.altavoz_nil_main
+
+              - type: conditional
+                conditions:
+                  - entity: media_player.altavoz_nil_main
+                    state_not: 'playing'
+                card:
+                  type: picture
+                  image: /local/img/radio/nil_off.png
+                  tap_action:
+                    action: call-service
+                    service: script.musica_server
+                    service_data:  
+                      altavoz: "media_player.altavoz_nil_main"
+
+
           - type: custom:gap-card

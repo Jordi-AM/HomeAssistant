@@ -49,7 +49,11 @@ input_number:
     step: 1
     mode: slider  
 
+#--------------------------------------------------------------------------------------------------------------
+#                                           A U T O M A T I O N S                                             -
+#--------------------------------------------------------------------------------------------------------------
 automation:
+    # --------------------------------------------------------------- LIMPIEZA ENTRE SEMANA -------------------------------------------------
   - id: cleaning_timer_weekdays
     alias: Horario de limpieza entre semana
     trigger:
@@ -60,27 +64,16 @@ automation:
     - condition: state
       entity_id: 'binary_sensor.workday_sensor' 
       state: 'on'
- #   condition:
- #   - condition: time
- #     weekday:
- #     - mon
- #     - tue
- #     - wed
- #     - thu
- #     - fri
+    - condition: state
+      entity_id: automation.horario_de_limpieza_entre_semana # si la condición es falsa, se para el script
+      state: 'on'
     action:
-
-    - service: persistent_notification.create
+    - service: script.pasar_aspirino
       data:
-        message: Limpiando v2
-#    - service: script.notificacion_google
-#      data:
-#        message: "3 minutos para empezar limpieza aspirino"
-#    - delay: '00:03:00'
-#    - data:
-#        entity_id: vacuum.xiaomi_vacuum_cleaner
-#      service: vacuum.start
+        sensor: automation.horario_de_limpieza_entre_semana
 
+
+    # --------------------------------------------------------------- LIMPIEZA FIN DE SEMANA -------------------------------------------------
   - id: cleaning_timer_weekend
     alias: Horario de limpieza para el fin de semana.
     trigger:
@@ -91,8 +84,40 @@ automation:
     - condition: state
       entity_id: 'binary_sensor.workday_sensor' 
       state: 'off'
+    - condition: state
+      entity_id: automation.horario_de_limpieza_para_el_fin_de_semana # si la condición es falsa, se para el script
+      state: 'on'
 
     action:
-    - data:
-        entity_id: vacuum.xiaomi_vacuum_cleaner
-      service: vacuum.start
+    - service: script.pasar_aspirino
+      data:
+        sensor: automation.horario_de_limpieza_para_el_fin_de_semana
+
+#--------------------------------------------------------------------------------------------------------------
+#                                                 S C R I P T S                                               -
+#--------------------------------------------------------------------------------------------------------------
+script:
+
+  # Avisa de que va a pasar aspirino y espera 2 minutos por si se quiere cancelar. Envía notificaciones a telegram
+  pasar_aspirino:
+    sequence:
+      - service: script.notificacion_google
+        data:
+          mensaje: "2 minutos para empezar limpieza aspirino"
+      - delay: '00:02:00'      # Damos tiempo por si queremos cancelar limpieza
+      - condition: template    # Verificamos si se ha cancelado
+        value_template: "{{ is_state(sensor,'on') }}"
+      - service: vacuum.start
+        data:
+          entity_id: vacuum.aspirino
+      - service: telegram_bot.send_message
+        data:
+          message: Pasando aspirino
+          target: 440192507      
+      - delay: '00:00:10'   # para que salga de estado docked
+      - wait_template: "{{ is_state('vacuum.aspirino', 'docked') }}"  # Esperamos hasta que esté de vuelta
+      - service: telegram_bot.send_message
+        data:
+          message: Limpieza finalizada
+          target: 440192507
+

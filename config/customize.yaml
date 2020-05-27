@@ -16,3 +16,12 @@ sensor.playlist5:
 
 sensor.temperatura_ampere:
   friendly_name: ' ' # para que no aparezca en el picture-element
+
+device_tracker.bici:
+  entity_picture: /local/img/lovelace/orbea.png      
+
+sensor.spain_coronavirus_deaths:
+  unit_of_measurement: 'Fallecidos'
+
+sensor.spain_coronavirus_confirmed:
+  unit_of_measurement: 'Contagio'

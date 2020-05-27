@@ -1,0 +1,23 @@
+title: Test
+path: test
+panel: true
+cards:
+  - type: horizontal-stack
+    cards:
+      - type: custom:gap-card
+      - type: picture-elements
+        style: |
+          ha-card {
+            --top: {{ states("input_number.y_pos") }}%;
+            --left: {{ states("input_number.x_pos") }}%;
+          }
+        image: /local/img/lovelace/amperev4.png
+        elements: !include sub_100_ampere.yaml
+      - type: custom:gap-card
+      - type: horizontal-stack
+        cards:
+          - type: entities
+            entities:
+              - media_player.altavoz_cocina_main
+              - media_player.altavoz_lavabo_main
+              - media_player.altavoz_nil_main

@@ -1,0 +1,117 @@
+#    top: "var(--top)"
+#    left: "var(--left)"
+
+- type: state-label
+  entity: sensor.carga_bateria_app
+  style:
+    left: 28%
+    top: 3%
+    transform: scale(3,3)
+
+- type: state-label
+  entity: sensor.ampere_batterysoh
+  style:
+    left: 68%
+    top: 3%
+    transform: scale(1.6,1.6)
+
+- type: state-badge
+  entity: sensor.temperatura_ampere
+  style: 
+    top: 17%
+    left: 20%
+    transform: scale(1,1)
+    title: Ampere
+
+# tuve que hacer un sensor template e igualarlo al de ampere, porque en el de ampere (modbus) no podía establecer el friendly_name
+
+- type: state-badge
+  entity: sensor.temp_inverter
+  style:
+    top: 17%
+    left: 47%
+    transform: scale(1,1)
+
+- type: state-badge
+  entity: sensor.temp_baterias
+  title: null
+  style:
+    left: 72%
+    top: 17%
+    transform: scale(1,1)
+
+- type: state-label
+  entity: sensor.ampere_inverterpvpower
+  style:
+    top: 33%
+    left: 81%
+    transform: scale(1.6,1.6)  
+
+- type: state-label
+  entity: sensor.miampere_solaampere
+  style:
+    top: 39%
+    left: 65%
+    transform: scale(1.6,1.6)  
+
+- type: state-label
+  entity: sensor.miampere_ampereared
+  style:
+    top: 39%
+    left: 25%
+    transform: scale(1.6,1.6)  
+
+- type: state-label
+  entity: sensor.miampere_solacasa
+  style:
+    top: 60%
+    left: 78%
+    transform: scale(1.6,1.6)  
+
+- type: state-label
+  entity: sensor.miampere_ampereacasa
+  style:
+    top: 57%
+    left: 56%
+    transform: scale(1.6,1.6)  
+
+- type: state-label
+  entity: sensor.miampere_redaampere
+  style:
+    top: 51%
+    left: 28%
+    transform: scale(1.6,1.6)  
+
+- type: state-label
+  entity: sensor.miampere_redacasa
+  style:
+    top: 62%
+    left: 15%
+    transform: scale(1.6,1.6)  
+
+- type: state-label
+  entity: sensor.ampere_demand
+  style:
+    top: 82%
+    left: 49%
+    transform: scale(1.6,1.6)
+
+# ------------------- Barra inferior ---------------------------------------
+# Alarmas: 43, 47 y 59 son estados de funcionamiento OK y los estados 63, 50 y 114 son de alerta donde conviene revisar
+# que no se haya saltado algún magnetotérmico o diferencial del equipo o de la instalación eléctrica.
+# El Working mode siempre será 0, es un parámetro que solo se utiliza en el test final de calidad cuando sale de fábrica.
+# de status no me han dado info
+
+- type: state-label
+  entity: sensor.ampere_alarms
+  style:
+    top: 92%
+    left: 70%
+    transform: scale(1.4,1.4)    
+
+- type: state-label
+  entity: sensor.humedad_ampere
+  style:
+    top: 92%
+    left: 21%
+    transform: scale(1.4,1.4)    

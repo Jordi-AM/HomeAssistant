@@ -18,8 +18,9 @@ cards:
             entities:
               - type: section
                 label: INTRFICIE
-              - entity: input_boolean.solo_bateria_baja
-              - entity: input_boolean.aleatorio_automatico
+#              - entity: input_boolean.aleatorio_automatico
+              - entity: input_boolean.modo_kiosko
+              - entity: input_boolean.avisar_pastillas_movil
           - type: vertical-stack
             cards:
               - type: glance
@@ -72,9 +73,10 @@ cards:
               - type: section
                 label: ENTIDADES
               - entity: input_select.hay_cole
+              - entity: input_select.control_volumen
               - entity: input_boolean.tomar_pastilla
               - entity: automation.sonar_timbre
               - entity: input_select.mapas_tiempo
-              - entity: input_boolean.iguala_luces
+              #- entity: input_boolean.iguala_luces
               - entity: input_boolean.encender_ordenador
               #- entity: input_select.quien_en_casa

@@ -1,0 +1,559 @@
+title: 890_pi
+path: pi
+icon: 'fab:raspberry-pi'
+panel: true
+cards:
+  - type: vertical-stack           
+
+    cards:    
+      - !include /config/lovelace1/000_top_barv2.yaml # Barra menú
+
+      - type: horizontal-stack    # Línea 2: IP y hora reinicio. Ejemplos de car-mod  ******************************************************     
+        cards:    
+          - type: markdown
+            style: |
+              ha-card {
+                --primary-text-color: #0F0
+              }
+            content: |
+              ## IP: {{ states.sensor.ipv4_address_wlan0.state }}  (wlan0) 
+          - type: markdown
+            style: |
+              ha-card {
+                --primary-text-color: #0F05
+              }
+
+            content: |
+              ### Último reinicio: {{ as_timestamp(states("sensor.last_boot")) | timestamp_custom('%d/%m' ' a las ' '%H:%M') }}
+
+      - type: horizontal-stack    # Línea 3: CPU, (RAM+MICROSD), BATERÍAS ********************************************************************     
+        cards:    
+          - type: custom:mini-graph-card
+            style: |
+              ha-card {
+                border: 2px solid green;
+                margin-left: 10px;
+               }
+            color_thresholds:
+              - color: '#0da035'
+                value: 0
+              - color: '#e0b400'
+                value: 25
+              - color: '#e45e65'
+                value: 50
+            points_per_hour: 6
+            hours_to_show: 48
+            tap_action:
+              action: none
+            line_width: 2
+            height: 90
+            smoothing: false
+            entities:
+              - entity: sensor.processor_use
+                name: CPU (48h)
+
+          - type: horizontal-stack    # RAM + MICROSD   
+            cards:    
+              - type: 'custom:flex-horseshoe-card'
+                entities:   # Qué muestra
+                  - entity: sensor.memory_use_percent
+                    decimals: 0
+                    icon: mdi:memory
+                    name: 'RAM'
+                  - entity: sensor.memory_use
+                    decimals: 0
+                    name: '(Usado)'
+                  - entity: sensor.memory_free
+                    decimals: 0
+                    name: '(Libre)'
+                card_filter: card--dropshadow-heavy--sepia90
+                show:
+                  scale_tickmarks: true   # Marcas en la herradura
+                layout:
+                  hlines:                 # línea horizontal
+                    - id: 0
+                      xpos: 50
+                      ypos: 38
+                      length: 40
+                      styles:
+                        - stroke: var(--primary-text-color);
+                        - stroke-width: 5;
+                        - opacity: 0.9;
+                        - stroke-linecap: round;
+                  vlines:                # línea vertical
+                    - id: 0
+                      xpos: 50
+                      ypos: 56
+                      length: 20
+                      styles:
+                        - stroke: var(--primary-text-color);
+                        - opacity: 0.5;
+                        - stroke-width: 2;
+                        - stroke-linecap: round;
+                  states:               # Dónde muestra los datos
+                    - id: 0
+                      entity_index: 0
+                      xpos: 50
+                      ypos: 30
+                      styles:
+                        - font-size: 3em;
+                        - opacity: 0.9;
+                    - id: 1
+                      entity_index: 1
+                      xpos: 46
+                      ypos: 54
+                      styles:
+                        - font-size: 1.5em;
+                        - text-anchor: end;
+                    - id: 2
+                      entity_index: 2
+                      xpos: 54
+                      ypos: 54
+                      styles:
+                        - font-size: 1.5em;
+                        - text-anchor: start;
+                  names:                # Dónde muestra el atributo name de las entidades
+                    - id: 0
+                      entity_index: 0
+                      xpos: 50
+                      ypos: 90
+                      styles:
+                        - font-size: 1.8em;
+                    - id: 1
+                      entity_index: 1
+                      xpos: 46
+                      ypos: 62
+                      styles:
+                        - font-size: 0.8em;
+                        - text-anchor: end;
+                        - opacity: 0.7;
+                    - id: 2
+                      entity_index: 2
+                      xpos: 54
+                      ypos: 62
+                      styles:
+                        - font-size: 0.8em;
+                        - text-anchor: start;
+                        - opacity: 0.7;
+
+
+                horseshoe_state:      # Propiedades de la herradura
+                  color:  '#FFF6E3'
+                horseshoe_scale:      #
+                  min: 0
+                  max: 100
+                  color: 'var(--primary-background-color)'
+                  width: 6
+                color_stops:
+                  0: '#FFF6E3'
+                  10: '#FFE9B9'
+
+
+                # *********************************************************  D I S K  ****************************************************************
+              - type: 'custom:flex-horseshoe-card'
+                entities:
+                  - entity: sensor.disk_use_percent
+                    decimals: 0
+                    icon: mdi:memory
+                    name: 'MicroSD'
+                  - entity: sensor.disk_use
+                    decimals: 1
+                    name: '(Usado)'
+                  - entity: sensor.disk_free
+                    decimals: 1
+                    name: '(Libre)'
+                card_filter: card--dropshadow-heavy--sepia90
+                show:
+                  scale_tickmarks: true
+                layout:
+                  hlines:
+                    - id: 0
+                      xpos: 50
+                      ypos: 38
+                      length: 40
+                      styles:
+                        - stroke: var(--primary-text-color);
+                        - stroke-width: 5;
+                        - opacity: 0.9;
+                        - stroke-linecap: round;
+                  vlines:
+                    - id: 0
+                      xpos: 50
+                      ypos: 56
+                      length: 20
+                      styles:
+                        - stroke: var(--primary-text-color);
+                        - opacity: 0.5;
+                        - stroke-width: 2;
+                        - stroke-linecap: round;
+                  states:
+                    - id: 0
+                      entity_index: 0
+                      xpos: 50
+                      ypos: 30
+                      styles:
+                        - font-size: 3em;
+                        - opacity: 0.9;
+                    - id: 1
+                      entity_index: 1
+                      xpos: 46
+                      ypos: 54
+                      styles:
+                        - font-size: 1.5em;
+                        - text-anchor: end;
+                    - id: 2
+                      entity_index: 2
+                      xpos: 54
+                      ypos: 54
+                      styles:
+                        - font-size: 1.5em;
+                        - text-anchor: start;
+                  names:
+                    - id: 0
+                      entity_index: 0
+                      xpos: 50
+                      ypos: 90
+                      styles:
+                        - font-size: 1.8em;
+                    - id: 1
+                      entity_index: 1
+                      xpos: 46
+                      ypos: 62
+                      styles:
+                        - font-size: 0.8em;
+                        - text-anchor: end;
+                        - opacity: 0.7;
+                    - id: 2
+                      entity_index: 2
+                      xpos: 54
+                      ypos: 62
+                      styles:
+                        - font-size: 0.8em;
+                        - text-anchor: start;
+                        - opacity: 0.7;
+                horseshoe_state:
+                  color:  '#FFF6E3'
+                horseshoe_scale:
+                  min: 0
+                  max: 100
+                  color: 'var(--primary-background-color)'
+                  width: 6
+                color_stops:
+                  0: '#FFF6E3'
+                  10: '#FFE9B9'
+
+
+                # *********************************************************  C P U  ****************************************************************
+
+            # *****************************************************************************************************************
+            # *                                 Muestra alertas de batería. Al pulsar, muestra estado de
+            # *                              TODAS las baterías (excepto móviles, aspirino y switch)
+            # *****************************************************************************************************************
+          - type: custom:auto-entities
+            card:
+              type: custom:bar-card
+              title: Alertas baterías (+)
+              attribute: battery_level
+              unit_of_measurement: "%"
+              positions:
+                icon: 'off'
+                indicator: inside
+              severity:
+                - color: Red
+                  from: 0
+                  to: 25
+                - color: Orange
+                  from: 26
+                  to: 50
+                - color: Green
+                  from: 51
+                  to: 100
+              title_position: inside
+              columns: 2
+              padding: 2px
+              title_style:
+                text-align: left
+                font-size: 16px
+              bar_style:
+                align-items: flex-start
+                font-size: 8px
+            filter:
+              include:
+                - attributes:
+                    battery_level: "<= 25"
+                  options:
+                    tap_action:
+                      action: call-service
+                      service: browser_mod.popup        # **************************** VENTANA FLOTANTE *******************************
+                      service_data:
+                        title: Baterías de dispositivos
+                        large: true
+                        card:
+                          type: custom:auto-entities
+                          card:
+                            type: custom:bar-card
+                            attribute: battery_level
+                            unit_of_measurement: "%"
+                            positions:
+                              icon: 'off'
+                              indicator: inside
+                            severity:
+                              - color: Red
+                                from: 0
+                                to: 25
+                              - color: Orange
+                                from: 26
+                                to: 50
+                              - color: Green
+                                from: 51
+                                to: 100
+                            title_position: inside
+                            columns: 2
+                            padding: 2px
+                            title_style:
+                              text-align: left
+                              font-size: 16px
+                            bar_style:
+                              align-items: flex-start
+                              font-size: 8px
+                          filter:
+                            include:
+                              - attributes:
+                                  battery_level: "<= 100"
+                            exclude:
+                              - entity_id: sensor.temperatura_ampere # muestro el de humedad, que es el mismo
+                              - entity_id: switch.xiaomi
+                              - entity_id: vacuum.aspirino
+                              - entity_id: device_tracker.pocophone_f1
+                              - entity_id: device_tracker.bici
+                              - entity_id: device_tracker.anagps
+                              - entity_id: device_tracker.jordigps
+                              - entity_id: sensor.humedad_comedor # estos dos son el mismo que el de temperatura
+                              - entity_id: sensor.presion_comedor
+                          sort:
+                            method: attribute
+                            attribute: battery_level
+                            numeric: true
+                        deviceID:
+                          - this 
+            sort:
+              method: attribute
+              attribute: battery_level
+              numeric: true
+
+      - type: horizontal-stack        # Línea 4: RAM, (CPU+LAN), Elementos HA *****************************************************************   
+        cards:    
+          - type: custom:mod-card
+            style: |
+              ha-card {
+                border: 2px solid blue;
+              }
+            card:
+              type: custom:mini-graph-card
+              points_per_hour: 6
+              hours_to_show: 48
+              line_width: 2
+              height: 90
+              smoothing: false
+              tap_action:
+                action: none
+              color_thresholds:
+                - color: '#0da035'
+                  value: 0
+                - color: '#e0b400'
+                  value: 50
+                - color: '#e45e65'
+                  value: 100
+              entities:
+                - entity: sensor.memory_use_percent
+                  name: RAM (48h)
+
+          - type: horizontal-stack    # CPU + LAN     
+            cards:    
+              - type: 'custom:flex-horseshoe-card'
+                entities:
+                  - entity: sensor.processor_use
+                    decimals: 0
+                    icon: mdi:memory
+                    name: 'CPU'
+                  - entity: sensor.load_1m
+                    decimals: 2
+                    name: '(Load 1m)'
+                  - entity: sensor.load_5m
+                    decimals: 2
+                    name: '(Load 5m)'
+                card_filter: card--dropshadow-heavy--sepia90
+                show:
+                  scale_tickmarks: true
+                layout:
+                  hlines:
+                    - id: 0
+                      xpos: 50
+                      ypos: 38
+                      length: 40
+                      styles:
+                        - stroke: var(--primary-text-color);
+                        - stroke-width: 5;
+                        - opacity: 0.9;
+                        - stroke-linecap: round;
+                  vlines:
+                    - id: 0
+                      xpos: 50
+                      ypos: 56
+                      length: 20
+                      styles:
+                        - stroke: var(--primary-text-color);
+                        - opacity: 0.5;
+                        - stroke-width: 2;
+                        - stroke-linecap: round;
+                  states:
+                    - id: 0
+                      entity_index: 0
+                      xpos: 50
+                      ypos: 30
+                      styles:
+                        - font-size: 3em;
+                        - opacity: 0.9;
+                    - id: 1
+                      entity_index: 1
+                      xpos: 46
+                      ypos: 54
+                      styles:
+                        - font-size: 1.5em;
+                        - text-anchor: end;
+                    - id: 2
+                      entity_index: 2
+                      xpos: 54
+                      ypos: 54
+                      styles:
+                        - font-size: 1.5em;
+                        - text-anchor: start;
+                  names:
+                    - id: 0
+                      entity_index: 0
+                      xpos: 50
+                      ypos: 90
+                      styles:
+                        - font-size: 1.8em;
+                    - id: 1
+                      entity_index: 1
+                      xpos: 46
+                      ypos: 62
+                      styles:
+                        - font-size: 0.8em;
+                        - text-anchor: end;
+                        - opacity: 0.7;
+                    - id: 2
+                      entity_index: 2
+                      xpos: 54
+                      ypos: 62
+                      styles:
+                        - font-size: 0.8em;
+                        - text-anchor: start;
+                        - opacity: 0.7;
+                horseshoe_state:
+                  color:  '#FFF6E3'
+                horseshoe_scale:
+                  min: 0
+                  max: 100
+                  color: 'var(--primary-background-color)'
+                  width: 6
+                color_stops:
+                  0: '#FFF6E3'
+                  10: '#FFE9B9'
+
+
+                # *********************************************************  L A N   ****************************************************************
+              - type: 'custom:flex-horseshoe-card'
+                
+                entities:
+                  - entity: sensor.network_in_wlan0
+                    decimals: 0
+                    area: 'IN'
+                    name: 'LAN '
+                  - entity: sensor.network_out_wlan0
+                    decimals: 0
+                    area: 'OUT'
+                card_filter: card--dropshadow-heavy--sepia90
+                scaleTickSize: 50
+                show:
+                  scale_tickmarks: true
+                layout:
+                  hlines:
+                    - id: 0
+                      xpos: 50
+                      ypos: 48
+                      length: 80
+                      styles:
+                        - opacity: 0.5;
+                  states:
+                    - id: 0
+                      entity_index: 0
+                      xpos: 50
+                      ypos: 40
+                      styles:
+                        - font-size: 3em;
+                        - opacity: 0.9;
+                    - id: 0
+                      entity_index: 1
+                      xpos: 75
+                      ypos: 65
+                      styles:
+                        - font-size: 3em;
+                        - text-anchor: end;
+
+                  names:
+                    - id: 0
+                      entity_index: 0
+                      xpos: 50
+                      ypos: 90
+                      styles:
+                          - font-size: 1.8em;
+                  areas:
+                    - id: 0
+                      entity_index: 0
+                      xpos: 50
+                      ypos: 20
+                    - id: 1
+                      entity_index: 1
+                      xpos: 50
+                      ypos: 75
+
+                horseshoe_scale:
+                  min: 0
+                  max: 215
+                  width: 1
+                color_stops:
+                  0: '#FFF6E3'
+                  215: '#FF8C06' 
+
+          - type: custom:auto-entities
+            filter:
+              include:
+                - entity_id: "*_count*"
+
+            card:
+              type: custom:bar-card
+              # estilo para desenganchar número del borde
+              style: |  
+                .value-direction-right {
+                  margin-right: 10px;
+                }
+
+              title: Elementos HA 
+              color: green
+              # attribute: label
+              #unit_of_measurement: "%"
+              positions:
+                icon: 'off'
+                indicator: inside
+
+              title_position: inside
+              columns: 3
+              padding: 5px
+              title_style:
+                text-align: left
+                font-size: 16px
+              bar_style:
+                align-items: flex-start
+                font-size: 8px

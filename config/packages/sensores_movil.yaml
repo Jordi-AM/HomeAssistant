@@ -17,21 +17,21 @@ sensor:
       # movil_precision_gps:
       #   value_template: "{{ states.device_tracker.honor7.attributes.gps_accuracy| float | round(1) }}"
       movil_precision_gps:
-         value_template: "{{ state_attr('device_tracker.honor7','gps_accuracy') | float | round(1) }}"
+         value_template: "{{ state_attr('device_tracker.bici','gps_accuracy') | float | round(1) }}"
       movil_bateria:
-        value_template: "{{ state_attr('device_tracker.honor7', 'battery_level') }}"
+        value_template: "{{ state_attr('device_tracker.bici', 'battery_level') }}"
       movil_encendido2: 
-        value_template: "{{ states('device_tracker.honor7') }}"   # unknow si no existe
+        value_template: "{{ states('device_tracker.bici') }}"   # unknow si no existe
       # da hora en UTC 0, no en zona horaria correcta
       # movil_ultima_actualizacion: # https://www.php.net/manual/es/function.strftime.php
       #   value_template: "{{ states.device_tracker.honor7.last_changed.strftime('%d de %b a las %H:%M') }}"
 
       # con last_changed no actualizaba, sólo al reiniciar hassio
       movil_ultima_actualizacion:
-        value_template: "{{ as_timestamp(states.device_tracker.honor7.last_updated) | timestamp_local }}"
+        value_template: "{{ as_timestamp(states.device_tracker.bici.last_updated) | timestamp_local }}"
         entity_id: sensor.time
       movil_tiempo_ultima_actualizacion:
-        value_template: "{{ relative_time(states.device_tracker.honor7.last_updated) }}"
+        value_template: "{{ relative_time(states.device_tracker.bici.last_updated) }}"
         entity_id: sensor.time  # así forzamos que se actualice cada minuto. con sensor.date sería cada día
 
 # Muestra el tiempo que hace que cambió en minutos como un float: 0.06793594360351562

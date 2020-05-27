@@ -1,0 +1,136 @@
+# https://community.home-assistant.io/t/rotate-to-the-left-or-right-in-xiaomi-magic-cube/24990/5
+# https://www.home-assistant.io/integrations/binary_sensor.xiaomi_aqara/
+
+input_select:
+  control_volumen:
+    name: Dispositivo a controlar volumen con Magic Cube
+    options:
+      - Lavabo
+      - Cocina
+      - Nil
+      - Superyo
+#      - Miniyo
+    initial: Cocina
+
+automation:
+  - id: siguiente_tema
+    alias: siguiente tema
+    trigger:
+      platform: event
+      event_type: xiaomi_aqara.cube_action
+      event_data:
+        entity_id: binary_sensor.magic_cube
+        action_type: flip90
+    action:
+      service: media_player.media_next_track
+      data_template:
+        entity_id: >
+          {% if (is_state('input_select.control_volumen','Cocina')) %}
+              media_player.altavoz_cocina_main
+          {% elif (is_state('input_select.control_volumen','Lavabo')) %}
+              media_player.altavoz_lavabo_main
+          {% elif (is_state('input_select.control_volumen','Nil')) %}
+              media_player.altavoz_nil_main
+          {% elif (is_state('input_select.control_volumen','Superyo')) %}
+              media_player.superyo
+          {% else %}
+              media_player.miniyo
+          {% endif %}
+
+  - id: anterior_tema
+    alias: anterior tema
+    trigger:
+      platform: event
+      event_type: xiaomi_aqara.cube_action
+      event_data:
+        entity_id: binary_sensor.magic_cube
+        action_type: shake_air
+    action:
+      service: media_player.media_previous_track
+      data_template:
+        entity_id: >
+          {% if (is_state('input_select.control_volumen','Cocina')) %}
+              media_player.altavoz_cocina_main
+          {% elif (is_state('input_select.control_volumen','Lavabo')) %}
+              media_player.altavoz_lavabo_main
+          {% elif (is_state('input_select.control_volumen','Nil')) %}
+              media_player.altavoz_nil_main
+          {% elif (is_state('input_select.control_volumen','Superyo')) %}
+              media_player.superyo
+          {% else %}
+              media_player.miniyo
+          {% endif %}
+
+      
+  - id: cambia volumen
+    alias: Cambia volumen
+    trigger:
+      platform: event
+      event_type: xiaomi_aqara.cube_action
+      event_data:
+        entity_id: binary_sensor.magic_cube
+        action_type: rotate
+
+    action:
+      - service: script.control_volumen
+        data_template:
+          entity_id: >
+            {% if (is_state('input_select.control_volumen','Cocina')) %}
+                media_player.altavoz_cocina_main
+            {% elif (is_state('input_select.control_volumen','Lavabo')) %}
+                media_player.altavoz_lavabo_main
+            {% elif (is_state('input_select.control_volumen','Nil')) %}
+                media_player.altavoz_nil_main
+            {% elif (is_state('input_select.control_volumen','Superyo')) %}
+                media_player.superyo
+            {% else %}
+                media_player.miniyo
+            {% endif %}
+          cantidad: >
+            {% if trigger.event.data.action_value | float > 18 %}
+              0.05
+            {% elif trigger.event.data.action_value | float > 0 %}
+              0.02
+            {% elif trigger.event.data.action_value | float < -18 %}
+              -0.05
+            {% elif trigger.event.data.action_value | float < 0 %}
+              -0.02
+            {% endif %}
+          actual: >
+            {% if (is_state('input_select.control_volumen','Cocina')) %}
+                {{ state_attr('media_player.altavoz_cocina_main', 'volume_level') | float }}
+            {% elif (is_state('input_select.control_volumen','Lavabo')) %}
+                {{ state_attr('media_player.altavoz_lavabo_main', 'volume_level') | float }}
+            {% elif (is_state('input_select.control_volumen','Nil')) %}
+                {{ state_attr('media_player.altavoz_nil_main', 'volume_level') | float }}
+            {% elif (is_state('input_select.control_volumen','Superyo')) %}
+                {{ state_attr('media_player.superyo', 'volume_level') | float }}
+            {% else %}
+                {{ state_attr('media_player.miniyo', 'volume_level') | float }}
+            {% endif %}
+
+    # Cambia de mediaplayer
+  - id: siguiente_mediaplayer
+    alias: Siguiente mediaplayer
+    trigger:
+      platform: event
+      event_type: xiaomi_aqara.cube_action
+      event_data:
+        entity_id: binary_sensor.magic_cube
+        action_type: flip180
+    action:
+      - service: input_select.select_next
+        entity_id: input_select.control_volumen
+
+
+script:
+  control_volumen:
+    alias: control volumen con cubo mágico
+    sequence:
+      - service: media_player.volume_set
+        data_template:
+          entity_id: >
+            {{ entity_id }}
+          volume_level: >
+            {% set vol = (( cantidad | float ) + (actual | float)) | float %}
+            {{ vol }}

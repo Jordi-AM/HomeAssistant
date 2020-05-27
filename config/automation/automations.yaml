@@ -4,7 +4,7 @@
   initial_state: 'on'
   trigger:
     platform: time
-    at: '11:10:00'
+    at: '06:00:00'
   condition:
   - condition: time
     weekday:
@@ -19,9 +19,8 @@
     event: start
   action:
     - service: telegram_bot.send_message
-      data_template :
-        message: >
-           "HA Reiniciado"
+      data:
+        message: "HA Reiniciado"
         target: 440192507
     - service: xiaomi_aqara.play_ringtone      
       data:
@@ -79,14 +78,12 @@
       entity_id: input_boolean.tomar_pastilla
       state: 'on'
   action:
-  - service: telegram_bot.send_message
-    data:
-      message: Pastilla!!!!
-      target: 440192507
   - service: xiaomi_aqara.play_ringtone    
     data:
       ringtone_id: '11'
       ringtone_vol: '3'
+  - service: script.telegram_pastilla
+
       
 
 - id: activar_recordatorio_pastilla
@@ -439,3 +436,50 @@
     data_template:
       entity_id: media_player.superyo
       volume_level: 0.5
+
+
+# --------------------------------------------------------------------------------------------------------------------------------
+# ----- Si se va el suministro eléctrico, cuando vuelve apaga las luces, que por defecto se encienden todas ----------------------
+# --------------------------------------------------------------------------------------------------------------------------------
+
+- id: redelectrica_apagada
+  alias: Red eléctrica apagada
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.philips_bridge
+      from: 'on'
+      to: 'off'
+    - platform: state
+      entity_id: binary_sensor.nevera
+      from: 'on'
+      to: 'off'
+#    for: 00:02:00
+  action:
+  - service: telegram_bot.send_message
+    data:
+      message: Ha caído red eléctrica
+      target: 440192507
+     
+- id: redelectrica_encendida
+  alias: Red eléctrica encendida
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.philips_bridge
+      from: 'off'
+      to: 'on'
+    - platform: state
+      entity_id: binary_sensor.nevera
+      from: 'of'
+      to: 'on'
+  action:
+  - service: telegram_bot.send_message
+    data:
+      message: Red eléctrica recuperada
+      target: 440192507
+    # encendemos enchufe wemo del aire acondicionado
+  - service: switch.turn_on
+    entity_id: switch.enchufe_aire
+    # y apagamos luces, ya que se encienden solas al volver la luz
+  - delay: 00:00:30
+  - service: light.turn_off
+    entity_id: light.luces_piso

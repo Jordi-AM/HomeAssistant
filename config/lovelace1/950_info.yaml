@@ -1,0 +1,274 @@
+title: 890_pi
+path: info
+icon: 'fab:raspberry-pi'
+panel: true
+cards:
+  - type: vertical-stack           
+
+    cards:    
+      - !include /config/lovelace1/000_top_barv2.yaml
+
+            # ************************************* INFORMACIÓN TINTA IMPRESORA ***************************************
+      - type: horizontal-stack
+        cards:
+          - type: conditional
+            conditions:
+              - entity: sensor.hp_color_laserjet_mfp_m277dw
+                state_not: "unavailable"
+            card:
+              type: 'custom:bar-card'
+              entities:
+                - entity: sensor.hp_color_laserjet_mfp_m277dw_black_cartridge_hp_cf400a
+                  name: BLACK
+                  color: "#000000"
+                - entity: sensor.hp_color_laserjet_mfp_m277dw_cyan_cartridge_hp_cf401a
+                  name: CYAN
+                  color: cyan
+                - entity: sensor.hp_color_laserjet_mfp_m277dw_magenta_cartridge_hp_cf403a
+                  name: MAGENTA
+                  color: magenta
+                - entity: sensor.hp_color_laserjet_mfp_m277dw_yellow_cartridge_hp_cf402a
+                  name: YELLOW
+                  color: yellow
+              style: |-
+                bar-card-value {
+                  
+                  font-size: 16px;
+                  font-weight: bold;
+                  text-shadow: 2px 2px #0005;
+                }
+              title: Cartuchos HP
+              direction: up
+              height: 200px
+              stack: horizontal
+
+          - type: conditional
+            conditions:
+              - entity: sensor.hp_color_laserjet_mfp_m277dw
+                state: "unavailable"
+            card:
+              type: picture
+              image: /local/img/lovelace/impresora.png
+              tap_action:
+                action: call-service
+                service: browser_mod.popup        # **************************** VENTANA FLOTANTE *******************************
+                service_data:
+                  title: Niveles de tinta
+                  card:
+                    type: markdown
+                    content: >
+                      ### Enciende la impresora para comprobar los niveles de tinta
+
+                  deviceID:
+                    - this 
+              
+
+            # *********************************************************  Synology   ****************************************************************
+
+          - type: custom:vertical-stack-in-card
+            title: SYNOLOGY
+            horizontal: true
+            cards:
+
+              - type: 'custom:flex-horseshoe-card'
+                entities:
+                  - entity: sensor.synology_volume_used_volume_1
+                    decimals: 1
+                    name: 'SYNOLOGY'
+                    area: 'Store'
+                  - entity: sensor.synology_total_size_volume_1
+                    decimals: 1
+                    icon: mdi:memory
+                    name: 'Size'
+                  - entity: sensor.synology_used_space_volume_1
+                    decimals: 1
+                    name: '(Used)'
+
+                card_filter: card--dropshadow-heavy--sepia90
+                show:
+                  scale_tickmarks: true
+                layout:
+                  hlines:
+                    - id: 0
+                      xpos: 50
+                      ypos: 38
+                      length: 40
+                      styles:
+                        - stroke: var(--primary-text-color);
+                        - stroke-width: 5;
+                        - opacity: 0.9;
+                        - stroke-linecap: round;
+                  vlines:
+                    - id: 0
+                      xpos: 50
+                      ypos: 56
+                      length: 20
+                      styles:
+                        - stroke: var(--primary-text-color);
+                        - opacity: 0.5;
+                        - stroke-width: 2;
+                        - stroke-linecap: round;
+                  states:
+                    - id: 0
+                      entity_index: 0
+                      xpos: 50
+                      ypos: 30
+                      styles:
+                        - font-size: 3em;
+                        - opacity: 0.9;
+                    - id: 1
+                      entity_index: 1
+                      xpos: 46
+                      ypos: 54
+                      styles:
+                        - font-size: 1.5em;
+                        - text-anchor: end;
+                    - id: 2
+                      entity_index: 2
+                      xpos: 54
+                      ypos: 54
+                      styles:
+                        - font-size: 1.5em;
+                        - text-anchor: start;
+                  names:
+                    - id: 0
+                      entity_index: 0
+                      xpos: 50
+                      ypos: 90
+                      styles:
+                        - font-size: 1.7em;
+                    - id: 1
+                      entity_index: 1
+                      xpos: 46
+                      ypos: 62
+                      styles:
+                        - font-size: 0.8em;
+                        - text-anchor: end;
+                        - opacity: 0.7;
+                    - id: 2
+                      entity_index: 2
+                      xpos: 54
+                      ypos: 62
+                      styles:
+                        - font-size: 0.8em;
+                        - text-anchor: start;
+                        - opacity: 0.7;
+                  areas:
+                    - id: 0
+                      entity_index: 0
+                      xpos: 50
+                      ypos: 76
+
+                horseshoe_state:
+                  color:  '#FFF6E3'
+                horseshoe_scale:
+                  min: 0
+                  max: 100
+                  color: 'var(--primary-background-color)'
+                  width: 6
+                color_stops:
+                  0: '#FFF6E3'
+                  10: '#FFE9B9'
+
+
+              - type: 'custom:flex-horseshoe-card'
+                entities:
+                  - entity: sensor.synology_memory_usage_real
+                    decimals: 1
+                    name: 'SYNOLOGY'
+                    area: 'RAM'
+                  - entity: sensor.synology_average_disk_temp_volume_1
+                    decimals: 1
+                    icon: mdi:memory
+                    name: 'Temp.'
+                  - entity: sensor.alertas_synology
+                    decimals: 0
+                    name: 'Alertas'
+
+                card_filter: card--dropshadow-heavy--sepia90
+                show:
+                  scale_tickmarks: true
+                layout:
+                  hlines:
+                    - id: 0
+                      xpos: 50
+                      ypos: 48
+                      length: 40
+                      styles:
+                        - stroke: var(--primary-text-color);
+                        - stroke-width: 5;
+                        - opacity: 0.9;
+                        - stroke-linecap: round;
+                  vlines:
+                    - id: 0
+                      xpos: 50
+                      ypos: 65
+                      length: 20
+                      styles:
+                        - stroke: var(--primary-text-color);
+                        - opacity: 0.5;
+                        - stroke-width: 2;
+                        - stroke-linecap: round;
+                  states:
+                    - id: 0
+                      entity_index: 0
+                      xpos: 50
+                      ypos: 40
+                      styles:
+                        - font-size: 3em;
+                        - opacity: 0.9;
+                    - id: 1
+                      entity_index: 1
+                      xpos: 46
+                      ypos: 59
+                      styles:
+                        - font-size: 1.5em;
+                        - text-anchor: end;
+                    - id: 2
+                      entity_index: 2
+                      xpos: 54
+                      ypos: 59
+                      styles:
+                        - font-size: 1.5em;
+                        - text-anchor: start;
+                  names:
+                    - id: 0
+                      entity_index: 0
+                      xpos: 50
+                      ypos: 90
+                      styles:
+                        - font-size: 1.7em;
+                    - id: 1
+                      entity_index: 1
+                      xpos: 46
+                      ypos: 67
+                      styles:
+                        - font-size: 0.8em;
+                        - text-anchor: end;
+                        - opacity: 0.7;
+                    - id: 2
+                      entity_index: 2
+                      xpos: 54
+                      ypos: 67
+                      styles:
+                        - font-size: 0.8em;
+                        - text-anchor: start;
+                        - opacity: 0.7;
+                  areas:
+                    - id: 0
+                      entity_index: 0
+                      xpos: 50
+                      ypos: 21
+                horseshoe_state:
+                  color:  '#FFF6E3'
+                horseshoe_scale:
+                  min: 0
+                  max: 100
+                  color: 'var(--primary-background-color)'
+                  width: 6
+                color_stops:
+                  0: '#FFF6E3'
+                  10: '#FFE9B9'
+
+          - type: custom:gap-card
+

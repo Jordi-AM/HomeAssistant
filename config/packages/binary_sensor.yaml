@@ -12,14 +12,26 @@ binary_sensor:
     scan_interval: 100
 
   - platform: ping
+    host: 192.168.1.8
+    name: Satelite conectado
+    count: 4
+    scan_interval: 47
+
+  - platform: ping
     host: 192.168.1.52
     name: Móvil Ana
     count: 4
-    scan_interval: 77
+    scan_interval: 37
 
   - platform: ping
     host: 192.168.1.55
     name: Móvil Jordi
+    count: 4
+    scan_interval: 105
+
+  - platform: ping
+    host: 192.168.1.54
+    name: Móvil Mari
     count: 4
     scan_interval: 105
 
@@ -32,3 +44,21 @@ binary_sensor:
     province: 'Litoral de Barcelona'
     language: es
 
+    # Para determinar si se ha ido la luz   
+  - platform: ping
+    host: 192.168.1.23 # Philips Bridge
+    name: Philips Bridge
+    count: 4
+    scan_interval: 151  # para que no coincida con otros pings
+    # Para determinar si se ha ido la luz
+  - platform: ping
+    host: 192.168.1.233 
+    name: Nevera
+    count: 4
+    scan_interval: 151  # para que no coincida con otros pings    
+
+  - platform: ping
+    host: 192.168.1.202
+    name: TV encendida
+    count: 4
+    scan_interval: 101  

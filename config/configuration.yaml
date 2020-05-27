@@ -79,6 +79,12 @@ vacuum:
     token: !secret vacuum_token
     name: Aspirino
 
+# https://www.home-assistant.io/integrations/synology_dsm/
+#synology_dsm:
+#  - host: 192.168.1.9
+#    username: !secret user_synology
+#    password: !secret pwd_synology
+
 
 wake_on_lan:
 
@@ -96,8 +102,20 @@ webostv:
     customize:
       sources:
         - livetv
-        - youtube
-        - netflix
+        - Youtube
+        - Amazon Prime Video
+        - Foto y Video
+        - GALERÍA
+        - Super3
+        - TV Cast
+        - Netflix
+        - Plex
+        - Satélite
+        - Shield
+        - Grabaciones
+        - Screen Share
+
+#Accesibilidad, AccuWeather 2.0, Amazon Prime Video, Ampli, Conector de dispositivo, Disney+, Filmbox Live, Foto y Video, GALERÍA, Google Play Películas, Grabaciones, Guía de TV, Guía del usuario, HBO España, HDMI 1, LG Content Store, Live TV, Mitele, Música, Navegador web, Netflix, Notificaciones, Orange TV, Plex, Programador, Rakuten TV, Reproducción de audio por Bluetooth, Satélite, Screen Share, Servicio remoto de LG, Shield, Sky, Speedtest Master, Spotify Music - Escúchalo gratis en LG TV, Super3, TV Cast, Visionado múltiple, YouTube
 
 notify:
   - name: correo_jam
@@ -120,21 +138,75 @@ notify:
 # Con la tablet de martí, a la mínima deja de funcionar. Tampoco auto start up
 
 
+
+logger:
+  default: critical
+  logs:
+    # log level for HA core
+#    homeassistant.core: fatal
+
+    # log level for MQTT integration
+#    homeassistant.components.mqtt: warning
+
+    # log level for all python scripts
+#    homeassistant.components.python_script: warning
+
+    # individual log level for this python script
+#    homeassistant.components.python_script.my_new_script.py: debug
+
+    # log level for SmartThings lights
+#    homeassistant.components.smartthings.light: info
+
+    # Para quitar los errores ipp
+    # homeassistant.config_entries: error
+    homeassistant.components.ipp: fatal
+
+
+
 # ----------------------- Establece qué grabamos y qué no --------------------
 # https://www.home-assistant.io/components/recorder/
 # https://community.home-assistant.io/t/rpi-hassio-synology-nas-maria-db-for-logging/64012
 
 recorder:
-  db_url: mysql://jordiam:5SCwf9kTyezdGqp@192.168.1.9:3307/ha_2020?charset=utf8
+  db_url: mysql://jordiam:5SCwf9kTyezdGqp@192.168.1.9:3307/ha_2020v3?charset=utf8
   purge_keep_days: 21   # días a mantener después del purge
-  purge_interval: 1
   exclude:
     event_types:
       - call_service
       - hacs/repository
   include:
-    domains:
-      - sensor
+    #domains:
+    #  - sensor
+    entities:
+      - sensor.miampere_demand
+      - sensor.miampere_externalpvpower
+      - sensor.miampere_inverteractivepower
+      - sensor.miampere_inverterbatterypower
+      - sensor.miampere_inverterpvpower
+      - sensor.miampere_meteractivepower
+      - sensor.carga_bateria_app
+      - sensor.temp_baterias
+      - sensor.temp_inverter
+      - sensor.temperatura_ampere
+      - sensor.dark_sky_temperature
+      - sensor.temperatura_comedor
+      - sensor.humedad_ampere
+      - sensor.humedad_comedor
+      - sensor.disk_use_percent
+      - sensor.disk_use
+      - sensor.disk_free
+      - sensor.memory_free
+      - sensor.memory_use
+      - sensor.memory_use_percent
+      - sensor.load_1m
+      - sensor.load_5m
+      - sensor.processor_use
+      - sensor.xiaomi_consumo
+      - sensor.wemo_consumo
+      - sensor.wemo_consumo_diario
+
+      - sensor.miampere_ampereacasa
+      - device_tracker.bici
 
 # https://www.home-assistant.io/integrations/history/
 # history: en principio no ponemos nada, entonces lo hará de los mismo elementos del recorder
@@ -178,6 +250,11 @@ media_player: # ----------------------------------------------------------------
   - platform: yamaha_musiccast
     host: 192.168.1.30
     port: 5007
+
+  - platform: enigma2
+    host: 192.168.1.8
+    mac_address: !secret mac_vusolose
+    name: vusolose
 
 #https://developer.spotify.com/dashboard/login -> Spotify2020
 spotify:

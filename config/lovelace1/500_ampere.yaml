@@ -26,73 +26,421 @@ cards:
         cards:
 
           - type: picture-elements
-            image: /local/img/lovelace/amperev3.png
+            image: /local/img/lovelace/amperev4.png
             elements: !include sub_100_ampere.yaml
 
-          - type: custom:mini-graph-card  # minigráfico
-            name: Temperaturas AMPERE
-            icon: mdi:server
-            hours_to_show: 48
-            points_per_hour: 0.25
-            lower_bound: 5
-            upper_bound: 65
-            line_width: 2
-            height: 300
-            show:
-              - labels: true
-              - extrema: true
+
+          - type: vertical-stack
+            cards:
+
+              - type: horizontal-stack  # pack de 3 herraduras temperatura + gráficos
+                cards:
+
+
+                    # ********************************************** A M P E R E ***************************************************
+                  - type: 'custom:flex-horseshoe-card'
+                    entities:   # Qué muestra
+                      - entity: sensor.temperatura_ampere
+                        decimals: 0
+                        icon: mdi:memory
+                        name: 'AMPERE'
+                      - entity: sensor.estadisticas_temperatura_armario_ampere
+                        attribute: min_value
+                        decimals: 0
+                        name: 'Min 24h'
+                      - entity: sensor.estadisticas_temperatura_armario_ampere
+                        attribute: max_value
+                        decimals: 0
+                        name: 'Max 24h'
+                    card_filter: card--dropshadow-light
+                    show:
+                      scale_tickmarks: true   # Marcas en la herradura
+                      horseshoe_style: 'lineargradient'
+                    layout:
+                      hlines:                 # línea horizontal
+                        - id: 0
+                          xpos: 50
+                          ypos: 38
+                          length: 40
+                          styles:
+                            - stroke: var(--primary-text-color);
+                            - stroke-width: 5;
+                            - opacity: 0.9;
+                            - stroke-linecap: round;
+                      vlines:                # línea vertical
+                        - id: 0
+                          xpos: 50
+                          ypos: 56
+                          length: 20
+                          styles:
+                            - stroke: var(--primary-text-color);
+                            - opacity: 0.5;
+                            - stroke-width: 2;
+                            - stroke-linecap: round;
+                      states:               # Dónde muestra los datos
+                        - id: 0
+                          entity_index: 0
+                          xpos: 50
+                          ypos: 30
+                          styles:
+                            - font-size: 3em;
+                            - opacity: 0.9;
+                        - id: 1
+                          entity_index: 1
+                          xpos: 46
+                          ypos: 54
+                          styles:
+                            - font-size: 2em;
+                            - text-anchor: end;
+                        - id: 2
+                          entity_index: 2
+                          xpos: 54
+                          ypos: 54
+                          styles:
+                            - font-size: 2em;
+                            - text-anchor: start;
+                      names:                # Dónde muestra el atributo name de las entidades
+                        - id: 0
+                          entity_index: 0
+                          xpos: 50
+                          ypos: 90
+                          styles:
+                            - font-size: 1.8em;
+                        - id: 1
+                          entity_index: 1
+                          xpos: 46
+                          ypos: 62
+                          styles:
+                            - font-size: 0.8em;
+                            - text-anchor: end;
+                            - opacity: 0.7;
+                        - id: 2
+                          entity_index: 2
+                          xpos: 54
+                          ypos: 62
+                          styles:
+                            - font-size: 0.8em;
+                            - text-anchor: start;
+                            - opacity: 0.7;
+
+
+                    horseshoe_state:      # Propiedades de la herradura
+                      color:  '#FFF6E3'
+                    
+                    horseshoe_scale:      #
+                      min: 0
+                      max: 55
+                      color: '#999999' #'var(--primary-background-color)'
+                      width: 6
+                    color_stops:
+                      0:  '#0000FF'
+                      55: '#FF0000'
+
+                    # ********************************************** I N V E R T E R ***************************************************
+                  - type: 'custom:flex-horseshoe-card'
+                    entities:   # Qué muestra
+                      - entity: sensor.estadisticas_temperatura_inverter
+                        decimals: 0
+                        icon: mdi:memory
+                        name: 'INVERTER'
+                      - entity: sensor.estadisticas_temperatura_inverter
+                        attribute: min_value
+                        decimals: 0
+                        name: 'Min 24h'
+                      - entity: sensor.estadisticas_temperatura_inverter
+                        attribute: max_value
+                        decimals: 0
+                        name: 'Max 24h'
+                    card_filter: card--dropshadow-light
+                    show:
+                      scale_tickmarks: true   # Marcas en la herradura
+                      horseshoe_style: 'lineargradient'
+                    layout:
+                      hlines:                 # línea horizontal
+                        - id: 0
+                          xpos: 50
+                          ypos: 38
+                          length: 40
+                          styles:
+                            - stroke: var(--primary-text-color);
+                            - stroke-width: 5;
+                            - opacity: 0.9;
+                            - stroke-linecap: round;
+                      vlines:                # línea vertical
+                        - id: 0
+                          xpos: 50
+                          ypos: 56
+                          length: 20
+                          styles:
+                            - stroke: var(--primary-text-color);
+                            - opacity: 0.5;
+                            - stroke-width: 2;
+                            - stroke-linecap: round;
+                      states:               # Dónde muestra los datos
+                        - id: 0
+                          entity_index: 0
+                          xpos: 50
+                          ypos: 30
+                          styles:
+                            - font-size: 3em;
+                            - opacity: 0.9;
+                        - id: 1
+                          entity_index: 1
+                          xpos: 46
+                          ypos: 54
+                          styles:
+                            - font-size: 2em;
+                            - text-anchor: end;
+                        - id: 2
+                          entity_index: 2
+                          xpos: 54
+                          ypos: 54
+                          styles:
+                            - font-size: 2em;
+                            - text-anchor: start;
+                      names:                # Dónde muestra el atributo name de las entidades
+                        - id: 0
+                          entity_index: 0
+                          xpos: 50
+                          ypos: 90
+                          styles:
+                            - font-size: 1.8em;
+                        - id: 1
+                          entity_index: 1
+                          xpos: 46
+                          ypos: 62
+                          styles:
+                            - font-size: 0.8em;
+                            - text-anchor: end;
+                            - opacity: 0.7;
+                        - id: 2
+                          entity_index: 2
+                          xpos: 54
+                          ypos: 62
+                          styles:
+                            - font-size: 0.8em;
+                            - text-anchor: start;
+                            - opacity: 0.7;
+
+
+                    horseshoe_state:      # Propiedades de la herradura
+                      color:  '#FFF6E3'
+                    
+                    horseshoe_scale:      #
+                      min: 0
+                      max: 75
+                      color: '#999999' #'var(--primary-background-color)'
+                      width: 6
+                    color_stops:
+                      0:  '#0000FF'
+                      55: '#FF0000'
+
+
+
+
+
+
+
+
+
+
+
+                    # ********************************************** B A T E R Í A S  ***************************************************
+                  - type: 'custom:flex-horseshoe-card'
+                    entities:   # Qué muestra
+                      - entity: sensor.temp_baterias
+                        decimals: 0
+                        icon: mdi:memory
+                        name: 'BATERÍAS'
+                      - entity: sensor.estadisticas_temperatura_baterias
+                        attribute: min_value
+                        decimals: 0
+                        name: 'Min 24h'
+                      - entity: sensor.estadisticas_temperatura_baterias
+                        attribute: max_value
+                        decimals: 0
+                        name: 'Max 24h'
+                    card_filter: card--dropshadow-light
+                    show:
+                      scale_tickmarks: true   # Marcas en la herradura
+                      horseshoe_style: 'lineargradient'
+                    layout:
+                      hlines:                 # línea horizontal
+                        - id: 0
+                          xpos: 50
+                          ypos: 38
+                          length: 40
+                          styles:
+                            - stroke: var(--primary-text-color);
+                            - stroke-width: 5;
+                            - opacity: 0.9;
+                            - stroke-linecap: round;
+                      vlines:                # línea vertical
+                        - id: 0
+                          xpos: 50
+                          ypos: 56
+                          length: 20
+                          styles:
+                            - stroke: var(--primary-text-color);
+                            - opacity: 0.5;
+                            - stroke-width: 2;
+                            - stroke-linecap: round;
+                      states:               # Dónde muestra los datos
+                        - id: 0
+                          entity_index: 0
+                          xpos: 50
+                          ypos: 30
+                          styles:
+                            - font-size: 3em;
+                            - opacity: 0.9;
+                        - id: 1
+                          entity_index: 1
+                          xpos: 46
+                          ypos: 54
+                          styles:
+                            - font-size: 2em;
+                            - text-anchor: end;
+                        - id: 2
+                          entity_index: 2
+                          xpos: 54
+                          ypos: 54
+                          styles:
+                            - font-size: 2em;
+                            - text-anchor: start;
+                      names:                # Dónde muestra el atributo name de las entidades
+                        - id: 0
+                          entity_index: 0
+                          xpos: 50
+                          ypos: 90
+                          styles:
+                            - font-size: 1.8em;
+                        - id: 1
+                          entity_index: 1
+                          xpos: 46
+                          ypos: 62
+                          styles:
+                            - font-size: 0.8em;
+                            - text-anchor: end;
+                            - opacity: 0.7;
+                        - id: 2
+                          entity_index: 2
+                          xpos: 54
+                          ypos: 62
+                          styles:
+                            - font-size: 0.8em;
+                            - text-anchor: start;
+                            - opacity: 0.7;
+
+
+                    horseshoe_state:      # Propiedades de la herradura
+                      color:  '#FFF6E3'
+                    
+                    horseshoe_scale:      #
+                      min: 0
+                      max: 60
+                      color: '#999999' #'var(--primary-background-color)'
+                      width: 6
+                    color_stops:
+                      0:  '#0000FF'
+                      55: '#FF0000'
+
+              - type: history-graph
+                title: 'Temperaturas'
+                hours_to_show: 24  # 96
+                refresh_interval: 30
+                entities:
+                  - entity: sensor.temp_baterias
+                    name: Baterías
+                  - entity: sensor.temp_inverter
+                    name: Inverter
+                  - entity: sensor.temperatura_ampere
+                    name: Armario
+                  - entity: sensor.dark_sky_temperature
+                    name: Exterior
+
+              - type: history-graph
+                title: 'Carga'
+                hours_to_show: 48  # 96
+                refresh_interval: 30
+                entities:
+                  - entity: sensor.carga_bateria_app
+                    name: Carga batería
+                  - entity: sensor.miampere_inverterpvpower
+                    name: Producción solar
+                  - entity: sensor.miampere_ampereacasa
+                    name: Inyección
+
+
+          # -------------------------------------- DATOS AMPERE W (8) -------------------------------------                            
+          - type: entities
+            show_header_toggle: false
             entities:
-              - entity: sensor.temp_baterias
-                name: Baterías
-              - entity: sensor.temp_inverter
-                name: Inverter
-              - entity: sensor.temperatura_ampere
-                name: Armario
-              - entity: sensor.dark_sky_temperature
-                name: Exterior
 
+              - type: section
+                label: FLUJOS
+              - entity: sensor.miampere_solaampere   # energía de red a casa (validado sin batería y sin sol)
+                name: SOL A AMPERE
+                secondary_info: last-changed
+                icon: mdi:solar-power
+              - entity: sensor.miampere_solacasa   # energía de red a casa (validado sin batería y sin sol)
+                name: SOL A CASA
+                secondary_info: last-changed
+                icon: mdi:solar-power
 
+              - entity: sensor.miampere_ampereared   # energía de red a casa (validado sin batería y sin sol)
+                name: AMPERE A RED (INYECTANDO)
+                secondary_info: last-changed
+                icon: mdi:solar-power
+              - entity: sensor.miampere_redacasa   # energía de red a casa (validado sin batería y sin sol)
+                name: RED A CASA
+                secondary_info: last-changed
+                icon: mdi:solar-power
 
+              - entity: sensor.miampere_redaampere   # energía de red a casa (validado sin batería y sin sol)
+                name: RED A AMPERE
+                secondary_info: last-changed
+                icon: mdi:solar-power
+              - entity: sensor.miampere_ampereacasa   # energía de red a casa (validado sin batería y sin sol)
+                name: AMPERE A CASA
+                secondary_info: last-changed
+                icon: mdi:solar-power
 
-          - type: history-graph
-            title: 'Temperaturas'
-            hours_to_show: 24  # 96
-            refresh_interval: 30
-            entities:
-              - entity: sensor.temp_baterias
-                name: Baterías
-              - entity: sensor.temp_inverter
-                name: Inverter
-              - entity: sensor.temperatura_ampere
-                name: Armario
-              - entity: sensor.dark_sky_temperature
-                name: Exterior
+              - type: section
+                label: ENERGÍA
 
-
-          - type: custom:mini-graph-card  # minigráfico
-            name: KW AMPERE
-            icon: mdi:server
-            hours_to_show: 48
-            points_per_hour: 0.25
-            lower_bound: 0
-            upper_bound: 65
-            line_width: 2
-            height: 300
-            show:
-              - labels: true
-              - extrema: true
-            entities:
               - entity: sensor.ampere_meteractivepower   # energía de red a casa (validado sin batería y sin sol)
+                name: Meter ActPow (GASTO RED)
+                secondary_info: last-changed
+                icon: mdi:solar-power
               - entity: sensor.ampere_inverteractivepower  # del sol a casa?
+                name: Inverter ActPow (sol/ampere a casa?)
+                secondary_info: last-changed
+                icon: mdi:solar-power
               - entity: sensor.ampere_inverterpvpower  # producción total sol?
+                name: Inverter PV Pow (PROD. SOLAR)
+                secondary_info: last-changed
+                icon: mdi:solar-power
+              - entity: sensor.ampere_externalpvpower
+                name: External PV Power
+                secondary_info: last-changed
+                icon: mdi:solar-power
+              - entity: sensor.ampere_inverterbatterypower
+                name: "Inverter batt Pow (BAT: >0: DESCARGA, <0: CARGA)"
+                secondary_info: last-changed
+                icon: mdi:solar-power
+#              - entity: sensor.ampere_chargeavailable   # lo que queda por cargar??
+#                name: Charge avail (? 2.46)
+#                secondary_info: last-changed
+#                icon: mdi:solar-power
+#              - entity: sensor.ampere_dischargeavailable
+#                name: Discharge available
+#                secondary_info: last-changed                
+#                icon: mdi:solar-power
+              - entity: sensor.ampere_demand
+                name: Demand
+                secondary_info: last-changed                   
+                icon: mdi:solar-power
 
-
-
-          - type: history-graph
-            title: 'Carga'
-            entities:
-              - entity: sensor.carga_bateria_app
-                name: Carga batería
 
 
 
@@ -102,44 +450,6 @@ cards:
 
 
 
-          # -------------------------------------- AMPERE W (8) -------------------------------------                            
-          - type: entities
-            show_header_toggle: false
-            entities:
-              - type: section
-                label: ENERGÍA
-              - entity: sensor.ampere_meteractivepower   # energía de red a casa (validado sin batería y sin sol)
-                name: Meter ActPow (red a casa?)
-                secondary_info: last-changed
-                icon: mdi:solar-power
-              - entity: sensor.ampere_inverteractivepower  # del sol a casa?
-                name: Inverter ActPow (sol/ampere a casa?)
-                secondary_info: last-changed
-                icon: mdi:solar-power
-              - entity: sensor.ampere_inverterpvpower  # producción total sol?
-                name: Inverter PV Pow (prod. total sol)
-                secondary_info: last-changed
-                icon: mdi:solar-power
-              - entity: sensor.ampere_externalpvpower
-                name: External PV Power
-                secondary_info: last-changed
-                icon: mdi:solar-power
-              - entity: sensor.ampere_inverterbatterypower
-                name: Inverter batt Pow (+:bat->casa -:sol->bat)
-                secondary_info: last-changed
-                icon: mdi:solar-power
-              - entity: sensor.ampere_chargeavailable   # lo que queda por cargar??
-                name: Charge avail (? 2.46)
-                secondary_info: last-changed
-                icon: mdi:solar-power
-              - entity: sensor.ampere_dischargeavailable
-                name: Discharge available
-                secondary_info: last-changed                
-                icon: mdi:solar-power
-              - entity: sensor.ampere_demand
-                name: Demand
-                secondary_info: last-changed                   
-                icon: mdi:solar-power
 
 
 

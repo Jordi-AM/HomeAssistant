@@ -23,3 +23,4 @@ custom_header:
 views:
   - !include /config/lovelace2/b100_start.yaml 
   - !include /config/lovelace2/300_test_barra.yaml  
+  - !include /config/lovelace2/900_test.yaml 

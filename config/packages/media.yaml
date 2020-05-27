@@ -124,10 +124,25 @@ script:
                   media_player.superyo
               {% endif %}
 
+      - service: input_select.select_option  # establece qué player cambiará volumen el magic cube
+        data_template:
+          entity_id: input_select.control_volumen
+          option: >
+
+              {% if is_state ('input_boolean.musica_cocina','on') %}
+                  Cocina
+              {% elif is_state ('input_boolean.musica_nil','on') %}
+                  Nil
+              {% elif is_state ('input_boolean.musica_lavabo','on') %}
+                  Lavabo
+              {% elif is_state ('input_boolean.comedor','on') %}
+                  Superyo
+              {% endif %}
+
       - delay: 00:00:02
 
         # Seleccionamos altavoces Spotify
-      - service_template: media_player.select_source
+      - service: media_player.select_source
         data_template:
           entity_id: media_player.spotify_bitmap
           source: >     
@@ -140,6 +155,7 @@ script:
               {% elif is_state ('input_boolean.comedor','on') %}
                   SuperYo
               {% endif %}
+
 
         # Pasamos al siguiente tema, para no oir siempre el mismo
       - service: media_player.media_play
@@ -172,6 +188,19 @@ script:
           {{ entidad }}
         source: "net_radio"  
 
+    - service: input_select.select_option  # establece qué player cambiará volumen el magic cube
+      data_template:
+        entity_id: input_select.control_volumen
+        option: >
+
+            {% if ( booleano == 'input_boolean.musica_cocina') %}
+                Cocina
+            {% elif (booleano == 'input_boolean.musica_nil') %}
+                Nil
+            {% elif (booleano == 'input_boolean.musica_lavabo') %}
+                Lavabo
+            {% endif %}
+
 
   radio_comedor: # y cocina
     alias: Pone radio comedor
@@ -190,6 +219,32 @@ script:
               {{ url }} 
             media_content_type: 'audio/mp4'
 
+        - service: input_select.select_option  # establece qué player cambiará volumen el magic cube
+          data:
+            entity_id: input_select.control_volumen
+            option: Superyo
+
+  musica_server:
+    alias: múscia servidor
+    sequence:
+      - service: media_player.select_source
+        data_template:
+          entity_id: >
+            {{ altavoz }}
+          source: server
+
+      - service: input_select.select_option  # establece qué player cambiará volumen el magic cube
+        data_template:
+          entity_id: input_select.control_volumen
+          option: >
+
+              {% if ( altavoz == 'media_player.altavoz_cocina_main') %}
+                  Cocina
+              {% elif (altavoz == 'media_player.altavoz_nil_main') %}
+                  Nil
+              {% elif (altavoz == 'media_player.altavoz_lavabo_main') %}
+                  Lavabo
+              {% endif %}
 
   paginacaratula:
     sequence:
@@ -201,6 +256,41 @@ script:
             entity_id: >
               {{ lista }}  
 
+  enciende_movistar:  # si switch también apagado
+    alias: Poner Movistar
+    sequence:
+      - service: switch.turn_on
+        data:
+          entity_id: switch.enchufe_canal_plus
+      - wait_template: "{{ is_state('binary_sensor.satelite_conectado', 'on') }}"
+        timeout: '00:01:30'
+      - delay: '00:00:30'  ## para que el servicio web esté activo
+      - service: script.activa_movistar
+
+
+  activa_movistar: # si switch encendido
+    sequence:
+      - service: media_player.turn_on
+        data: 
+          entity_id: media_player.vusolose
+      - delay: '00:00:03'
+      - wait_template: "{{ is_state('media_player.vusolose', 'on') }}"
+        timeout: '00:00:40'
+      - service:  media_player.select_source
+        data:  
+          source: "FOX HD"
+          entity_id: media_player.vusolose      
+      - delay: '00:00:03'
+      - service: media_player.turn_on
+        data: 
+          entity_id: media_player.lg
+      - wait_template: "{{ is_state('media_player.lg', 'on') }}"
+        timeout: '00:00:40'
+      - delay: '00:00:01'
+      - service: media_player.select_source
+        data: 
+          entity_id: media_player.lg
+          source: "Satélite"
 
 automation:
 
@@ -234,7 +324,6 @@ automation:
       entity_id: input_boolean.musica_cocina
 
 
-
 - id: idle_to_off_lavabo
   alias: Pasar altavoces de idle a off (lavabo)
   trigger:
@@ -247,7 +336,7 @@ automation:
     - service: input_boolean.turn_off
       entity_id: input_boolean.musica_lavabo
 
-      
+  
 - id: idle_to_off_nil
   alias: Pasar altavoces de idle a off (Nil)
   trigger:
@@ -271,7 +360,6 @@ automation:
   action:
     - service: input_boolean.turn_off
       entity_id: input_boolean.comedor
-
 
 
 ###############################################################################################################################

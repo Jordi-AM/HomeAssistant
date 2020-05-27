@@ -1,0 +1,177 @@
+title: 400_ampere
+path: ampere
+icon: mdi:solar-panel
+panel: true
+cards:
+
+  - type: vertical-stack           
+    cards:    
+      - !include /config/lovelace1/000_top_barv2.yaml
+
+      #- type: markdown
+      #  content: |
+            # Datos producción solar (AMPERE)
+      
+
+      - type: custom:layout-card
+        layout: horizontal # auto vertical horizontal
+        column_num: 3
+        max_columns: 3
+        # column_width: 50
+        max_width: [33%, 33%, 33%]
+        min_height: 100
+        rebuild: 1000
+        tap_action:
+          action: none
+        cards:
+
+          - type: picture-elements
+            image: /local/img/lovelace/amperev4.png
+            elements: !include sub_100_ampere.yaml
+
+          - type: custom:mini-graph-card  # minigráfico
+            name: Temperaturas AMPERE
+            icon: mdi:server
+            hours_to_show: 48
+            points_per_hour: 1
+            lower_bound: 5
+            upper_bound: 65
+            line_width: 2
+            height: 300
+            smoothing: false
+            animate: true
+            show:
+              - labels: true
+              - extrema: true
+              - average: true
+              - labels_secondary: true
+            entities:
+              - entity: sensor.temp_baterias
+                name: Baterías
+              - entity: sensor.temp_inverter
+                name: Inverter
+              - entity: sensor.temperatura_ampere
+                name: Armario
+              - entity: sensor.dark_sky_temperature
+                name: Exterior
+
+
+
+
+          - type: history-graph
+            title: 'Temperaturas'
+            hours_to_show: 24  # 96
+            refresh_interval: 30
+            entities:
+              - entity: sensor.temp_baterias
+                name: Baterías
+              - entity: sensor.temp_inverter
+                name: Inverter
+              - entity: sensor.temperatura_ampere
+                name: Armario
+              - entity: sensor.dark_sky_temperature
+                name: Exterior
+
+
+          - type: custom:mini-graph-card  # minigráfico
+            name: KW AMPERE
+  
+            entities:
+              - sensor.ampere_meteractivepower
+              - sensor.ampere_inverteractivepower
+              - sensor.ampere_inverterpvpower
+              - sensor.miampere_meteractivepower
+              - sensor.miampere_inverteractivepower
+              - sensor.miampere_inverterpvpower
+
+
+
+
+          - type: history-graph
+            title: 'Carga'
+            entities:
+              - entity: sensor.carga_bateria_app
+                name: Carga batería
+
+
+
+            # Power wheel no me gusta. Si hay que recuperarlo, descomentar en resources.yaml. Código en power_whell.txt
+
+
+
+
+
+          # -------------------------------------- AMPERE W (8) -------------------------------------                            
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - type: section
+                label: ENERGÍA
+              - entity: sensor.miampere_solaampere   # energía de red a casa (validado sin batería y sin sol)
+                name: SOL A AMPERE
+                secondary_info: last-changed
+                icon: mdi:solar-power
+              - entity: sensor.miampere_solacasa   # energía de red a casa (validado sin batería y sin sol)
+                name: SOL A CASA
+                secondary_info: last-changed
+                icon: mdi:solar-power
+
+              - entity: sensor.miampere_ampereared   # energía de red a casa (validado sin batería y sin sol)
+                name: AMPERE A RED (INYECTANDO)
+                secondary_info: last-changed
+                icon: mdi:solar-power
+              - entity: sensor.miampere_redacasa   # energía de red a casa (validado sin batería y sin sol)
+                name: RED A CASA
+                secondary_info: last-changed
+                icon: mdi:solar-power
+
+              - entity: sensor.miampere_redaampere   # energía de red a casa (validado sin batería y sin sol)
+                name: RED A AMPERE
+                secondary_info: last-changed
+                icon: mdi:solar-power
+              - entity: sensor.miampere_ampereacasa   # energía de red a casa (validado sin batería y sin sol)
+                name: AMPERE A CASA
+                secondary_info: last-changed
+                icon: mdi:solar-power
+
+
+              - entity: sensor.ampere_meteractivepower   # energía de red a casa (validado sin batería y sin sol)
+                name: Meter ActPow (GASTO RED)
+                secondary_info: last-changed
+                icon: mdi:solar-power
+              - entity: sensor.ampere_inverteractivepower  # del sol a casa?
+                name: Inverter ActPow (sol/ampere a casa?)
+                secondary_info: last-changed
+                icon: mdi:solar-power
+              - entity: sensor.ampere_inverterpvpower  # producción total sol?
+                name: Inverter PV Pow (PROD. SOLAR)
+                secondary_info: last-changed
+                icon: mdi:solar-power
+              - entity: sensor.ampere_externalpvpower
+                name: External PV Power
+                secondary_info: last-changed
+                icon: mdi:solar-power
+              - entity: sensor.ampere_inverterbatterypower
+                name: "Inverter batt Pow (BAT: >0: DESCARGA, <0: CARGA)"
+                secondary_info: last-changed
+                icon: mdi:solar-power
+              - entity: sensor.ampere_chargeavailable   # lo que queda por cargar??
+                name: Charge avail (? 2.46)
+                secondary_info: last-changed
+                icon: mdi:solar-power
+              - entity: sensor.ampere_dischargeavailable
+                name: Discharge available
+                secondary_info: last-changed                
+                icon: mdi:solar-power
+              - entity: sensor.ampere_demand
+                name: Demand
+                secondary_info: last-changed                   
+                icon: mdi:solar-power
+
+
+
+
+
+
+
+

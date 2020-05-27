@@ -15,5 +15,7 @@ input_select:
     options:
       - 'Si'
       - 'No'
-    initial: 'Si'
+    initial: 'No'
     icon: mdi:school
+
+

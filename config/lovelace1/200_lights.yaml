@@ -322,16 +322,16 @@ cards:
       # *********************************************   B O T T O M  ****************************************************
       # *****************************************************************************************************************      
       - type: horizontal-stack
-        cards:
+        cards: []
 #          - type: picture-elements
 #            image: /local/img/lovelace/bottom.svg
 #            elements: []
 
-          - type: custom:slider-entity-row
-            entity: input_number.principales
+#          - type: custom:slider-entity-row
+#            entity: input_number.principales
 
-          - type: custom:slider-entity-row
-            entity: input_number.traseras
+#          - type: custom:slider-entity-row
+#            entity: input_number.traseras
 
   
 
