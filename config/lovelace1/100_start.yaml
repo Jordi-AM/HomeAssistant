@@ -18,9 +18,8 @@ cards:
       # *****************************************************************************************************************
       # **************************************************** T O P ******************************************************
       # *****************************************************************************************************************
-      - !include /config/lovelace1/000_top_barv2.yaml
+      - !include /config/lovelace1/__menu__.yaml
 
-          # - type: custom:compact-custom-header  
       - type: horizontal-stack
         cards:
           - type: "custom:atomic-calendar"
@@ -74,107 +73,165 @@ cards:
                   - "Asia/Tokyo"
 
                 # ******************************************** BATERÍA AMPERE ******************************************
-              - type: 'custom:flex-horseshoe-card'
-                entities:   # Qué muestra
-                  - entity: sensor.carga_bateria_app
-                    decimals: 1
-                    icon: mdi:memory
-                    name: 'AMPERE'
-                  - entity: sensor.ampere_inverterpvpower
-                    decimals: 2
-                    name: 'SOL'
-                  - entity: sensor.ampere_demand
-                    decimals: 2
-                    name: 'CONSUMO'
-                card_filter: card--dropshadow-heavy--sepia90
-                show:
-                  scale_tickmarks: true   # Marcas en la herradura
-                layout:
-                  hlines:                 # línea horizontal
-                    - id: 0
-                      xpos: 50
-                      ypos: 38
-                      length: 40
-                      styles:
-                        - stroke: var(--primary-text-color);
-                        - stroke-width: 5;
-                        - opacity: 0.9;
-                        - stroke-linecap: round;
-                  vlines:                # línea vertical
-                    - id: 0
-                      xpos: 50
-                      ypos: 56
-                      length: 20
-                      styles:
-                        - stroke: var(--primary-text-color);
-                        - opacity: 0.5;
-                        - stroke-width: 2;
-                        - stroke-linecap: round;
-                  states:               # Dónde muestra los datos
-                    - id: 0
-                      entity_index: 0
-                      xpos: 50
-                      ypos: 30
-                      styles:
-                        - font-size: 3em;
-                        - opacity: 0.9;
-                    - id: 1
-                      entity_index: 1
-                      xpos: 46
-                      ypos: 54
-                      styles:
-                        - font-size: 1.5em;
-                        - text-anchor: end;
-                    - id: 2
-                      entity_index: 2
-                      xpos: 54
-                      ypos: 54
-                      styles:
-                        - font-size: 1.5em;
-                        - text-anchor: start;
-                  names:                # Dónde muestra el atributo name de las entidades
-                    - id: 0
-                      entity_index: 0
-                      xpos: 50
-                      ypos: 90
-                      styles:
-                        - font-size: 1.8em;
-                    - id: 1
-                      entity_index: 1
-                      xpos: 46
-                      ypos: 62
-                      styles:
-                        - font-size: 0.8em;
-                        - text-anchor: end;
-                        - opacity: 0.7;
-                    - id: 2
-                      entity_index: 2
-                      xpos: 54
-                      ypos: 62
-                      styles:
-                        - font-size: 0.8em;
-                        - text-anchor: start;
-                        - opacity: 0.7;
+
+              - type: custom:state-switch
+#                entity: user
+#                default: default
+#                states:
+#                  'Jordi Aguilera':
+                entity: input_boolean.mostrar_horseshoe
+                states:
+                  "off":
+                    type: entities
+                    title: Estado Ampere
+                    show_header_toggle: false
+                    header:
+                      image: 'local/img/lovelace/sol.png'
+                      type: picture
+                    entities:
+                      - entity: sensor.carga_bateria_app
+                        icon: mdi:memory
+                        name: 'CARGA AMPERE'
+                        style: |
+
+                          .text-content {
+                            font-size: 32px; 
+                            color: white;
+                          }
+                      - entity: sensor.ampere_inverterpvpower
+                        name: 'PRODUCCIÓN SOLAR'
+                        icon: mdi:weather-sunny
+                        style: |
+
+                          .text-content {
+                            font-size: 32px; 
+                            color: white;
+                          }
+                      - entity: sensor.ampere_demand
+                        name: 'CONSUMO TOTAL'
+                        icon: mdi:power-plug
+                        style: |
+
+                          .text-content {
+                            font-size: 32px; 
+                            color: white;
+                          }
+                  #'Tablet':
+                  'on':
+                    type: 'custom:flex-horseshoe-card'
+                    entities:   # Qué muestra
+                      - entity: sensor.carga_bateria_app
+                        decimals: 1
+                        icon: mdi:memory
+                        name: 'AMPERE'
+                        tap_action:
+                          action: more-info
+                      - entity: sensor.ampere_inverterpvpower
+                        decimals: 2
+                        name: 'SOL'
+                        tap_action:
+                          action: more-info
+                      - entity: sensor.ampere_demand
+                        decimals: 2
+                        name: 'CONSUMO'
+                        tap_action:
+                          action: more-info
+                    card_filter: card--dropshadow-heavy--sepia90
+                    show:
+                      scale_tickmarks: true   # Marcas en la herradura
+                    layout:
+                      hlines:                 # línea horizontal
+                        - id: 0
+                          xpos: 50
+                          ypos: 38
+                          length: 40
+                          styles:
+                            - stroke: var(--primary-text-color);
+                            - stroke-width: 5;
+                            - opacity: 0.9;
+                            - stroke-linecap: round;
+                      vlines:                # línea vertical
+                        - id: 0
+                          xpos: 50
+                          ypos: 56
+                          length: 20
+                          styles:
+                            - stroke: var(--primary-text-color);
+                            - opacity: 0.5;
+                            - stroke-width: 2;
+                            - stroke-linecap: round;
+                      states:               # Dónde muestra los datos
+                        - id: 0
+                          entity_index: 0
+                          xpos: 50
+                          ypos: 30
+                          styles:
+                            - font-size: 3em;
+                            - opacity: 0.9;
+                        - id: 1
+                          entity_index: 1
+                          xpos: 46
+                          ypos: 54
+                          styles:
+                            - font-size: 1.5em;
+                            - text-anchor: end;
+                        - id: 2
+                          entity_index: 2
+                          xpos: 54
+                          ypos: 54
+                          styles:
+                            - font-size: 1.5em;
+                            - text-anchor: start;
+                      names:                # Dónde muestra el atributo name de las entidades
+                        - id: 0
+                          entity_index: 0
+                          xpos: 50
+                          ypos: 90
+                          styles:
+                            - font-size: 1.8em;
+                        - id: 1
+                          entity_index: 1
+                          xpos: 46
+                          ypos: 62
+                          styles:
+                            - font-size: 0.8em;
+                            - text-anchor: end;
+                            - opacity: 0.7;
+                        - id: 2
+                          entity_index: 2
+                          xpos: 54
+                          ypos: 62
+                          styles:
+                            - font-size: 0.8em;
+                            - text-anchor: start;
+                            - opacity: 0.7;
 
 
-                horseshoe_state:      # Propiedades de la herradura
-                  color:  '#FFF6E3'
-                horseshoe_scale:      #
-                  min: 0
-                  max: 100
-                  color: 'var(--primary-background-color)'
-                  width: 6
-                color_stops:
-                  0: '#FFF6E3'
-                  10: '#FFE9B9'
-                  20: '#FFDA8A'
-                  30: '#FFCB5B'
-                  40: '#FFBF37'
-                  50: '#ffb414'
-                  60: '#FFAD12'
-                  70: '#FFA40E'
-                  80: '#FF9C0B' 
-                  90: '#FF8C06' 
+                    horseshoe_state:      # Propiedades de la herradura
+                      color:  '#FFF6E3'
+                    horseshoe_scale:      #
+                      min: 0
+                      max: 100
+                      color: 'var(--primary-background-color)'
+                      width: 6
+                    color_stops:
+                      0: '#FFF6E3'
+                      10: '#FFE9B9'
+                      20: '#FFDA8A'
+                      30: '#FFCB5B'
+                      40: '#FFBF37'
+                      50: '#ffb414'
+                      60: '#FFAD12'
+                      70: '#FFA40E'
+                      80: '#FF9C0B' 
+                      90: '#FF8C06' 
+
+                  default:
+                    type: markdown
+                    content: >
+                      ## Unknown user
+
+ 
 
 
 
@@ -198,10 +255,6 @@ cards:
                     name: Versión disponible
                     icon: mdi:home-assistant
 
-
-
-
-
         # ************************************************* BARRA INFERIOR **********************************************
 
       - type: horizontal-stack
@@ -214,7 +267,8 @@ cards:
                 elements: 
 
                   - type: image
-                    entity: device_tracker.jordi
+                    #entity: device_tracker.jordi
+                    entity: person.jordi
                     image: /local/img/personas/jordi.jpg
                     state_image:
                       "home": /local/img/personas/jordi.jpg
@@ -224,16 +278,17 @@ cards:
                       left: 12%
                       width: 8%
 
-                  - type: state-label
-                    entity: binary_sensor.movil_jordi
-                    title: Jordi
-                    style:
-                      top: 90%
-                      left: 12%
+                  #- type: state-label  # TODO: posiblemente eliminable al usar person
+                  #  entity: binary_sensor.movil_jordi
+                  #  title: Jordi
+                  #  style:
+                  #    top: 90%
+                  #    left: 12%
 
 
                   - type: image
-                    entity: device_tracker.ana
+                    #entity: device_tracker.ana
+                    entity: person.ana
                     image: /local/img/personas/jordi.jpg
                     state_image:
                       "home": /local/img/personas/ana.jpg
@@ -243,31 +298,32 @@ cards:
                       left: 27%
                       width: 8%
 
-                  - type: state-label
-                    entity: binary_sensor.movil_ana
-                    title: ANA
-                    style:
-                      top: 90%
-                      left: 27%
+                  #- type: state-label
+                  #  entity: binary_sensor.movil_ana
+                  #  title: ANA
+                  #  style:
+                  #    top: 90%
+                  #    left: 27%
 
 
                   - type: image
-                    entity: device_tracker.mari
+                    #entity: device_tracker.mari
+                    entity: person.mari
                     image: /local/img/personas/mari.jpg
                     state_image:
                       "home": /local/img/personas/mari.jpg
-                      "not_home": /local/img/personas/mari_bn.jpg
+                      "not_home": /local/img/personas/nulo.png #mari_bn.jpg
                     style:
                       top: 37%
                       left: 42%
                       width: 8%
 
-                  - type: state-label
-                    entity: binary_sensor.movil_mari
-                    title: Mari
-                    style:
-                      top: 90%
-                      left: 42%
+                  #- type: state-label
+                  #  entity: binary_sensor.movil_mari
+                  #  title: Mari
+                  #  style:
+                  #    top: 90%
+                  #    left: 42%
 
                   - type: state-badge
                     entity: sensor.spain_coronavirus_deaths

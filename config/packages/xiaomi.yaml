@@ -59,7 +59,7 @@ automation:
     trigger:
     - platform: template
       value_template: >
-          {{ states.sensor.vacuum_start_time_weekdays.state == states.sensor.time.state }}
+         {{ states('sensor.vacuum_start_time_weekdays') == states('sensor.time') }}
     condition:
     - condition: state
       entity_id: 'binary_sensor.workday_sensor' 
@@ -79,7 +79,7 @@ automation:
     trigger:
     - platform: template
       value_template: >
-        {{ states.sensor.vacuum_start_time_weekend.state == states.sensor.time.state }}
+        {{ states('sensor.vacuum_start_time_weekend') == states('sensor.time') }}
     condition:
     - condition: state
       entity_id: 'binary_sensor.workday_sensor' 

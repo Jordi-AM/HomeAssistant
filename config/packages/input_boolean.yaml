@@ -3,6 +3,9 @@ input_boolean: # Si está encendida, aviso pastilla
     name: Pastilla
     icon: mdi:pill
 
+  topbar_config:
+    name: Menú de configuración
+
   encender_ordenador: # si pasa a on trigger encender_ordenador
     name: Endender ordenador
     icon: 'mdi:desktop-classic'
@@ -15,21 +18,30 @@ input_boolean: # Si está encendida, aviso pastilla
     name: Activar modo kiosko
     icon: fas:desktop
 
-  avisar_pastillas_movil: # el aviso diario de la pastilla, lo envía al móvil? Útil en vacaciones
+  mostrar_horseshoe:
+    name: Mostrar Horse Shoe
+    icon: mdi:horseshoe
+
+  avisar_pastillas_movil: # aviso pastilla al móvil
     name: Avisar pastillas móvil
     icon: mdi:pill
-  # --------------------- Asociados a las pantallas --------------------------------
-  screen_home: 
-    name: pantalla home
-    icon: fas:house-user
 
-  screen_lights: # panta
-    name: pantalla luces
-    icon: fas:lightbulb
+  aviso_actividad_pc:
+    name: Avisa encendidos y apagados PC
+    icon: mdi:alarm-light-outline
 
-  screen_weather:
-    name: pantalla meteo
-    icon: fas:cloud-sun
+  # para activar cosas desde google assistant
+  cenando:
+    name: escena cenando
+
+  relax:
+    name: escena relax
+
+  a_cocinar:
+    name: a cocinar
+
+  a_la_ducha:
+    name: a la ducha
 
 
 
@@ -57,4 +69,6 @@ input_boolean: # Si está encendida, aviso pastilla
     name: Lluvia proxima
     initial: false
 
-
+  # si se detecta caída se pone a true. Para diferenciar de caída internet
+  red_electrica_caida:
+    initial: false

@@ -1,0 +1,25 @@
+title: 930_aire
+path: aire
+icon: mdi:air-conditioner
+panel: true
+cards:
+  - type: vertical-stack           
+    cards:    
+      - !include /config/lovelace1/__menu__.yaml
+
+      - type: markdown
+        content: |
+            Aire acondicionado2
+
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: entities
+                title: SETUP
+                entities:
+                  - input_boolean.ahorrar_aire
+                  - input_number.limite
+                  - automation.ahorra_energia_aire
+              - type: custom:gap-card
+              - type: custom:gap-card

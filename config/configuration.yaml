@@ -1,36 +1,66 @@
 homeassistant:
+
+  latitude: 41.428728  #41.427628
+  longitude: 2.179750  # esta es la buena
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: 34
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: Europe/Madrid
+
   packages: !include_dir_named packages
   customize: !include customize.yaml
   customize_glob: !include customize_glob.yaml
 
 default_config:
 
+updater:
+
+# https://community.home-assistant.io/t/dismiss-all-persistent-notifications-script/108789/3
+python_script:
+
 http:
-  base_url: !secret duckdns
-  # ssl_certificate: /ssl/fullchain.pem
-  # ssl_key: /ssl/privkey.pem
+  #base_url: !secret duckdns
+  #ssl_certificate: /ssl/fullchain.pem
+  #ssl_key: /ssl/privkey.pem
 
+zone:
+  # This will override the default home zone
+  - name: Home
+    latitude: 41.427628 #41.427628
+    longitude: 2.179750  # esta es la buena
+    radius: 100
+    icon: mdi:home-account
 
+# https://www.home-assistant.io/integrations/google_assistant/v 
+# alarm_control_panel
+# group (on/off)
+# input_boolean (on/off)
+# input_select (option/setting/mode/value)
+# scene (on)
+# script (on)
+# switch (on/off)
+# fan (on/off/speed)
+# light (on/off/brightness/rgb color/color temp)
+# media_player (on/off/set volume (via set volume)/source (via set input source))
+# climate (temperature setting, hvac_mode)
+# vacuum (dock/start/stop/pause)
+# sensor (temperature setting for temperature sensors and humidity setting for humidity sensors)
 
-
-# --------------------------------------------------------------------------------------
-# ------------------------------ Google Home -------------------------------------------
-# --------------------------------------------------------------------------------------
-
-# https://domology.es/integracion-de-google-home-en-home-assistant/
 google_assistant:
   project_id: !secret google_home 
-  exposed_domains:
-    - switch
-    - light
-    - input_boolean
-    - media_player
-    - automation  
-    - scene
-    - script      
-    - vacuum
+  service_account: !include Home-bbad653f7867.json
+  report_state: true
+  expose_by_default: false
+#  exposed_domains:   Desactivado. Muestro solo las entidades que quiero
+#    - light
+#    - scene
   entity_config: !include dispositivosGH.yaml
 
+
+camera:
+  - platform: local_file
+    file_path: /config/www/img/pruebas/img1.jpg
 
 #https://www.home-assistant.io/integrations/calendar.google
 google:
@@ -58,7 +88,7 @@ telegram_bot:
       - 440192507
 
 # https://darksky.net/dev/docs
-# si en PLANTILLAS escribo {{ states.weather.dark_sky }}, veré todo lo que ofrece. En la carpeta APUNTS hay
+# si en PLANTILLAS escribo {{ states .weather.dark_sky }}, veré todo lo que ofrece. En la carpeta APUNTS hay
 # un ejemplo de cómo acceder a todos los campos
 weather:
   - platform: darksky
@@ -88,6 +118,9 @@ vacuum:
 
 wake_on_lan:
 
+# para poder utilizar un contador y contabilizar errores en el log
+system_log:
+  fire_event: true
 
 
 # https://www.home-assistant.io/integrations/webostv/
@@ -140,7 +173,7 @@ notify:
 
 
 logger:
-  default: critical
+  default: error
   logs:
     # log level for HA core
 #    homeassistant.core: fatal
@@ -159,7 +192,31 @@ logger:
 
     # Para quitar los errores ipp
     # homeassistant.config_entries: error
-    homeassistant.components.ipp: fatal
+    homeassistant.components.ipp: fatal # para que ifnore si impresora apagada
+    homeassistant.helpers.entity: fatal #para evitar los de spotify cuando lo encendemos
+
+
+
+person:
+  - name: Jordi
+    id: jordi
+    device_trackers:
+      - device_tracker.jordi # router
+      - device_tracker.jordi_pff1ot # owntracks
+      # - device_tracker.jordigps
+      # device_tracker.pocophone_f1 Supongo que Ariela o similar
+  - name: Ana
+    id: ana
+    device_trackers:
+      - device_tracker.ana
+      #- device_tracker.ana_xiaomiot
+  - name: Mari
+    id: mari
+    device_trackers:
+      - device_tracker.mari
+
+
+
 
 
 
@@ -224,6 +281,8 @@ device_tracker:
 # Enables map tracking of devices
 map:
 
+# https://www.home-assistant.io/integrations/api
+api:
 
 browser_mod:
   devices:

@@ -133,4 +133,9 @@ script:
             {{ entity_id }}
           volume_level: >
             {% set vol = (( cantidad | float ) + (actual | float)) | float %}
-            {{ vol }}
+            {% if vol < 0 %}
+            {% set vol = 0 %}
+            {% elif vol > 1 %}
+            {% set vol = 1 %}
+            {% endif %}
+            {{ vol | float }}

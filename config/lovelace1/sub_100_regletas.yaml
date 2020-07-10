@@ -8,12 +8,11 @@
       tap_action:
         action: toggle
       style:
-        top: 26%
-        left: 16%
+        top: 15%
+        left: 13%
+        transform: scale(2,2)
         "--paper-item-icon-color": red
         "--paper-item-icon-active-color": green
-        "--iron-icon-height": 35px
-        "--iron-icon-width": 35px
 
     - type: state-icon
       icon: mdi:power
@@ -21,25 +20,24 @@
       tap_action:
         action: toggle
       style:
-        top: 26%
-        left: 35%
+        top: 15%
+        left: 32%
+        transform: scale(2,2)
         "--paper-item-icon-color": red
         "--paper-item-icon-active-color": green
-        "--iron-icon-height": 35px
-        "--iron-icon-width": 35px                      
-
+                 
     - type: state-icon
       icon: mdi:power
       entity: switch.enchufe_libre
       tap_action:
         action: toggle
       style:
-        top: 26%
-        left: 53%
+        top: 15%
+        left: 51%
+        transform: scale(2,2)
         "--paper-item-icon-color": red
         "--paper-item-icon-active-color": green
-        "--iron-icon-height": 35px
-        "--iron-icon-width": 35px
+
 
     - type: state-icon
       icon: mdi:power
@@ -47,12 +45,12 @@
       tap_action:
         action: toggle
       style:
-        top: 26%
-        left: 72%
+        top: 15%
+        left: 70%
+        transform: scale(2,2)
         "--paper-item-icon-color": red
         "--paper-item-icon-active-color": green
-        "--iron-icon-height": 35px
-        "--iron-icon-width": 35px            
+         
 
     # -------- Todos los enchufes ---------------
 
@@ -64,11 +62,11 @@
         service_data:
           entity_id: group.regleta1                
       style:
-        top: 69%
-        left: 85%
-        --iron-icon-fill-color: "red"
-        --iron-icon-height: "35px"
-        --iron-icon-width: "35px"            
+        top: 65%
+        left: 83%
+        color: red
+        transform: scale(2,2)
+   
 
     - type: icon
       icon: mdi:power
@@ -78,13 +76,11 @@
         service_data:
           entity_id: group.regleta1                
       style:
-        top: 69%
+        top: 65%
         left: 92%
-        --iron-icon-fill-color: "green"
-        --iron-icon-height: "35px"
-        --iron-icon-width: "35px"      
-
-
+        color: green
+        transform: scale(2,2)
+    
 
 # ---------------------------------------------- REGLETA 2 ----------------------------------------------
 - type: picture-elements
@@ -96,12 +92,12 @@
       tap_action:
         action: toggle
       style:
-        top: 26%
-        left: 16%
+        top: 15%
+        left: 13%
+        transform: scale(2,2)
         "--paper-item-icon-color": red
         "--paper-item-icon-active-color": green
-        "--iron-icon-height": 35px
-        "--iron-icon-width": 35px
+
 
     - type: state-icon
       icon: mdi:power
@@ -109,12 +105,12 @@
       tap_action:
         action: toggle
       style:
-        top: 26%
-        left: 35%
+        top: 15%
+        left: 32%
+        transform: scale(2,2)
         "--paper-item-icon-color": red
         "--paper-item-icon-active-color": green
-        "--iron-icon-height": 35px
-        "--iron-icon-width": 35px                      
+                    
 
     - type: state-icon
       icon: mdi:power
@@ -122,12 +118,12 @@
       tap_action:
         action: toggle
       style:
-        top: 26%
-        left: 53%
+        top: 15%
+        left: 51%
+        transform: scale(2,2)
         "--paper-item-icon-color": red
         "--paper-item-icon-active-color": green
-        "--iron-icon-height": 35px
-        "--iron-icon-width": 35px
+
 
     - type: state-icon
       icon: mdi:power
@@ -135,12 +131,12 @@
       tap_action:
         action: toggle
       style:
-        top: 26%
-        left: 72%
+        top: 15%
+        left: 70%
+        transform: scale(2,2)
         "--paper-item-icon-color": red
         "--paper-item-icon-active-color": green
-        "--iron-icon-height": 35px
-        "--iron-icon-width": 35px    
+  
 
     # -------- Todos los enchufes ---------------
 
@@ -152,11 +148,11 @@
         service_data:
           entity_id: group.regleta2                
       style:
-        top: 69%
-        left: 85%
-        --iron-icon-fill-color: "red"
-        --iron-icon-height: "35px"
-        --iron-icon-width: "35px"            
+        top: 65%
+        left: 83%
+        color: red
+        transform: scale(2,2)
+        
 
     - type: icon
       icon: mdi:power
@@ -166,8 +162,7 @@
         service_data:
           entity_id: group.regleta2                
       style:
-        top: 68%
-        left: 93%
-        --iron-icon-fill-color: "green"
-        --iron-icon-height: "35px"
-        --iron-icon-width: "35px"      
+        top: 65%
+        left: 92%
+        color: green
+        transform: scale(2,2)

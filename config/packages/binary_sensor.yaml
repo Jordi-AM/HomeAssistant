@@ -9,7 +9,7 @@ binary_sensor:
     host: www.google.es
     name: Online Internet
     count: 4
-    scan_interval: 100
+    scan_interval: 50
 
   - platform: ping
     host: 192.168.1.8
@@ -55,10 +55,10 @@ binary_sensor:
     host: 192.168.1.233 
     name: Nevera
     count: 4
-    scan_interval: 151  # para que no coincida con otros pings    
+    scan_interval: 91  # para que no coincida con otros pings    
 
   - platform: ping
-    host: 192.168.1.202
+    host: 192.168.1.203 # 202 Wifi
     name: TV encendida
     count: 4
     scan_interval: 101  

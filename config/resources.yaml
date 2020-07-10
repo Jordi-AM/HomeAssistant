@@ -1,77 +1,85 @@
   ################################################ H A C S ####################################################################
   #                                                                                                                           #
 
-- url: /local/community/spotify-playlist-card/spotify-playlist-card.js
+- url: /hacsfiles/spotify-playlist-card/spotify-playlist-card.js
   type: js      
 
   # Para modo kiosko
   # https://192.168.1.40:8123/lovelace/0?disable_ch      para mostrarlo desactivado
-- url: /local/community/custom-header/custom-header.js
+- url: /hacsfiles/custom-header/custom-header.js
   type: module
 
   # Agrupa entidades de diferentes maneras
-- url: /local/community/lovelace-auto-entities/auto-entities.js
+- url: /hacsfiles/lovelace-auto-entities/auto-entities.js
   type: module
 
-- url: /local/community/atomic_calendar/atomic_calendar.js
+- url: /hacsfiles/atomic_calendar/atomic_calendar.js
   type: module
 
-- url: /local/community/atomic-calendar-revive/atomic-calendar-revive.js
+- url: /hacsfiles/atomic-calendar-revive/atomic-calendar-revive.js
   type: module
 
   # Xiaomi vacuum  https://github.com/benct/lovelace-xiaomi-vacuum-card
-- url: /local/community/lovelace-xiaomi-vacuum-card/xiaomi-vacuum-card.js?v=3.0.1
+- url: /hacsfiles/lovelace-xiaomi-vacuum-card/xiaomi-vacuum-card.js
   type: module
 
   # https://github.com/PiotrMachowski/lovelace-xiaomi-vacuum-map-card
-- url: /local/community/lovelace-xiaomi-vacuum-map-card/xiaomi-vacuum-map-card.js
+- url: /hacsfiles/lovelace-xiaomi-vacuum-map-card/xiaomi-vacuum-map-card.js
   type: module
 
   #https://github.com/thomasloven/lovelace-layout-card - Get more control over the placement of lovelace cards
-- url: /local/community/lovelace-layout-card/layout-card.js
+- url: /hacsfiles/lovelace-layout-card/layout-card.js
   type: module
 
   # This is not a new card. Instead it changes the way pretty much any other card works.
-- url: /local/community/lovelace-card-mod/card-mod.js
+- url: /hacsfiles/lovelace-card-mod/card-mod.js
   type: module
 
   # Para los botones de los mapas del tiempo
-- url: /local/community/button-card/button-card.js
+- url: /hacsfiles/button-card/button-card.js
   type: module
 
-- url: /local/community/lovelace-gap-card/gap-card.js
+- url: /hacsfiles/lovelace-gap-card/gap-card.js
   type: module
 
-- url: /local/community/mini-media-player/mini-media-player-bundle.js?v=1.7.0
+- url: /hacsfiles/mini-media-player/mini-media-player-bundle.js
   type: module
 
-- url: /local/community/lovelace-slider-entity-row/slider-entity-row.js
-  type: module
 
- #- url: /local/community/power-wheel-card/power-wheel-card.js
+ #- url: /hacsfiles/power-wheel-card/power-wheel-card.js
  #  type: module
 
-- url: /local/community/mini-graph-card/mini-graph-card-bundle.js?v=0.9.3
+- url: /hacsfiles/mini-graph-card/mini-graph-card-bundle.js
   type: module
 
-- url: /local/community/light-entity-card/light-entity-card.js
+- url: /hacsfiles/light-entity-card/light-entity-card.js
   type: js
 
 # Al final lo hago "a mano"
 #- url: /local/community/battery-state-card/battery-state-card.js
 #  type: module
 
-- url: /local/community/bar-card/bar-card.js
+- url: /hacsfiles/bar-card/bar-card.js
   type: module
   
   # problemas de compatibilidad. Substituido el js por el encontrado en https://github.com/Lau-ie/flex-horseshoe-card/tree/0.106.x-compatibility
-- url: /local/community/flex-horseshoe-card/flex-horseshoe-card.js
+  # foro problemas y explica como instalar el nuevo: https://community.home-assistant.io/t/lovelace-flexible-horseshoe-card-donut-graph-flexible-layout-multiple-entities-actions-animations-including-next-gen-experimental-examples/137850/103
+
+- url: /hacsfiles/flex-horseshoe-card/flex-horseshoe-card.js
   type: module
   
-- url: /local/community/vertical-stack-in-card/vertical-stack-in-card.js?v=0.3.2
+- url: /hacsfiles/vertical-stack-in-card/vertical-stack-in-card.js
   type: js  
 
-- url: /local/community/plan-coordinates/plan-coordinates.js
+- url: /hacsfiles/plan-coordinates/plan-coordinates.js
+  type: module
+
+- url: /hacsfiles/lovelace-slider-entity-row/slider-entity-row.js
+  type: module
+
+
+  # https://github.com/thomasloven/lovelace-state-switch: muestra una tarjeta u otra según condición. Usada para HorseShoe cuando no iba en PC
+- url: /hacsfiles/lovelace-state-switch/state-switch.js
   type: module
 
   #                                                                                                                           #

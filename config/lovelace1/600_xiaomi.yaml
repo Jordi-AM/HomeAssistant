@@ -5,7 +5,7 @@ panel: true
 cards:
   - type: vertical-stack           
     cards:    
-      - !include /config/lovelace1/000_top_barv2.yaml
+      - !include /config/lovelace1/__menu__.yaml
       - type: horizontal-stack
         cards:
           - type: custom:xiaomi-vacuum-card # https://github.com/benct/lovelace-xiaomi-vacuum-card

@@ -1,25 +1,38 @@
 sensor:
+
+  - platform: broadlink
+    #en segundos
+    scan_interval: 300
+    name: 'Broadlink IR' # RM2
+    host: 192.168.1.219
+    mac: '34:ea:34:f4:32:c5'
+    monitored_conditions:
+      - 'temperature'
+
+
   - platform: template
     sensors: 
       xiaomi_consumo:
         unit_of_measurement: 'W'
         friendly_name: "Consumo Xiaomi"
-        value_template: '{{ states.switch.xiaomi.attributes.load_power|int }}'
+        # value_template: '{{ states .switch.xiaomi.attributes.load_power|int }}'
+        value_template: '{{ state_attr("switch.xiaomi","load_power") |int }}'
 
       xiaomi_on:
         friendly_name: "Enchufe Xiaomi ON"
-        value_template: '{{ states.switch.xiaomi.attributes.in_use|default(0) }}'
+        #value_template: '{{ states .switch.xiaomi.attributes.in_use|default(0) }}'
+        value_template: '{{ state_attr("switch.xiaomi","in_use")|default(0) }}'
 
       wemo_consumo:
-        unit_of_measurement: 'kW'
+        unit_of_measurement: 'W'
         friendly_name: "Consumo Wemo"
-        #value_template: '{{ (states.switch.enchufe_aire.attributes.current_power_w | float / 1000)  | round(3) }}'
-        value_template: '{{ (state_attr("switch.enchufe_aire","current_power_w") | float / 1000)  | round(3) }}'
+        #value_template: '{{ (states .switch.enchufe_aire.attributes.current_power_w | float / 1000)  | round(3) }}'
+        value_template: '{{ (state_attr("switch.enchufe_aire","current_power_w") | float )   }}'
 
       wemo_consumo_diario:
         unit_of_measurement: 'kWh'
         friendly_name: "Consumo diario Wemo"
-        value_template: '{{ (state_attr("switch.enchufe_aire","today_energy_kwh") | float)  | round(3) }}'
+        value_template: '{{ (state_attr("switch.enchufe_aire","today_energy_kwh") | float)  | round(2) }}'
 
       moonphases:
         entity_id: sensor.moon
@@ -30,19 +43,19 @@ sensor:
           {% set state = states('sensor.moon').title().replace('_','').replace(' ','') %}
           {{ '/local/img/MoonPhases/N{}.jpg'.format(state) }}
 
-      # ------------------------------------- El tiempo ---------------------------------------------------------
-      nextsunrise:
-        friendly_name: 'Salida del sol'
-        value_template: >
-          {{ as_timestamp(states.sun.sun.attributes.next_rising) | timestamp_custom(' %I:%M%p') | replace(" 0", "") }}
-        icon_template: mdi:weather-sunset-up
-      nextsunset:
-        friendly_name: 'Puesta de sol'
-        value_template: >
-          {{ as_timestamp(states.sun.sun.attributes.next_setting) | timestamp_custom(' %I:%M%p') | replace(" 0", "") }}
-        icon_template: mdi:weather-sunset-down
-        
 
+
+      # ------------------------------------- El tiempo ---------------------------------------------------------
+#      nextsunrise:
+#        friendly_name: 'Salida del sol'
+#        value_template: >
+#          {{ as_timestamp(state_attr('sun.sun','next_rising')) | timestamp_custom(' %I:%M%p') | replace(' 0', '') }}
+#        icon_template: mdi:weather-sunset-up
+#      nextsunset:
+#        friendly_name: 'Puesta de sol'
+#        value_template: >
+#          {{ as_timestamp(state_attr('sun.sun','next_setting')) | timestamp_custom(' %I:%M%p') | replace(' 0', '') }}
+#        icon_template: mdi:weather-sunset-down
 
       alertas_synology:
         value_template: >
@@ -86,6 +99,7 @@ sensor:
     display_options:
       - 'time'          # para actualizar algunos sensores
       - 'date_time_iso' # necesario para reloj primera página
+      - 'date_time'     # para guardar cuando se corta internet
 
   - platform: moon
 
@@ -153,98 +167,82 @@ sensor:
       sensor_count:
         friendly_name: 'Sensores'
         value_template: >
-          {%- set domains = ['sensor'] -%}
-          {%- for domain in domains -%}
-            {%- for item in states[domain] -%}
+            {%- for item in states['sensor'] -%}
               {% if loop.first %}
                 [ {{loop.length}} ]     
               {% endif %}
             {%- endfor -%}
-          {%- endfor -%}
 
           
       automation_count:
         friendly_name: 'Automatizacones'
         value_template: >
-          {%- set domains = ['automation'] -%}
-          {%- for domain in domains -%}
-            {%- for item in states[domain] -%}
+            {%- for item in states['automation'] -%}
               {% if loop.first %}
                 [ {{loop.length}} ]     
               {% endif %}
             {%- endfor -%}
-          {%- endfor -%}
 
       script_count:
         friendly_name: 'Scripts'
         value_template: >
-          {%- set domains = ['script'] -%}
-          {%- for domain in domains -%}
-            {%- for item in states[domain] -%}
+            {%- for item in states['script'] -%}
               {% if loop.first %}
                 [ {{loop.length}} ]     
               {% endif %}
             {%- endfor -%}
-          {%- endfor -%}
 
       switch_count:
         friendly_name: 'Switches'
         value_template: >
-          {%- set domains = ['switch'] -%}
-          {%- for domain in domains -%}
-            {%- for item in states[domain] -%}
-              {% if loop.first %}
-                [ {{loop.length}} ]     
-              {% endif %}
-            {%- endfor -%}
-          {%- endfor -%}
+             {%- for item in states['switch'] -%}
+               {% if loop.first %}
+                  [ {{loop.length}} ]
+               {% endif %}
+             {%- endfor -%}
+ #         {%- set domains = ['switch'] -%}
+ #         {%- for domain in domains -%}
+ #           {%- for item in states[domain] -%}
+ #             {% if loop.first %}
+ #               [ {{loop.length}} ]     
+ #             {% endif %}
+ #           {%- endfor -%}
+ #         {%- endfor -%}
 
       binary_sensor_count:
         friendly_name: 'Binary Sensors'
         value_template: >
-          {%- set domains = ['binary_sensor'] -%}
-          {%- for domain in domains -%}
-            {%- for item in states[domain] -%}
+            {%- for item in states['binary_sensor'] -%}
               {% if loop.first %}
                 [ {{loop.length}} ]     
               {% endif %}
             {%- endfor -%}
-          {%- endfor -%}
 
       lights_count:
         friendly_name: 'Luces'
         value_template: >
-          {%- set domains = ['light'] -%}
-          {%- for domain in domains -%}
-            {%- for item in states[domain] -%}
-              {% if loop.first %}
-                [ {{ loop.length }} ]     
-              {% endif %}
-            {%- endfor -%}
-          {%- endfor -%}
-
-      tracker_count:
-        friendly_name: 'Trackers'
-        value_template: >
-          {%- set domains = ['device_tracker'] -%}
-          {%- for domain in domains -%}
-            {%- for item in states[domain] -%}
-              {% if loop.first %}
-                  [ {{loop.length}} ]     
-              {% endif %}
-            {%- endfor -%}
-          {%- endfor -%}
-      
-      media_player_count:
-        friendly_name: 'Media Players'
-        value_template: >
-          {%- set domains = ['media_player'] -%}
-          {%- for domain in domains -%}
-            {%- for item in states[domain] -%}
+            {%- for item in states['light'] -%}
               {% if loop.first %}
                 [ {{loop.length}} ]     
               {% endif %}
             {%- endfor -%}
-          {%- endfor -%}
+
+      tracker_count:
+        friendly_name: 'Trackers'
+        value_template: >
+            {%- for item in states['device_tracker'] -%}
+              {% if loop.first %}
+                [ {{loop.length}} ]     
+              {% endif %}
+            {%- endfor -%}
+      
+      media_player_count:
+        friendly_name: 'Media Players'
+        value_template: >
+            {%- for item in states['media_player'] -%}
+              {% if loop.first %}
+                [ {{loop.length}} ]     
+              {% endif %}
+            {%- endfor -%}
 
 

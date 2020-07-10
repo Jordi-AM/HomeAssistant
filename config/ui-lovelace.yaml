@@ -7,7 +7,7 @@ background: center / cover no-repeat url("/local/img/background_19.png") fixed
 
 
 custom_header:
-  kiosk_mode: '{{ states.input_boolean.modo_kiosko.state  == "on" }}'
+  kiosk_mode: '{{ is_state("input_boolean.modo_kiosko","on") }}'
   background: 'rgba(150, 150, 150, 0.2)'
   menu_hide: false
   options_hide: false
@@ -35,5 +35,6 @@ views:
   - !include /config/lovelace1/890_pi.yaml
   - !include /config/lovelace1/950_info.yaml
   - !include /config/lovelace1/920_enchufes.yaml
+  - !include /config/lovelace1/930_aire.yaml
 
     

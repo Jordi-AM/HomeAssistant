@@ -12,52 +12,25 @@
   action:
   - service: script.full_backup_a_drive
 
-- id: reinicio_HA
-  alias: Notificación reinicio
-  trigger:
-    platform: homeassistant
-    event: start
-  action:
-    - service: telegram_bot.send_message
-      data:
-        message: "HA Reiniciado"
-        target: 440192507
-    - service: xiaomi_aqara.play_ringtone      
-      data:
-        ringtone_id: '12'
-        ringtone_vol: '3'
-    - service: light.turn_on
-      entity_id: light.xiaomi
-      data:
-        rgb_color:
-        - 5
-        - 5
-        - 50
-    - delay: 600
-    - service: light.turn_off
-      entity_id: light.xiaomi
-
-
 # ------------------------------------------------------------------------------------------------------
 # ------------------------------ PRESENCIA ENTRADA -----------------------------------------------------
 # ------------------------------------------------------------------------------------------------------
 
-    
-    
 - id: sonar_simbre
   alias: Sonar timbre
   trigger:
-  - entity_id: binary_sensor.puerta_principal
-    from: 'off'
-    platform: state
-    to: 'on'
-    
+    - platform: state
+      entity_id: binary_sensor.puerta_principal
+      to: 'on'
+#  condition:
+#    - condition: state
+#      entity_id: input_boolean.modo_fiesta
+#      state: 'off'
   action:
-  - data:
-      ringtone_id: '10'
-      ringtone_vol: '10'
-    service: xiaomi_aqara.play_ringtone
-
+    - service: xiaomi_aqara.play_ringtone
+      data:
+        ringtone_id: '10'
+        ringtone_vol: '10'
 
 # ------------------------------------------------------------------------------------------------------      
 # --------------------------------------------------- TOMAR PASTILLA ---------------------------------
@@ -82,7 +55,13 @@
     data:
       ringtone_id: '11'
       ringtone_vol: '3'
-  - service: script.telegram_pastilla
+  - condition: state
+    entity_id: input_boolean.avisar_pastillas_movil
+    state: 'on'
+  - service: telegram_bot.send_message
+    data:
+      message: Pastilla!!!!
+      target: 440192507
 
       
 
@@ -109,12 +88,15 @@
     to: 'off'
     for: 00:02:00
   action:
+  - service: input_boolean.turn_off
+    entity_id: input_boolean.encender_ordenador
+  - condition: state
+    entity_id: input_boolean.aviso_actividad_pc
+    state: 'on'
   - service: telegram_bot.send_message
     data:
       message: PC apagado
       target: 440192507
-  - service: input_boolean.turn_off
-    entity_id: input_boolean.encender_ordenador
       
       
 - id: PC_encendido
@@ -126,6 +108,9 @@
     to: 'on'
     for: 00:02:00
   action:
+  - condition: state
+    entity_id: input_boolean.aviso_actividad_pc
+    state: 'on'
   - service: telegram_bot.send_message
     data:
       message: PC encendido
@@ -194,49 +179,52 @@
         target: 440192507
 
     - service: notify.correo_jam
-
       data_template:
         title: 'HA: IMPORTANTE'
         target:
-        - jordiaguileram@gmail.com
+          - jordiaguileram@gmail.com
         message: >-
           There is a Home Assistant upgrade for Hass.io pending!
           Version {{ states('sensor.version_available') }} just got released!
-        data:
-          attachment:
-            content-type: png
-            url: https://raw.githubusercontent.com/home-assistant/home-assistant-assets/master/logo-round-192x192.png
 
 
 # ------------------------------------------------------------------------------------------------------
 # -------------------------------------------- A DORMIR  -----------------------------------------------
 # ------------------------------------------------------------------------------------------------------
 
-- id: preaviso_dormir
+- id: preaviso_dormir  # De domingo a viernes, los días de cole
   alias: Preaviso dormir
   trigger:
-  - at: '21:40'
-    platform: time
-   
+  - platform: time
+    at: '21:40'
+  condition:
+    - condition: template  # 0: lunes
+      value_template: "{{ now().weekday() in (6,0,1,2,3) }}"
+    - condition: state
+      entity_id: 'input_select.hay_cole' 
+      state: Si
   action:
-  - service: tts.google_say  
-    entity_id: media_player.superyo
+  - service: script.notificacion_google
     data:  
-      message: Son las 10 menos 20. Preparándose para ir a dormir
-
+      mensaje: Son las 10 menos 20. Preparándose para ir a dormir
+      volumen: 0.6
 
 - id: avisodormir
   alias: Aviso dormir
   trigger:
-  - at: '21:50'
-    platform: time
+  - platform: time
+    at: '21:50'
+  condition:
+    - condition: template  # 0: lunes
+      value_template: "{{ now().weekday() in (6,0,1,2,3) }}"
+    - condition: state
+      entity_id: 'input_select.hay_cole' 
+      state: Si
   action:
-  - service: tts.google_say
-    entity_id: media_player.superyo
+  - service: script.notificacion_google
     data:
-      message: Pijama, dientes y a dormir
-
-
+      mensaje: Pijama, dientes y a dormir
+      volumen: 0.6
 
 - alias: Alerta metereológica
   trigger:
@@ -260,92 +248,6 @@
         notification_id: alerte_metereologica
 
 
-- alias: cuenta atras tablet
-  trigger: 
-    platform: state
-    entity_id: input_boolean.aviso_tablet
-    to: 'on'
-  action:
-    - delay: '00:00:15'
-    - service: script.notificacion_google
-      data:
-        mensaje: "15 minutos para apagar la tablet"
-    - delay: '00:12:00'
-    - service: script.notificacion_google
-      data:
-        mensaje: "3 minutos para apagar la tablet"
-    - delay: '00:03:00'
-    - service: script.notificacion_google
-      data:
-        mensaje: "Apagar la tablet"
-    - service: input_boolean.turn_off
-      data:
-        entity_id: input_boolean.aviso_tablet
-
-
-
-
-- alias: Llegando a casa home
-  trigger:
-  - entity_id: device_tracker.ana
-    platform: state
-    to: home
-  - entity_id: binary_sensor.movil_ana
-    platform: state
-    to: 'on'
-  action:
-    - service: xiaomi_aqara.play_ringtone      
-      data:
-        ringtone_id: '7'
-        ringtone_vol: '0'
-
-
-
-# ------------------------------------------------------------------------------------------------------
-# ---------------------------------- A DESPERTARSE  ---------------------------------------------------------
-# ------------------------------------------------------------------------------------------------------
-
-
-- id: a_despertarse
-  alias: Establece escena DESPIERTO (wifi)
-  trigger:
-    - platform: state
-      entity_id: device_tracker.jordi
-      to: 'home'
-  condition:
-    - condition: state
-      entity_id: input_select.quien_en_casa
-      state: 'Durmiendo'
-    - condition: time
-      after: '06:00:00'
-      before: '10:00:00'
-  action:
-    - service: telegram_bot.send_message
-      data:
-        message: Despierto? 
-        target: 440192507
-    - service: scene.turn_on
-      entity_id: scene.despierto 
-
-- id: a_despertarse2
-  alias: Establece escena DESPIERTO (presencia)
-  trigger:
-    - platform: state
-      entity_id: input_select.quien_en_casa
-      from: 'Durmiendo'      
-  condition:
-    - condition: time
-      after: '06:00:00'
-      before: '10:00:00'
-  action:
-    - service: telegram_bot.send_message
-      data:
-        message: Despierto 2? 
-        target: 440192507
-    - service: scene.turn_on
-      entity_id: scene.despierto 
-
-
 # ------------------------------------------------------------------------------------------------------      
 # ----------------------------------------------- AL COLE ----------------------------------------------   
 # ------------------------------------------------------------------------------------------------------
@@ -362,81 +264,34 @@
       entity_id: 'input_select.hay_cole' 
       state: Si
   action:
-  - service: media_player.volume_set
-    data_template:
-      entity_id: media_player.superyo
-      volume_level: 0.7
-  - service: tts.google_say  
-    data:  
-      entity_id: media_player.superyo
-      message: "Son las 8:30. A lavarse los dientes y preparar la mochila" 
-  - service: media_player.volume_set
-    data_template:
-      entity_id: media_player.superyo
-      volume_level: 0.5
-
-- id: aviso_cole1
-  alias: Primer aviso cole
-  trigger:
-  - at: 08:40
-    platform: time
-  condition:
-    - condition: state
-      entity_id: 'binary_sensor.workday_sensor' 
-      state: 'on'
+    - service: script.notificacion_google
+      data:  
+        mensaje: "Son las 8:30. A lavarse los dientes y preparar la mochila" 
+        volumen: 0.7
+    - delay: '00:01:00'
     - condition: state
       entity_id: 'input_select.hay_cole' 
       state: Si
-    
-  action:
-  - service: media_player.volume_set
-    data_template:
-      entity_id: media_player.superyo
-      volume_level: 0.7
-  - service: tts.google_say  
-    data:  
-      entity_id: media_player.superyo
-      message: "Son las 8:40. Faltan 5 minutos para ir al cole" 
-  - service: media_player.volume_set
-    data_template:
-      entity_id: media_player.superyo
-      volume_level: 0.5
-      
-      
-- id: aviso_cole2
-  alias: Segundo aviso cole
-  trigger:
-  - at: 08:45
-    platform: time
-  condition:
-    - condition: state
-      entity_id: 'binary_sensor.workday_sensor' 
-      state: 'on'
+    - service: script.notificacion_google
+      data:  
+        mensaje: "Son las 8:40. Faltan 5 minutos para ir al cole" 
+        volumen: 0.7
+    - delay: '00:01:00'
     - condition: state
       entity_id: 'input_select.hay_cole' 
       state: Si
-  action:
-  - service: media_player.volume_set
-    data_template:
-      entity_id: media_player.superyo
-      volume_level: 0.7
-  - service: tts.google_say  
-    data:  
-      entity_id: media_player.superyo
-      message: "Son las 8:45. Hora de ir al cole. Apagando la tele en 15 segundos" 
-  - delay: 00:00:45
-  - service: media_player.turn_off
-    entity_id: media_player.lg
-  - delay: 00:00:15
-  - service: tts.google_say  
-    data:  
-      entity_id: media_player.superyo
-      message: "Que tengáis todos un buen día"       
-  - service: media_player.volume_set
-    data_template:
-      entity_id: media_player.superyo
-      volume_level: 0.5
-
+    - service: script.notificacion_google
+      data:  
+        mensaje: "Son las 8:45. Hora de ir al cole. Apagando la tele en 15 segundos" 
+        volumen: 0.7
+    - delay: 00:00:15
+    - service: media_player.turn_off
+      entity_id: media_player.lg
+    - delay: 00:00:05
+    - service: script.notificacion_google
+      data:  
+        mensaje: "Que tengáis todos un buen día"       
+        volumen: 0.7
 
 # --------------------------------------------------------------------------------------------------------------------------------
 # ----- Si se va el suministro eléctrico, cuando vuelve apaga las luces, que por defecto se encienden todas ----------------------
@@ -449,12 +304,19 @@
       entity_id: binary_sensor.philips_bridge
       from: 'on'
       to: 'off'
+      for: 00:01:00 # si no ponemos tiempo, aun encontrarà online_internet a on
     - platform: state
       entity_id: binary_sensor.nevera
       from: 'on'
       to: 'off'
-#    for: 00:02:00
+      for: 00:01:00
+  condition: 
+    - condition: state
+      entity_id: binary_sensor.online_internet
+      state: 'on'
   action:
+  - service: input_boolean.turn_on # para distinguir de cuando cae internet
+    entity_id: input_boolean.red_electrica_caida
   - service: telegram_bot.send_message
     data:
       message: Ha caído red eléctrica
@@ -471,7 +333,13 @@
       entity_id: binary_sensor.nevera
       from: 'of'
       to: 'on'
+  condition: 
+    - condition: state
+      entity_id: input_boolean.red_electrica_caida
+      state: 'on'
   action:
+  - service: input_boolean.turn_off
+    entity_id: input_boolean.red_electrica_caida  
   - service: telegram_bot.send_message
     data:
       message: Red eléctrica recuperada
@@ -483,3 +351,61 @@
   - delay: 00:00:30
   - service: light.turn_off
     entity_id: light.luces_piso
+
+# ------------------------------------------------------------------------------------------------------      
+# ----------------------------------------------- VARIOS ----------------------------------------------   
+# ------------------------------------------------------------------------------------------------------
+
+- id: internet_online
+  alias: Internet Online
+  initial_state: true
+  trigger:
+    platform: state
+    entity_id: binary_sensor.online_internet
+    from: 'off'
+    to: 'on'
+    for: 00:00:10
+  action:
+  - service: telegram_bot.send_message
+    data_template:
+      message: >-
+        Reestablecida conexión Internet. Hora de caída: {{ states ('input_text.hora_caida_internet')}}. Hora de recuperación: {{ states('sensor.date_time') }}
+      target: 440192507
+
+
+  # Guarda hora caída internet, para avisar al restablecer
+- alias: guarda hora
+  trigger:
+    platform: state
+    entity_id:  binary_sensor.online_internet
+    from: 'on'
+    to: 'off'
+    for: 00:00:10
+  action:
+    - service: input_text.set_value
+      data_template:
+        entity_id: input_text.hora_caida_internet
+        value: "{{ states('sensor.date_time') }}"
+
+################################################ VOLUMEN SUPERYO ######################################################
+- id: volumen_bajo
+  alias: Volumen google home bajo
+  trigger:
+  - at: '22:10'
+    platform: time
+  action:
+  - service: media_player.volume_set
+    data_template:
+      entity_id: media_player.superyo
+      volume_level: 0.5
+
+- id: volumen_alto
+  alias: Volumen google home alto
+  trigger:
+  - at: '07:45'
+    platform: time
+  action:
+  - service: media_player.volume_set
+    data_template:
+      entity_id: media_player.superyo
+      volume_level: 0.7

@@ -13,3 +13,8 @@ input_number:
     min: 0
     max: 100
     step: 1  
+
+  backup_volumen:
+    name: Guarda volumen player para después restablecer
+    min: 0
+    max: 1

@@ -1,0 +1,62 @@
+input_boolean:   ##no se usa. Eliminar??
+  ahorrar_aire:
+    name: Apaga aire cuando baja batería
+input_number:
+  limite:
+    name: Límite batería para apagar aire
+    initial: 95
+    min: 0
+    max: 100
+
+
+switch:
+  - platform: broadlink
+    host: 192.168.1.219
+    mac: '34:ea:34:f4:32:c5'
+    switches:
+      aire_acondicionado:
+        friendly_name: "Aire Acondicionado"
+        command_on:  'JgAIAQABC4gQNA80DzQQNA8SEBIPEw8SEBIPNBASDzQQNA80EDMQEhASDxMPEhA0DzQPEw8SEDMQNA80EDQPEhASDxMPEhASDxMPNA8TDxIQEg80EDQPNA8ABBoAAQuJDzQPNBA0DzQPEw8SEBIPEw8SEDQPEhA0DzQQMxA0DxMPEhASDxMPNA80EBIPEw80DzQQNBAzDxMPEhASEBIPEhERDzQQEg8TDxIQNA80ETIRAAQZAAEMhxEyETMQMxEyERERERARERERERAzEREQMxEzEDMQMxEREBIQEREREDMRMhEREREQMxEzEDMRMhEREBIQEREREREQEREzEBERERERETIRMhEzEAANBQ==' 
+        command_off: 'JgAIAQABCogRMhA0DxIOFA8SEBIPEw8SDxMPNA8TDzQRMg80DzQPEw8SDxMPEhA0DzQPEhASDzQPEw80DzQPEw8SDxMPEg8TDzQPEw4TDzQQEg80DzQQMxAABBcAAQqIEDMQNA8SEBIPEw8SDxMPEg8TDjUPEw80DzQPNA80EBIPEw8SDxMONQ80DxMPEg80EBIONQ80EBIPEw4TDxMPEg80EBIPEw80DxIQNA80DzQPAAQYAAEJiQ80DzQQEg8TDxIPEw8SEBIPEhA0DxIPNBEyEDQPNA8SEBIOFA8SDzQQNA8SDxMPNA8SEDQPNA8SDxMPEw8SDxMPNA8SEREPNBASDzQPNA80EAANBQ=='        
+      calor_22:
+        friendly_name: "Aire caliente"
+        command_on: "JgAIAQABCogQMxAzDxMPNA8TDxIPEw8SEBIPNA80DzQPNBAzEDMQEg4UDhMOFA80DxIQNA80DxIQMxA0DjUPEg8TDxIPEw4UDxIPNBATDhMPEg41DxMOExAABBYAAQmJEDQONQ4TDzQQEg8TDxIOFA8SDzQQMxA0DzQPNA80DxMPEg4UDhMQMxASDjUQMxASDzQONQ80EBIPEhASDhQPEg8TDjUOEw8TDhQONQ8SDxMPAAQXAAEJiQ8zEDQPEw80DxIPEw8SDxMPEw41DzQPNA80DzQQMw4UDxIQEg4UDjUPEhAzDzQQEg80DzQPNBASDhMPFA4TDxMOEw41DxIQEg4UDjUPEg8TDgANBQ=="
+        command_off: 'JgAIAQABCogRMhA0DxIOFA8SEBIPEw8SDxMPNA8TDzQRMg80DzQPEw8SDxMPEhA0DzQPEhASDzQPEw80DzQPEw8SDxMPEg8TDzQPEw4TDzQQEg80DzQQMxAABBcAAQqIEDMQNA8SEBIPEw8SDxMPEg8TDjUPEw80DzQPNA80EBIPEw8SDxMONQ80DxMPEg80EBIONQ80EBIPEw4TDxMPEg80EBIPEw80DxIQNA80DzQPAAQYAAEJiQ80DzQQEg8TDxIPEw8SEBIPEhA0DxIPNBEyEDQPNA8SEBIOFA8SDzQQNA8SDxMPNA8SEDQPNA8SDxMPEw8SDxMPNA8SEREPNBASDzQPNA80EAANBQ=='
+      frio_25_22:
+        friendly_name: "Aire frio"
+        command_on: "JgAIAQABCogQMxAzEDQPNA8SEBIPEhASDxIQNA8SDzQQMxAzEDMQEg8TDxIQEg80DzQPEw8SDzQQMxAzEDMQEg8TDxIQEg8SEBIPNA8TDxIPEw80DzQPNA8ABBcAAQmIEDMQNA80DzQPEhASDxMPEg8TDzQPEhAzEDMQNA80DxIQEg8SEBIPNA80DxMPEhAzEDMQMxA0DxIQEg8SEBIPEhASDzQPEw8SEBIPNA80DzQPAAQXAAEJiQ80DzQPNA80DxMPEg8TDxIQEg80DxIQNA80DzQPNA8SEBIPEw8SDzQQMxASDxIQMxA0DzQPNA8SEBIPEw8SDxMPEhAzEBIPEhASDzQPNBAzEAANBQ=="
+        command_off: 'JgAIAQABCogRMhA0DxIOFA8SEBIPEw8SDxMPNA8TDzQRMg80DzQPEw8SDxMPEhA0DzQPEhASDzQPEw80DzQPEw8SDxMPEg8TDzQPEw4TDzQQEg80DzQQMxAABBcAAQqIEDMQNA8SEBIPEw8SDxMPEg8TDjUPEw80DzQPNA80EBIPEw8SDxMONQ80DxMPEg80EBIONQ80EBIPEw4TDxMPEg80EBIPEw80DxIQNA80DzQPAAQYAAEJiQ80DzQQEg8TDxIPEw8SEBIPEhA0DxIPNBEyEDQPNA8SEBIOFA8SDzQQNA8SDxMPNA8SEDQPNA8SDxMPEw8SDxMPNA8SEREPNBASDzQPNA80EAANBQ=='        
+
+automation:
+- id: enciende_ir
+  description: Si se enciende el AA, activa el enchufe IR, para poder usar el mando
+  alias: enciende IR
+  trigger:
+    - platform: numeric_state
+      above: 200
+      entity_id: sensor.wemo_consumo
+  action:
+    - service: switch.turn_on
+      entity_id: switch.enchufe_infrarrojos
+
+- id: ahorra_energia_aire
+  description: Cuando la carga de la batería esté por debajo de input_number.limite, apaga el aire
+  alias: ahorra energia aire
+  trigger:
+    - platform: template
+      value_template: "{{ states('sensor.carga_bateria_app') | int < states('input_number.limite') | int  }}"
+  action:
+    - service: switch.turn_off
+      entity_id: switch.aire_acondicionado
+    - service: telegram_bot.send_message
+      data:
+        message: Apagando aire acondicionado
+        target: 440192507
+    - delay: '00:00:05'   # Por si no va a la primera
+    - service: switch.turn_off  
+      entity_id: switch.aire_acondicionado
+    - delay: '00:00:05'
+    - service: switch.turn_off
+      entity_id: switch.aire_acondicionado
+    - service: automation.turn_off
+      entity_id: automation.ahorra_energia_aire

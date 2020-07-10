@@ -1,0 +1,43 @@
+automation:
+  - id: vacaciones_musica_on
+    alias: vacaciones_musicaon
+    initial_state: true
+    trigger:
+      platform: time
+      at: '10:00:00'
+    condition:
+      - condition: state
+        entity_id: 'input_boolean.vacaciones' 
+        state: 'on'
+    action:
+      - service: media_player.volume_set
+        data:
+          entity_id: media_player.superyo
+          volume_level: 0.7
+      - service: media_player.play_media
+        data:
+          entity_id: media_player.superyo
+          media_content_id: http://playerservices.streamtheworld.com/api/livestream-redirect/M80RADIO.mp3
+          media_content_type: 'audio/mp4'
+
+
+  - id: vacaciones_musica_off
+    alias: vacaciones_musicaoff
+    initial_state: true
+    condition:
+      - condition: state
+        entity_id: 'input_boolean.vacaciones' 
+        state: 'on'
+    trigger:
+      platform: time
+      at: '21:15:00'
+    action:
+      - service: media_player.turn_off
+        data:
+          entity_id: media_player.superyo
+
+input_boolean:
+  vacaciones:
+    name: vacaciones
+    icon: mdi:beach
+    initial: false

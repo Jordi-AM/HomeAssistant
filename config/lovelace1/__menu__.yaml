@@ -1,0 +1,37 @@
+  type: custom:state-switch
+  entity: input_boolean.topbar_config
+  states:
+    "off":
+      type: custom:layout-card
+      layout: horizontal
+      column_num: 2
+      max_columns: 2
+      max_width: [85%,15%]
+      cards:
+        - !include /config/lovelace1/000_top_barv3-1.yaml
+        - !include /config/lovelace1/000_top_barv3-config.yaml
+    "on":
+      type: custom:layout-card
+      layout: horizontal
+      column_num: 3
+      max_columns: 3
+      max_width: [75%,10%,15%]
+      cards:
+        - !include /config/lovelace1/000_top_barv3-2.yaml
+        - type: 'custom:clockwork-card'         # Reloj-------------------------------------------------
+          #title: "My Time"
+          locale: es-ES
+          entity: sensor.date_time_iso
+          other_time: []
+          style: |
+              date {
+                font-variant: small-caps;
+                color: red;
+              }
+              .date {
+                font-variant: small-caps;
+                color: blue;
+                --visibility: hidden;
+                display: none;
+              }
+        - !include /config/lovelace1/000_top_barv3-config.yaml

@@ -5,7 +5,7 @@ panel: true
 cards:
   - type: vertical-stack           
     cards:    
-      - !include /config/lovelace1/000_top_barv2.yaml
+      - !include /config/lovelace1/__menu__.yaml
 
       - type: markdown
         content: |
@@ -17,12 +17,36 @@ cards:
             show_header_toggle: false
             entities:
               - type: section
-                label: INTRFICIE
+                label: ------- INTRFICIE -------
 #              - entity: input_boolean.aleatorio_automatico
               - entity: input_boolean.modo_kiosko
               - entity: input_boolean.avisar_pastillas_movil
+              - entity: input_boolean.mostrar_horseshoe
+              - type: section
+                label: -------- ALARMAS --------
+              - entity: input_boolean.aviso_familia
+              - entity: input_boolean.aviso_nadie
+              - entity: input_boolean.aviso_desconocido
+              - entity: input_boolean.aviso_durmiendo
+              - entity: input_boolean.aviso_despierto
+              - entity: input_boolean.aviso_actividad_pc
+              - entity: input_boolean.notificar_errores
+
           - type: vertical-stack
             cards:
+              - type: entities
+                title: Temporizador
+                show_header_toggle: false
+                entities:
+                  - entity: timer.temporizador
+                    style: |
+                      .text-content {
+                        font-size: 30px; 
+                      }
+                  - entity: input_number.minutero
+                  - entity: input_number.preaviso
+                  - entity: input_boolean.activa_temporizador
+                  - entity: input_select.mensaje_aviso
               - type: glance
                 title: Restore
                 entities:
@@ -66,6 +90,14 @@ cards:
                 label: TAREAS
               - entity: script.full_backup_a_drive
                 secondary_info: last-changed
+              - entity: input_boolean.encender_ordenador
+              - entity: input_boolean.aviso_tablet
+              - type: section
+                label: ------- CONTROL -------
+              - entity: input_select.quien_en_casa
+              - entity: sensor.hay_alguien
+              - entity: sensor.hay_alguien_conocido
+              - entity: sensor.hay_alguien_desconocido
 
           - type: entities
             show_header_toggle: false
@@ -78,5 +110,8 @@ cards:
               - entity: automation.sonar_timbre
               - entity: input_select.mapas_tiempo
               #- entity: input_boolean.iguala_luces
-              - entity: input_boolean.encender_ordenador
-              #- entity: input_select.quien_en_casa
+              - entity: input_boolean.vacaciones
+              - entity: input_boolean.modo_fiesta
+
+
+              #- entity:  automation.llegando_a_casa_home

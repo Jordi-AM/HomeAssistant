@@ -1,0 +1,158 @@
+  type: horizontal-stack
+  cards:
+    - type: picture-elements
+      image: /local/img/topv9-left.png
+      elements:
+        - type: image
+          image: /local/img/topbar/old/home.png
+          tap_action:
+            action: navigate
+            navigation_path: start
+          style:
+            top: 50%
+            left: 4%
+            width: 5.5%
+            border-radius: 15px
+            border: solid 1px rgba(100,100,100,0.3)
+            color: "#999999"
+            box-shadow: 3px 3px rgba(0,0,0,0.4)
+
+        - type: image
+          image: /local/img/topbar/old/bombilla2.png
+          tap_action:
+            action: navigate
+            navigation_path: lights
+          style:
+            top: 50%
+            left: 11%
+            width: 5.5%
+            border-radius: 15px
+            border: solid 1px rgba(100,100,100,0.3)
+            color: "#999999"
+            box-shadow: 3px 3px rgba(0,0,0,0.4)
+
+        - type: image
+          image: /local/img/topbar/old/eltiempo.png
+          tap_action:
+            action: navigate
+            navigation_path: eltiempo
+          style:
+            top: 50%
+            left: 18%
+            width: 5.5%
+            border-radius: 15px
+            border: solid 1px rgba(100,100,100,0.3)
+            color: "#999999"
+            box-shadow: 3px 3px rgba(0,0,0,0.4)
+
+        - type: image
+          image: /local/img/topbar/old/spotify1.png
+          tap_action:
+            action: navigate
+            navigation_path: spotify
+          style:
+            top: 50%
+            left: 25%
+            width: 5.5%
+            border-radius: 15px
+            border: solid 1px rgba(100,100,100,0.3)
+            color: "#999999"
+            box-shadow: 3px 3px rgba(0,0,0,0.4)
+
+        - type: image
+          image: /local/img/topbar/old/ampere.png
+          tap_action:
+            action: navigate
+            navigation_path: ampere
+          style:
+            top: 50%
+            left: 32%
+            width: 5.5%
+            border-radius: 15px
+            border: solid 1px rgba(100,100,100,0.3)
+            color: "#999999"
+            box-shadow: 3px 3px rgba(0,0,0,0.4)
+
+        - type: image
+          image: /local/img/topbar/old/aspirino.png
+          tap_action:
+            action: navigate
+            navigation_path: aspirino
+          style:
+            top: 50%
+            left: 39%
+            width: 5.5%
+            border-radius: 15px
+            border: solid 1px rgba(100,100,100,0.3)
+            color: "#999999"
+            box-shadow: 3px 3px rgba(0,0,0,0.4)
+
+        - type: image
+          image: /local/img/topbar/old/radio.png
+          tap_action:
+            action: navigate
+            navigation_path: radio
+          style:
+            top: 50%
+            left: 46%
+            width: 5.5%
+            border-radius: 15px
+            border: solid 1px rgba(100,100,100,0.3)
+            color: "#999999"
+            box-shadow: 3px 3px rgba(0,0,0,0.4)
+
+        - type: image
+          image: /local/img/topbar/old/tv2.png
+          tap_action:
+            action: navigate
+            navigation_path: tv
+          style:
+            top: 50%
+            left: 53%
+            width: 5.5%
+            border-radius: 15px
+            border: solid 1px rgba(100,100,100,0.3)
+            color: "#999999"
+            box-shadow: 3px 3px rgba(0,0,0,0.4)
+
+        - type: image
+          image: /local/img/topbar/old/location.png
+          tap_action:
+            action: navigate
+            navigation_path: location
+          style:
+            top: 50%
+            left: 60%
+            width: 5.5%
+            border-radius: 15px
+            border: solid 1px rgba(100,100,100,0.3)
+            color: "#999999"
+            box-shadow: 3px 3px rgba(0,0,0,0.4)
+
+        - type: image
+          image: /local/img/topbar/old/enchufe.png
+          tap_action:
+            action: navigate
+            navigation_path: enchufes
+          style:
+            top: 50%
+            left: 67%
+            width: 5.5%
+            border-radius: 15px
+            border: solid 1px rgba(100,100,100,0.3)
+            color: "#999999"
+            box-shadow: 3px 3px rgba(0,0,0,0.4)
+
+        - type: image
+          image: /local/img/topbar/old/aire.png
+          tap_action:
+            action: navigate
+            navigation_path: aire
+          style:
+            top: 50%
+            left: 74%
+            width: 5.5%
+            border-radius: 15px
+            border: solid 1px rgba(100,100,100,0.3)
+            color: "#999999"
+            box-shadow: 3px 3px rgba(0,0,0,0.4)

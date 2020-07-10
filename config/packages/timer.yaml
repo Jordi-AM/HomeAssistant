@@ -1,0 +1,117 @@
+
+timer:
+  temporizador:
+    name: Cuenta atrás
+  preaviso:
+    name: Preaviso
+
+input_number:
+  minutero:
+    name: Minutos
+    min: 0
+    max: 120
+    step: 1
+    unit_of_measurement: mins  
+    mode: box
+  preaviso:
+    name: Preaviso
+    min: 0
+    max: 15
+    step: 1
+    unit_of_measurement: mins  
+    mode: box
+
+input_select:
+  mensaje_aviso:
+    name: Mensaje aviso temporizador
+    options:
+      - Apagar la tablet
+      - Cuenta atràs
+    initial: Apagar la tablet
+
+
+input_boolean:
+  activa_temporizador:
+    name: activa_temporizador
+    initial: off
+  activa_preaviso:
+    name: activa_preaviso
+    initial: off
+
+automation:
+  - alias: Timer start
+    trigger:
+      platform: state
+      entity_id: input_boolean.activa_temporizador
+      to: 'on'
+    action:
+      - service: timer.start
+        entity_id: timer.temporizador
+        data_template:
+          duration: "{{ states('input_number.minutero') | int * 60 }}" 
+      - service: timer.start
+        entity_id: timer.preaviso
+        data_template:
+          duration: >
+              {% set v = (states('input_number.minutero') | int) - (states('input_number.preaviso') | int) %}
+              {% if (v<0) %}
+                  999999
+              {% else %}
+                  {{ v * 60 }}
+              {% endif %}
+      - delay: '00:00:15'
+      - service: script.notificacion_google
+        data_template:
+          mensaje: 'Temporizador en marcha. {{ states("input_number.minutero") | int | round(0) }} minutos para {{ states("input_select.mensaje_aviso") }}'
+
+  - alias: Timer cancel
+    trigger:
+      platform: state
+      entity_id: input_boolean.activa_temporizador
+      to: 'off'
+    action:
+      - service: timer.cancel
+        entity_id: timer.temporizador
+      - service: timer.cancel
+        entity_id: timer.preaviso
+
+
+  - alias: Timer stop
+    trigger:
+      platform: event
+      event_type: timer.finished
+      event_data:
+        entity_id: timer.temporizador
+    action:
+    - service: input_boolean.turn_off
+      data:
+        entity_id: input_boolean.activa_temporizador
+    - service: timer.cancel
+      entity_id: timer.preaviso
+    - service: media_player.play_media
+      entity_id: media_player.superyo
+      data:
+        media_content_id: http://192.168.1.100:8123/local/audio/alarm.mp3
+        media_content_type: audio/mp3
+    - delay: '00:00:06'
+    - service: script.notificacion_google
+      data_template:
+        mensaje: '{{ states("input_select.mensaje_aviso") }}'
+    - delay: '00:00:05'
+    - service: media_player.play_media
+      entity_id: media_player.superyo
+      data:
+        media_content_id: http://192.168.1.100:8123/local/audio/alarm2.mp3
+        media_content_type: audio/mp3
+
+  - alias: Preaviso Timer
+    trigger:
+      platform: event
+      event_type: timer.finished
+      event_data:
+        entity_id: timer.preaviso
+    action:
+      - service: script.notificacion_google
+        data_template:
+          mensaje: 'Faltan {{ states("input_number.preaviso") | int | round(0) }} minutos para {{ states("input_select.mensaje_aviso") }}'
+

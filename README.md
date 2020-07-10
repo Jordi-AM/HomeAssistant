@@ -100,7 +100,8 @@ Mi configuración HA. Subido 4/24/2020 7:50:11 PM
 - **[https://github.com/custom-cards/bar-card](https://github.com/custom-cards/bar-card "Bar-card")**: usado en estado baterías
 - **[https://github.com/AmoebeLabs/flex-horseshoe-card](https://github.com/AmoebeLabs/flex-horseshoe-card "flex-horseshoe-card")**: gráficos en forma de herradura
 - **[https://github.com/ofekashery/vertical-stack-in-card](https://github.com/ofekashery/vertical-stack-in-card "vertical-stack-in-card")**: similar a vertical-stack u horizontal-stack, pero sin bordes
-- **[https://github.com/custom-cards/plan-coordinates](https://github.com/custom-cards/plan-coordinates "Plan-coordinates")**: para obtener coordenadas em picture-elements 
+- **[https://github.com/custom-cards/plan-coordinates](https://github.com/custom-cards/plan-coordinates "Plan-coordinates")**: para obtener coordenadas em picture-elements
+- **[https://github.com/iantrich/config-template-card](https://github.com/iantrich/config-template-card "config-template-card")**: para intentar usar iframe o picture para enseñar carátula player spotify
  
 ## 5. Addons
 - Samba Share

@@ -1,3 +1,6 @@
+# http://www.tv-logo.com/page/spain
+# https://consejoescolar.es/blog/tv-y-radio-online-lista-de-canales-de-television-y-radio-que-se-emiten-en-abierto-por-internet
+# iconos plus http://www.movistarplus.es/programacion-tv
 title: 750_tv
 path: tv
 icon: mdi:radio
@@ -5,7 +8,7 @@ panel: true
 cards:
   - type: vertical-stack           
     cards:    
-      - !include /config/lovelace1/000_top_barv2.yaml
+      - !include /config/lovelace1/__menu__.yaml
       - type: horizontal-stack
         cards:
           - type: custom:layout-card
@@ -27,6 +30,53 @@ cards:
                     column_num: 4
                     max_width: [30%, 30%, 40%]
                     cards: []
+
+                  - type: custom:layout-card
+                    layout: horizontal # auto vertical horizontal
+                    column_num: 4
+                    cards: 
+
+
+                        #************************************************ FILA 1 ***************************************************************
+                      - type: picture
+                        image: /local/img/tv/La1HD.png
+                        tap_action:
+                          action: call-service
+                          service: media_player.play_media
+                          service_data:  
+                            media_content_id: "La 1 HD"
+                            entity_id: media_player.lg
+                            media_content_type: "channel"
+
+                      - type: picture
+                        image: /local/img/tv/La2HD.png
+                        tap_action:
+                          action: call-service
+                          service: media_player.play_media
+                          service_data:  
+                            media_content_id: "La 2 HD"
+                            entity_id: media_player.lg
+                            media_content_type: "channel"
+
+                      - type: picture
+                        image: /local/img/tv/tv3.png
+                        tap_action:
+                          action: call-service
+                          service: media_player.play_media
+                          service_data:  
+                            media_content_id: "TV3HD"
+                            entity_id: media_player.lg
+                            media_content_type: "channel"
+
+                      - type: picture
+                        image: /local/img/tv/324.png
+                        tap_action:
+                          action: call-service
+                          service: media_player.play_media
+                          service_data:  
+                            media_content_id: "3/24"
+                            entity_id: media_player.lg
+                            media_content_type: "channel"
 
               - type: vertical-stack           
                 cards: 
@@ -188,7 +238,23 @@ cards:
                             source: "FOX HD"
                             entity_id: media_player.vusolose
 
+                      - type: picture
+                        image: /local/img/movistar2/46-MLIGA.png
+                        tap_action:
+                          action: call-service
+                          service: media_player.select_source
+                          service_data:  
+                            source: "M. LaLiga HD"
+                            entity_id: media_player.vusolose
 
+                      - type: picture
+                        image: /local/img/movistar2/70-NATGEO.png
+                        tap_action:
+                          action: call-service
+                          service: media_player.select_source
+                          service_data:  
+                            source: "NAT GEO HD"
+                            entity_id: media_player.vusolose
 
               - type: picture
                 image: /local/img/lovelace/200_lights/wheel2.png

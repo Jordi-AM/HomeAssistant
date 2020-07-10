@@ -6,7 +6,7 @@ cards:
 
   - type: vertical-stack           
     cards:    
-      - !include /config/lovelace1/000_top_barv2.yaml
+      - !include /config/lovelace1/__menu__.yaml
    
 
         #****************************************************************************************************************
@@ -173,7 +173,44 @@ cards:
                   info: scroll   #short scroll  
 
  
-        # El código para el altavoz del lavabo venía aquí. Se ha guardado en 400_spotify_comedor.txt hasta que se arregle spotcast
+              #*****************************************   C O M E D O R     **********************************************
+            - type: conditional                                                 # ************** SIN SONAR ***************
+              conditions:
+                - entity: media_player.superyo
+                  state_not: "playing"
+              card:
+                  type: picture-entity
+                  image: /local/img/lovelace/comedorv3.png
+                  #entity: media_player.altavoz_nil_main
+                  entity: input_boolean.comedor
+                  show_name: false
+                  show_state: false
+                  tap_action:
+                    action: call-service
+                    service: script.activa_spotify_superyo
+                    service_data: {"entidad":"input_boolean.comedor"}
+                  hold_action:
+                    action: call-service
+                    service: script.pon_radio
+                    service_data:
+                      entidad: "media_player.superyo"
+                      booleano: "input_boolean.comedor"
+
+            - type: conditional                                                 # ************** SONANDO  ****************
+              conditions:
+                - entity: media_player.superyo
+                  state: "playing"
+              card:
+                  type: custom:mini-media-player
+                  entity: media_player.superyo
+                  artwork: cover  # cover  full-cover none full-cover-fit
+                  source: icon   # full  icon
+                  more_info: true 
+                  info: scroll   #short scroll   
+
+
+
+        # El código para el altavoz del comedor venía aquí. Se ha guardado en 400_spotify_comedor.txt hasta que se arregle spotcast
 
         #****************************************************************************************************************
         #****************************************************************************************************************
@@ -189,11 +226,7 @@ cards:
               type: glance
               show_name: false
               show_state: false 
-              style: 
-                "--paper-item-icon-color": lime
-                "--iron-icon-stroke-color": green
-                "--iron-icon-height": 41px
-                "--iron-icon-width": 41px
+
 
             filter:
               include:
@@ -323,4 +356,31 @@ cards:
         conditions:
           - entity: input_boolean.caratulas5
             state: "on"
-        card: []
+        card:
+          type: custom:layout-card
+          layout:  horizontal # auto vertical horizontal
+          column_width: 200px
+          min_columns: 8
+          max_columns: 8
+          cards:
+            - type: picture
+              image: /local/img/spoti/leonbenavente.png
+              tap_action:
+                action: call-service
+                service: script.spoty_yamaha
+                service_data:
+                  lista: 'spotify:album:4jRMwulUkj2n8ZJGTLAjum'
+            - type: picture
+              image: /local/img/spoti/fitografia.png
+              tap_action:
+                action: call-service
+                service: script.spoty_yamaha
+                service_data:
+                  lista: 'spotify:album:4zSihveMwgYWHA5Bkw29Ug'
+            - type: picture
+              image: /local/img/spoti/rios.png
+              tap_action:
+                action: call-service
+                service: script.spoty_yamaha
+                service_data:
+                  lista: 'spotify:album:0u3fBFL5Q87TLagmaUOtxu'

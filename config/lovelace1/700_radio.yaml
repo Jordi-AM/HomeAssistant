@@ -5,9 +5,7 @@ panel: true
 cards:
   - type: vertical-stack           
     cards:    
-      - !include /config/lovelace1/000_top_barv2.yaml
-
-
+      - !include /config/lovelace1/__menu__.yaml
       - type: custom:layout-card
         layout: horizontal # auto vertical horizontal
         column_num: 2
@@ -179,8 +177,25 @@ cards:
               service_data:
                 url: http://stream.klassikradio.de/live/mp3-128/stream.klassikradio.de/
 
+          - type: picture
+            image: /local/img/radio/bestof8090.png
+            tap_action:
+              action: call-service
+              service: script.radio_comedor
+              service_data:
+                url: http://streamingv2.shoutcast.com/80s90shitsradio
 
-          - type: custom:gap-card
+
+
+            # ******************************************************* SPOTIFY **********************************************************
+          - type: picture
+            image: /local/img/spoti/leonbenavente.png
+            tap_action:
+              action: call-service
+              service: script.spoty_googlehome
+              service_data:
+                lista: 'spotify:album:4jRMwulUkj2n8ZJGTLAjum'
+  
 
             # ***************************************************** PONER MÚSICA SERVER ***************************************************
 

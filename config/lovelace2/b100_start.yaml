@@ -1,83 +1,31 @@
 title: 100_start
 path: start
-panel: false
+panel: true
 cards:
-      # - type: custom:compact-custom-header  
-  - type: markdown
-    title: MARKDOWN
-    content: |
-      Hello world
-  - type: entities
-    entities:
-      - input_number.x_pos
-      - input_number.y_pos
-  - type: picture
-    image: local/img/lovelace/cocinav2.png
-    tap_action: 
-      #action: call-service
-      #service: script.test_popup
 
-      action: call-service
-      service: browser_mod.command
+  - type: custom:layout-card
+    layout: horizontal
+    column_num: 1
+    max_columns: 1
+    max_width: [100%]
+    cards:
 
-      service_data:
-        command: popup
-        title: Garage Options
-        deviceID:
-          - this
-        large: true
-        card:
-          type: horizontal-stack
-          cards:
-            - type: custom:light-entity-card
-              entity: light.leds
-            - type: custom:light-entity-card
-              entity: light.cortina
-            - type: custom:light-entity-card
-              entity: light.luces_comedor
+      # *****************************************************************************************************************
+      # **************************************************** T O P ******************************************************
+      # *****************************************************************************************************************
 
+      - type: custom:state-switch
+        entity: input_boolean.topbar_config
+        states:
+          "off":
+            !include /config/lovelace1/000_top_barv2.yaml
+          "on":
+            !include /config/lovelace1/000_top_barv2-2.yaml
+      - type: horizontal-stack
+        cards:
 
-
-  - type: 'custom:flex-horseshoe-card'
-    entities:
-      - entity: sensor.dark_sky_temperature
-        decimals: 1
-        unit: '°C'
-        area: De Maan
-    show:
-      horseshoe_style: 'lineargradient'
-    layout:
-      states:
-        # Refers to the first entity in the list, ie index 0
-        # State value is positioned at (50%,60%) with a large font size
-        # The size of the units are automatically calculated at 60% of the
-        # state value font size and shifted upwards.
-        # The default font color is the theme defined primary-text-color.
-        - id: 0
-          entity_index: 0
-          xpos: 50
-          ypos: 60
-          styles:
-            - font-size: 3.5em;
-      areas:
-        # Refers to the first entity in the list, ie index 1
-        # Area value is positioned at (50%,35%) with font-size 1.5 and
-        # an opacity of 80%.
-        # The default font color is the theme defined primary-text-color.
-        - id: 0
-          entity_index: 0
-          xpos: 50
-          ypos: 35
-          styles:
-            - font-size: 1.5em;
-            - opacity: 0.8;
-
-    # Scale set to -10 to +40 degrees celcius
-    horseshoe_scale:
-      min: -10
-      max: 40
-    # color stop list with two colors. With the `lineargradient` fill style, only the
-    # colors are used. The thresholds are ignored with this setting.
-    color_stops:
-      10: 'red'
-      18: 'blue'
+          - type: entities
+            entities:
+              - input_number.x_pos
+              - input_number.y_pos
+          - type: custom:gap-card

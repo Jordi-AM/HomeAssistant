@@ -1,0 +1,115 @@
+input_boolean:
+  notificar_errores:
+    icon: mdi:email-alert-outline
+    initial: false
+
+counter:
+  contador_errores:
+    name: Errors
+    icon: mdi:alert
+    initial: 0
+  
+  contador_warnings:
+    name: Warnings
+    icon: mdi:alert
+    initial: 0
+
+automation:
+
+
+- id: Contador_warnings_log
+  alias: Contador_warnings_log
+  trigger:
+    platform: event
+    event_type: system_log_event
+    event_data:
+      level: WARNING
+  condition:
+    - condition: template
+      value_template: >   ##no mostrará los que contengan ese texto. Hay que pasarlo a string, si no considera array por [] 
+          {% if "ipp" in (trigger.event.data.message | string) or "broadlink not ready yet" in (trigger.event.data.message | string) or "enchufe_" in (trigger.event.data.message | string) %}
+              False
+          {% else %}
+              True
+          {% endif %}
+    - condition: numeric_state
+      entity_id: counter.contador_warnings
+      below: 50
+  action:
+    - service: counter.increment
+      data:
+        entity_id: counter.contador_warnings
+    - service: persistent_notification.create
+      data_template:
+        message: > 
+          {% if trigger.event.data.message is defined or True %}
+              WARNING!!!! {{ trigger.event.data.message }} 
+              ORIGEN: {{ trigger.event.origin }}
+              NAME: {{ trigger.event.data.name }}
+          {% else %}
+              Indefinido
+          {% endif %}
+
+# Notifica los errores en la barra de notificaciones (excepto los especificados, que ya están controlados)  
+# suma el contador de errores    
+# si input_boolean.notificar_errores es on, también envía correo
+- id: errores2mail
+  alias: errores2mail
+  trigger:
+    - platform: event
+      event_type: system_log_event
+      event_data:
+        level: ERROR
+  condition:
+      ## no mostrará las siguientes:
+      ## ipp: lo da cuando la impre está apagada
+      ## switch_enchufe: desde la 0.110 de vez en cuando, pero funciona bien
+      ## spotify: lo da cuando conecto spotify en el móvil
+    - condition: template
+      value_template: >   
+          {% if "ipp" in trigger.event.data.name or "switch.enchufe_" in (trigger.event.data.message | string ) or "Update for media_player.spotify_bitmap fails" in (trigger.event.data.message | string ) %}  
+              False
+          {% else %}
+              True
+          {% endif %}
+    - condition: numeric_state
+      entity_id: counter.contador_errores
+      below: 50
+  action:
+    - service: persistent_notification.create
+      data_template:
+        message: > 
+          {% if trigger.event.data.message is defined %}
+              ERROR!!!! {{ trigger.event.data.message }} 
+              ORIGEN: {{ trigger.event.origin }}
+              NAME: {{ trigger.event.data.name }}
+          {% else %}
+              Indefinido
+          {% endif %}
+    - service: counter.increment
+      data:
+        entity_id: counter.contador_errores
+    - condition: state
+      entity_id: input_boolean.notificar_errores
+      state: 'on'
+    - condition: numeric_state            # si saltan muchos, para que no colapse correo
+      entity_id: counter.contador_errores
+      below: 5 
+    - service: notify.correo_jam 
+      data_template:
+        title: 'HA: ERRORES'
+        target:
+        - jordiaguileram@gmail.com
+        message: >-
+          Error encontrado en HA:
+              - MESSAGE: {{ trigger.event.data.message }}
+#    - service: persistent_notification.create
+#      data_template:
+#        message: " Fin notificación "
+
+script:
+  resetear_contadores:
+    sequence:
+      - service: counter.reset
+        entity_id: counter.contador_errores, counter.contador_warnings
+      - service: python_script.dismiss_notifications # https://community.home-assistant.io/t/dismiss-all-persistent-notifications-script/108789/3

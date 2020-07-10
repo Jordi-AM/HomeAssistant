@@ -6,7 +6,7 @@ cards:
   - type: vertical-stack           
 
     cards:    
-      - !include /config/lovelace1/000_top_barv2.yaml # Barra menú
+      - !include /config/lovelace1/__menu__.yaml
 
       - type: horizontal-stack    # Línea 2: IP y hora reinicio. Ejemplos de car-mod  ******************************************************     
         cards:    
@@ -16,7 +16,7 @@ cards:
                 --primary-text-color: #0F0
               }
             content: |
-              ## IP: {{ states.sensor.ipv4_address_wlan0.state }}  (wlan0) 
+              ## IP wlan0: {{states('sensor.ipv4_address_wlan0')}}
           - type: markdown
             style: |
               ha-card {
@@ -326,10 +326,11 @@ cards:
                               - entity_id: vacuum.aspirino
                               - entity_id: device_tracker.pocophone_f1
                               - entity_id: device_tracker.bici
-                              - entity_id: device_tracker.anagps
-                              - entity_id: device_tracker.jordigps
+                              #- entity_id: device_tracker.anagps
+                              #- entity_id: device_tracker.jordigps
                               - entity_id: sensor.humedad_comedor # estos dos son el mismo que el de temperatura
                               - entity_id: sensor.presion_comedor
+                              - entity_id: sensor.iluminacion_pir_comedor # es el mismo que pir_comedor
                           sort:
                             method: attribute
                             attribute: battery_level

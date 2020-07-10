@@ -1,0 +1,292 @@
+input_select:
+  quien_en_casa:
+    name: Quién hay en casa?
+    options:
+      - Familia
+      - Nadie
+      - Desconocido
+      - Durmiendo
+    initial: Nadie
+    icon: mdi:account-group
+
+input_boolean:
+    aviso_familia:
+      name: Estado pasa a FAMILIA
+      icon: mdi:alarm-light-outline
+    aviso_nadie:
+      name: Estado pasa a NADIE
+      icon: mdi:alarm-light-outline
+    aviso_desconocido:
+      name: Estado pasa a DESCONOCIDO
+      icon: mdi:alarm-light-outline
+    aviso_durmiendo:
+      name: Estado pasa a DURMIENDO
+      icon: mdi:alarm-light-outline
+    aviso_despierto:
+      name: Estado pasa a DESPIERTO
+      icon: mdi:alarm-light-outline
+
+
+sensor:
+  - platform: template
+    sensors: 
+      hay_alguien_conocido:
+        icon_template: mdi:account-question
+        value_template: >-
+          {{ is_state('person.jordi', 'home')
+             or is_state('person.ana', 'home')
+             or is_state('person.mari', 'home') }}
+
+      hay_alguien_desconocido:
+        icon_template: mdi:account-question
+        value_template: >-
+          {{ is_state('binary_sensor.puerta_principal', 'on')
+             or is_state('binary_sensor.pir_entrada', 'on')
+             or is_state('binary_sensor.tv_encendida', 'on')
+             or is_state('binary_sensor.pc_encendido', 'on')
+             or is_state('binary_sensor.pir_comedor', 'on') }}
+
+      hay_alguien:
+        icon_template: mdi:account-question
+        value_template: >-
+          {{ is_state('sensor.hay_alguien_conocido', 'True')
+              or is_state('sensor.hay_alguien_desconocido', 'True') }}
+#          {{ is_state('person.jordi', 'home')
+#             or is_state('person.ana', 'home')
+#             or is_state('person.mari', 'home')
+#             or is_state('binary_sensor.puerta_principal', 'on')
+#             or is_state('binary_sensor.pir_entrada', 'on')
+#             or is_state('binary_sensor.tv_encendida', 'on')
+#             or is_state('binary_sensor.pc_encendido', 'on')
+#             or is_state('binary_sensor.pir_comedor', 'on') }}
+
+automation:
+
+  # ------------------------------------------------------------------------------------------------------
+  # ---------------------------------- A DORMIR  ---------------------------------------------------------
+  # ------------------------------------------------------------------------------------------------------
+  # Si a partir de las 11:30 apago móvil, tele y pc, activa escena DURMIENDO
+
+  - id: a_dormir
+    alias: establece_escena_durmiendo
+    trigger:
+      platform: state
+      entity_id: device_tracker.jordi # apagar la wifi. Si usara person, necesitaría modo avión para activarse
+      to: 'not_home'
+      for: 00:02:00
+    condition:
+      - condition: time
+        # At least one of the following is required.
+        after: '22:30:00'
+        before: '4:00:00'
+      - condition: state
+        entity_id: binary_sensor.pc_encendido
+        state: 'off'
+      - condition: state
+        entity_id: binary_sensor.tv_encendida
+        state: 'off'
+    action:
+      - service: media_player.turn_off
+        data:
+          entity_id: media_player.vusolose_local
+      - service: script.apagar_todas_luces # mejor que por escenas, por los booleanos
+      - delay: '00:00:15' # para que de tiempo a apagar satélite
+      - service: scene.turn_on
+        entity_id: scene.durmiendo
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.quien_en_casa
+          option: Durmiendo
+      - condition: state
+        entity_id: input_boolean.aviso_durmiendo
+        state: 'on'
+      - service: telegram_bot.send_message
+        data:
+          message: Durmiendo? 
+          target: 440192507
+
+  # ------------------------------------------------------------------------------------------------------
+  # ---------------------------------- A DESPERTARSE  ----------------------------------------------------
+  # ------------------------------------------------------------------------------------------------------
+
+    # cuando enciendo móvil por la mañana o detecta movimiento pir_comedor
+  - id: a_despertarse
+    alias: Establece escena DESPIERTO (wifi)
+    trigger:
+      - platform: state
+        entity_id: device_tracker.jordi
+        to: 'home'
+      - platform: state
+        entity_id: binary_sensor.movil_jordi
+        to: 'on'
+      - platform: state
+        entity_id: binary_sensor.pir_comedor
+        to: 'on'
+    condition:
+      - condition: state
+        entity_id: input_select.quien_en_casa
+        state: 'Durmiendo'
+      - condition: time
+        after: '06:00:00'
+        before: '10:00:00'
+    action:
+      - service: scene.turn_on
+        entity_id: scene.despierto
+      - condition: state
+        entity_id: input_boolean.aviso_despierto
+        state: 'on'
+      - service: telegram_bot.send_message
+        data:
+          message: Despierto? 
+          target: 440192507
+
+  # ------------------------------------------------------------------------------------------------------
+  # -------------------------------------- CONTROL PRESENCIA ---------------------------------------------
+  # ------------------------------------------------------------------------------------------------------
+
+  - id: nadieencasa
+  #--------------------------------------------------------
+    alias: Nadie en casa1 # ni móviles, tv, ordenador, pir, door 10 minutos, y que no estemos durmiendo
+    trigger:
+      platform: state
+      entity_id: sensor.hay_alguien
+      to: 'False'
+      for:
+        minutes: 10
+    condition:
+      - condition: not
+        conditions:
+          - condition: state
+            entity_id: input_select.quien_en_casa
+            state: Durmiendo    
+    action:
+
+      - service: media_player.turn_off
+        data:
+          entity_id: media_player.vusolose_local
+      - service: script.apagar_todas_luces # mejor que por escenas, por los booleanos
+      - delay: '00:00:15' # para que de tiempo a apagar satélite
+      - service: scene.turn_on
+        entity_id: scene.durmiendo
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.quien_en_casa
+          option: Nadie
+      - condition: state
+        entity_id: input_boolean.aviso_nadie
+        state: 'on'
+      - service: telegram_bot.send_message
+        data:
+          message: Nadie en casa 
+          target: 440192507
+
+    # Si no hay nadie y detecta puerta, PIRs, TV o PC
+  - id: desconocido_en_casa
+    alias: Desconocido en casa
+    trigger:
+      - platform: state
+        entity_id: sensor.hay_alguien_desconocido
+        to: 'True'
+    condition:
+      - condition: state
+        entity_id: input_select.quien_en_casa
+        state: 'Nadie'
+    
+    action:
+      - delay: '00:00:30' # para dar tiempo a que se active hay_alguien_conocido, si corresponde      
+      - condition: state
+        entity_id: sensor.hay_alguien_conocido
+        state: 'False'  
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.quien_en_casa
+          option: Desconocido
+      - condition: state
+        entity_id: input_boolean.aviso_desconocido
+        state: 'on'  
+      - service: telegram_bot.send_message
+        data:
+          message: Desconocido en casa (TV,PC,PIR)
+          target: 440192507
+      - service: notify.navegador
+        data:
+          message: Desconocido en casa (TV,PC,PIR)      
+
+  - id: familia_en_casa
+  #--------------------------------------------------------
+    alias: familia_en_casa # ni móviles, tv, ordenador, pir, door 10 minutos, y que no estemos durmiendo
+    trigger:
+      platform: state
+      entity_id: sensor.hay_alguien_conocido
+      to: 'True'
+    condition:
+      - condition: not
+        conditions:
+          - condition: state
+            entity_id: input_select.quien_en_casa
+            state: Durmiendo    
+          - condition: state
+            entity_id: input_select.quien_en_casa
+            state: Familia
+
+    action:
+
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.quien_en_casa
+          option: Familia
+      - condition: state
+        entity_id: input_boolean.aviso_familia
+        state: 'on'
+      - service: telegram_bot.send_message
+        data:
+          message: Familia en casa
+          target: 440192507
+
+
+  - id: hay_alguien_reinicio
+    alias: hay_alguien_reinicio
+    trigger:
+      platform: homeassistant
+      # Event can also be 'shutdown'
+      event: start
+    condition:
+      - condition: state
+        entity_id: sensor.hay_alguien
+        state: 'True'  
+    action:
+      - delay: '00:00:10'
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.quien_en_casa
+          option: Desconocido
+      - condition: state
+        entity_id: sensor.hay_alguien_conocido
+        state: 'True'  
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.quien_en_casa
+          option: Familia
+      - service: telegram_bot.send_message
+        data_template:
+          message: >
+            HA Reiniciado. Establecida presencia a {{ states('input_select.quien_en_casa') }}
+          target: 440192507
+      - service: xiaomi_aqara.play_ringtone      
+        data:
+          ringtone_id: '12'
+          ringtone_vol: '3'
+      - service: light.turn_on
+        entity_id: light.xiaomi
+        data:
+          rgb_color:
+          - 5
+          - 5
+          - 50
+      - delay: 600
+      - service: light.turn_off
+        entity_id: light.xiaomi
+      - service: counter.reset
+        entity_id: counter.contador_errores
+      - service: counter.reset
+        entity_id: counter.contador_warnings

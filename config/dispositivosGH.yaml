@@ -1,3 +1,94 @@
 # He probado con grupos, pero no me funciona, solo con entidades individuales
-input_boolean.modo_kiosko:
+
+input_boolean.a_cocinar:
+  expose: true
+
+input_boolean.a_la_ducha:
+  expose: true
+
+input_boolean.tomar_pastilla:
+  expose: true
+
+input_boolean.luces_cruz:
+  expose: true
+
+#---------------- SCENES (no aparecen en pantalla principal de Home Assistant, pero si pueden activarse y usarse en rutinas ---------------
+
+scene.cenando:
+  expose: true
+scene.cine:
+  expose: true
+#scene.luces_apagadas:
+#  expose: false
+scene.luces_led:
   expose: false
+scene.luces_principales:
+  expose: true
+scene.luces_traseras:
+  expose: true
+#    scene.luz_cruzada:
+#      expose: false      
+scene.relax:
+  expose: true      
+
+# ------------------ SCRIPTS (se comportan igual que SCENES ---------------------------------
+script.estado_baterias:
+  expose: true
+
+
+# ----------------------------- LIGHTS -----------------------------------
+light.ana:
+  expose: true
+light.comedor:
+  expose: true
+light.cortina:
+  expose: true
+light.dos:
+  expose: true
+light.jordi:
+  expose: true
+light.leds:
+  expose: true
+light.luces_comedor:
+  expose: true
+light.luces_cruzadas:
+  expose: true
+#light.luces_piso:
+#  expose: true
+light.luces_principales:
+  expose: true
+light.luces_traseras:
+  expose: true
+light.marti:
+  expose: true
+light.mueble:
+  expose: true
+light.nil:
+  expose: true
+light.recibidor:
+  expose: true
+#light.todas:
+#  expose: true
+light.tres:
+  expose: true
+light.uno:
+  expose: true
+light.ventana:
+  expose: true
+#light.xiaomi:
+#  expose: true
+
+# ------------------- MEDIA PLAYERS --------------------------
+
+media_player.altavoz_cocina_main:
+  expose: true
+media_player.altavoz_lavabo_main:
+  expose: true
+media_player.altavoz_nil_main:
+  expose: true
+media_player.lg:
+  expose: true
+media_player.miniyo:
+  expose: true
+media_player.superyo:
+  expose: true

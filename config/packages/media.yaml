@@ -1,14 +1,8 @@
-# https://community.home-assistant.io/t/spotcast-custom-component-to-start-playback-on-an-idle-chromecast-device/114232
 # https://github.com/fondberg/spotcast
 # La activación de la música con el chromecast no funciona como con los altavoces Yamaha. Este componente lo permite
-
-# Por política de spotify, ha dejado de funcionar en may-2020
-# https://github.com/enriquegh/spotify-webplayer-token/issues/6
-# https://github.com/fondberg/spotcast/issues/84
-#spotcast:
-#  username: !secret username_web_spoty
-#  password: !secret password_web_spoty
-
+spotcast:
+  sp_dc: !secret sp_dc
+  sp_key: !secret sp_key
 
 sensor:
     #HACS Spotify Playlist Sensor: recupera listas de la cuenta
@@ -66,7 +60,7 @@ group:
       - input_boolean.caratulas2
       - input_boolean.caratulas3
       - input_boolean.caratulas4
-     # - input_boolean.caratulas5
+      - input_boolean.caratulas5
 
 input_boolean:
 
@@ -79,8 +73,9 @@ input_boolean:
     icon: mdi:numeric-3-circle
   caratulas4:
     icon: mdi:numeric-4-circle
-#  caratulas5:
-#    icon: mdi:numeric-5-circle
+  caratulas5:
+    icon: mdi:numeric-5-circle
+  # si añadimos más, recordar ponerlas en el grupo carátulas
 
   musica_lavabo:
     name: Música lavabo
@@ -98,6 +93,52 @@ input_boolean:
 
 script:
 
+  spoty_googlehome:
+    alias: spoty googlehome
+    sequence:
+      - service: spotcast.start
+        data_template:
+            entity_id: media_player.superyo
+            uri: >
+              {{ lista }}
+            # transfer_playback: false
+            random_song: true
+            shuffle: true
+
+  spoty_yamaha:
+    alias: spoty yamaha
+    sequence:
+        # Hacemos play de la lista pasada
+      - service: media_player.play_media
+        data_template:
+          entity_id: media_player.spotify_bitmap
+          media_content_id: >
+             {{ lista }} 
+          media_content_type: playlist
+        # Activamos aleatorio
+      - delay: 00:00:02
+      - service: media_player.shuffle_set
+        data:
+          entity_id: media_player.spotify_bitmap
+          shuffle: true
+        # Pasamos al siguiente tema, para no oir siempre el mismo
+      - service: media_player.media_next_track
+        entity_id: media_player.spotify_bitmap
+
+
+  activa_spotify_superyo:
+    alias: Activar Spotify en el comedor
+    sequence:
+      - service: input_boolean.turn_off
+        entity_id: group.lista_players
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.comedor
+
+      - service: spotcast.start
+        data_template:
+            entity_id: media_player.superyo
+            random_song: true
+            shuffle: true
   #--------------------------------------------------------------------------------------------------------------------------
   # Llamada desde view Spotify. Recibe parámetro entidad con input_boolean.musica_NomAltavoz
   #--------------------------------------------------------------------------------------------------------------------------
@@ -311,6 +352,7 @@ automation:
 
 
 - id: idle_to_off_cocina_tiempo
+  alias: Pasar altavoces de idle a off (cocina)
   trigger:
     platform: time_pattern
     # You can also match on interval. This will match every 5 minutes
@@ -426,3 +468,18 @@ automation:
       entity_id: input_boolean.musica_nil
 ###############################################################################################################################
 ###############################################################################################################################
+
+  # Apagar plus si se apaga TV.
+- id: autocierre_plus
+  alias: autocierre_plus
+  trigger:
+    - platform: state
+      entity_id: media_player.lg
+      to: 'off'    
+  condition: 
+    - condition: state
+      entity_id: media_player.turn_off
+      state: 'on'
+  action:
+    - service: media_player.turn_off
+      entity_id: media_player.vusolose

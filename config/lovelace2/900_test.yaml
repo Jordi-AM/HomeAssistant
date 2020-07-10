@@ -1,23 +1,45 @@
 title: Test
 path: test
-panel: true
+panel: false
 cards:
-  - type: horizontal-stack
-    cards:
-      - type: custom:gap-card
-      - type: picture-elements
-        style: |
-          ha-card {
-            --top: {{ states("input_number.y_pos") }}%;
-            --left: {{ states("input_number.x_pos") }}%;
-          }
-        image: /local/img/lovelace/amperev4.png
-        elements: !include sub_100_ampere.yaml
-      - type: custom:gap-card
-      - type: horizontal-stack
-        cards:
-          - type: entities
-            entities:
-              - media_player.altavoz_cocina_main
-              - media_player.altavoz_lavabo_main
-              - media_player.altavoz_nil_main
+
+
+  - type: picture-entity
+    entity: camera.local_file
+  - type: picture-entity
+    entity: input_boolean.a_cocinar
+    image: /local/img/pruebas/img1.jpg
+
+  - type: picture-entity
+    entity: input_boolean.a_la_ducha
+    image: /api/media_player_proxy/media_player.altavoz_cocina_main?token=8e9943a3220ea59be53a098af6c52bee162ebb9a51a08dd263557192014b1282&cache=ee7a152f497df69a
+
+  - type: iframe
+    url: http://homeassistant.local:8123/api/media_player_proxy/media_player.altavoz_cocina_main?token=8e9943a3220ea59be53a098af6c52bee162ebb9a51a08dd263557192014b1282&cache=ee7a152f497df69a
+    aspect_ratio: 80%
+  - type: iframe
+    url: /api/media_player_proxy/media_player.altavoz_cocina_main?token=8e9943a3220ea59be53a098af6c52bee162ebb9a51a08dd263557192014b1282&cache=ee7a152f497df69a
+    aspect_ratio: 80%
+  - type: entities
+    style: |
+      ha-card {
+        border: 2px solid grey;
+        margin: auto;
+        width: 300px;
+        height: 300px !important;
+        background-image: url({{ state_attr('media_player.altavoz_cocina_main','entity_picture') }}) !important;
+      }
+    entities: 
+      - media_player.altavoz_cocina_main
+
+  - type: entities
+    style: |
+      ha-card {
+        border: 2px solid grey;
+        margin: auto;
+        width: 300px;
+        height: 300px !important;
+        background-image: url({{ state_attr('media_player.spotify_bitmap','entity_picture') }}) !important;
+      }
+    entities: 
+      - media_player.spotify_bitmap

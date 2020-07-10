@@ -10,15 +10,6 @@ escenas:
     - input_boolean.luces_relax
     - input_boolean.luces_cine
 
-#botones_tiempo:
-#  name: botones mapa tiempo
-#  entities:
-#    - input_boolean.boton1
-#    - input_boolean.boton2
-#    - input_boolean.boton3
-#    - input_boolean.boton4
-
-
 regleta1:
   name: Regleta 1
   entities:

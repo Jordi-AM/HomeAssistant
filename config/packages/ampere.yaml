@@ -4,9 +4,11 @@ modbus:
   host: 192.168.1.234
   port: 502
 
+
+input_text:
+  silenciar_alertas_hasta: ## para que no de muchos avisos seguidos
+
 sensor:
-
-
   - platform: statistics
     entity_id: sensor.temp_baterias
     name: Estadisticas temperatura baterias
@@ -35,7 +37,7 @@ sensor:
 
       carga_bateria_app:
         value_template: >
-            {% set v =  (states.sensor.ampere_batterysoc.state | float *1.5 -25) | round(1) %}
+            {% set v =  (states('sensor.ampere_batterysoc') | float * 1.5 -25) | round(1) %}
             {% if v<100 %}
             {{ v }}
             {% else %}
@@ -46,12 +48,14 @@ sensor:
 
       # tuve que hacer un sensor template e igualarlo al de ampere, porque en el de ampere (modbus) no podía establecer el friendly_name
       temp_baterias:
-        value_template: "{{ states.sensor.ampere_temp_battcellmax.state|float }}"
+        # value_template: "{{ states .sensor.ampere_temp_battcellmax.state|float }}"
+        value_template: "{{ states('sensor.ampere_temp_battcellmax')|float }}"
         unit_of_measurement: "°C"
         friendly_name: ' '  # para que no aparezca en el picture-element
 
       temp_inverter:
-        value_template: "{{ states.sensor.ampere_temp_inverter.state|float }}"
+        # value_template: "{{ states .sensor.ampere_temp_inverter.state|float }}"
+        value_template: "{{ states('sensor.ampere_temp_inverter')|float }}"
         unit_of_measurement: "°C"
         friendly_name: ' '  
 
@@ -390,10 +394,7 @@ automation:
     platform: numeric_state    
   action:
   - data:
-      message: 'Temperatura AMPER {{ states.sensor.temperatura_ampere.state
-        }} grados
-
-        '
+      message: 'Temperatura AMPER {{ states("sensor.temperatura_ampere") }} grados '
       target: 440192507
     service: telegram_bot.send_message
 
@@ -410,8 +411,6 @@ automation:
     - delay: 00:00:10
     - service: input_boolean.turn_off
       entity_id: input_boolean.ejecuta_estado_ampere
-
-    
 
 # ------------------------------------------------------------------------------------------------------      
 # --------------------------------------------------- INTRUSIÓN AMPERE ---------------------------------
@@ -443,25 +442,71 @@ automation:
       message: AMPERE CERRADO!!!!
       target: 440192507
 
+# ------------------------------------------------------------------------------------------------------      
+# ------------------------------------------ ALERTA CONSUMO ELÉCTRICO ----------------------------------
+# ------------------------------------------------------------------------------------------------------
+
 - id: alerta_consumo
   alias: Alerta consumo eléctrico alto
   trigger:
-    platform: numeric_state
-    entity_id: sensor.ampere_demand
-    above: 4.0
+    - platform: numeric_state
+      entity_id: sensor.ampere_demand
+      above: 4.0
+    - platform: numeric_state
+      entity_id: sensor.ampere_demand
+      above: 5.5
+    - platform: numeric_state
+      entity_id: sensor.ampere_demand
+      above: 6.0
+
+  condition:
+    condition: or  # Solo si han pasado 5 minutos desde el aviso anterior, o el consumo es realmente alto
+    conditions:
+      - condition: template
+        value_template: "{{ (as_timestamp(now()) | float) | timestamp_custom('%H:%M') > states('input_text.silenciar_alertas_hasta') }}"
+      - condition: template
+        value_template: "{{ states('sensor.ampere_demand') | float > 5.5 }}"
+
   action:
     - service: script.notificacion_google
       data_template:
         mensaje: >
-           Consumo eléctrico elevado, {{ states ("sensor.ampere_demand") }} kilowatios
-
+          {% if (states ("sensor.ampere_demand") | float > 6.0 ) %}
+            Consumo eléctrico MUY alto, {{ states ("sensor.ampere_demand") }} kilowatios. Recomendable apagar dispositivos
+          {% elif (states ("sensor.ampere_demand") | float > 5.0 ) %}}
+            Consumo eléctrico alto, {{ states ("sensor.ampere_demand") }} kilowatios.
+          {% else %}
+            Consumo eléctrico elevado, {{ states ("sensor.ampere_demand") }} kilowatios.
+          {% endif %}
+        volumen: >
+          {% if (states ("sensor.ampere_demand") | float > 6.0 ) %}
+            {% set vol = 0.9 %}
+          {% elif (states ("sensor.ampere_demand") | float > 5.0 ) %}}
+            {% set vol = 0.7 %}
+          {% else %}
+            {% set vol = 0.6 %}
+          {% endif %}
+          {{ vol }}
+    - service: input_text.set_value # Desactivo la alarma durante 5 minutos
+      data_template:
+        entity_id: input_text.silenciar_alertas_hasta
+        value: "{{ (as_timestamp(now()) + 300 | float) | timestamp_custom('%H:%M') }}"
+       
 script:
   estado_baterias:      
     alias: Estado baterías AMPERE
     sequence:
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.superyo
+        volume_level: 0.7
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.miniyo
+        volume_level: 0.7
     - delay: 00:00:03  # para que no se una mensaje de google (de acuerdo, ejecuto...) y el de las baterías
     - service: tts.google_say
       entity_id:  "all" # media_player.superyo  
       data_template:
         message: >
-            La carga de la batería es {{ states.sensor.carga_bateria_app.state }} por ciento y se está generando {{  states.sensor.ampere_inverterpvpower.state  }}. La temperatura es de {{ states.sensor.temperatura_ampere.state }} grados.
+            La carga de la batería es {{ states('sensor.carga_bateria_app') }} por ciento y se está generando {{  states('sensor.ampere_inverterpvpower')  }}. Se está consumiendo {{ states('sensor.miampere_demand') }}. La temperatura es de {{ states('sensor.temperatura_ampere') }} grados.

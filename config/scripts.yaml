@@ -29,19 +29,58 @@ test_telegram:
 test_google_tts:      # Hecho
   alias: Testea funcionamiento google
   sequence:
-  - service: tts.google_say
-    entity_id: media_player.superyo
-    data:
-      message: Son las {{(as_timestamp (now()) + (states("input_number.sleep_timer_duration") | int) *60) | timestamp_custom ("%H:%M:%S", true)}}
+    - service: script.notificacion_google
+      data:
+        mensaje: "15 minutos para apagar la tablet"
+        volumen: 0.5
 
+#------------------------------------------------- NOTIFICACIONES GOOGLE TTS -----------------------------------------
 notificacion_google:      # Hecho
   alias: Notificación google
+  description: 'Lee mensaje en superyo a volumen especificado (0.5 si no se especifica)'
+  fields:
+    mensaje:
+      description: 'Texto a leer'
+      example: 'Hola mundo!'
+    volumen:
+      description: 'Volumen altavoz (opcional)'
+      example: '0.7'
   sequence:
+  - service: input_number.set_value
+    data_template:
+      entity_id: input_number.backup_volumen
+      value: >
+        {% if (state_attr('media_player.superyo','volume_level')==None) %} 
+        0.5
+        {% else %}
+        {{ state_attr('media_player.superyo','volume_level') }}
+        {% endif %}
+  - service: media_player.volume_set
+    data_template:
+      entity_id: media_player.superyo
+      volume_level: >
+        {% if volumen is defined %}
+          {{ volumen }}
+        {% else %}
+           {% if now().hour < 7 %}
+              0.4
+           {% elif now().hour < 22 %}
+              0.6
+           {% else %}
+              0.4
+           {% endif %} 
+        {% endif %}
   - service: tts.google_say
     entity_id: media_player.superyo
     data_template:
       message: >
           {{ mensaje }}
+  - delay: '00:00:20'
+  - service: media_player.volume_set
+    data_template:
+      entity_id: media_player.superyo
+      volume_level: >
+        {{ states('input_number.backup_volumen') }}
 
 # Enciende la luz del HUB Xiaomi segun color en formato hexadecimal
 alerta_luz_hub:
@@ -54,23 +93,3 @@ alerta_luz_hub:
           - '{{ what_color[2:4]|int(0,16) }}'
           - '{{ what_color[4:6]|int(0,16) }}'
 
-
-
-test_popup:      
-  sequence:
-  - service: persistent_notification.create
-    data:
-      message: Popup
-
-
-# Si el switch está activado, también avisa de recordatorio pastilla al móvil
-telegram_pastilla:
-  alias: telegram recordatorio pastilla
-  sequence:
-    - condition: state
-      entity_id: input_boolean.avisar_pastillas_movil
-      state: 'on'
-    - service: telegram_bot.send_message
-      data:
-        message: Pastilla!!!!
-        target: 440192507

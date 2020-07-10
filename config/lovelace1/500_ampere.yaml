@@ -6,7 +6,7 @@ cards:
 
   - type: vertical-stack           
     cards:    
-      - !include /config/lovelace1/000_top_barv2.yaml
+      - !include /config/lovelace1/__menu__.yaml
 
       #- type: markdown
       #  content: |

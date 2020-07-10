@@ -6,7 +6,7 @@
   entities:
     light.luces_principales:
       state: on
-      brightness_pct: 100
+      brightness: 255
       color_temp: 220
     light.luces_traseras:
       state: off
@@ -18,7 +18,7 @@
       state: off
     light.luces_traseras:
       state: on
-      brightness_pct: 100
+      brightness: 255
       color_temp: 220
 
 - name: luces led
@@ -38,7 +38,7 @@
   entities:
     light.luces_principales:
       state: on
-      brightness_pct: 100
+      brightness: 255
       color_temp: 220
     light.luces_traseras:
       state: off
@@ -46,7 +46,7 @@
     light.cortina:
       state: on
       transition: 2
-      brightness_pct: 100
+      brightness: 255
       color_temp: 200
     light.mueble:
       state: off
@@ -57,7 +57,7 @@
   entities: 
     light.luces_cruzadas:
       state: on
-      brightness_pct: 100
+      brightness: 255
       color_temp: 220
     light.ana:
       state: off
@@ -68,7 +68,7 @@
   entities:
     light.todas:
       state: on
-      brightness_pct: 100
+      brightness: 255
       color_temp: 220
 
 
@@ -92,3 +92,23 @@
       rgb_color: [0,222,0]
     light.todas:
       state: off
+
+    
+- name: despierto
+  entities: 
+    switch.enchufe_pc: true
+    switch.enchufe_monitor: true
+    #switch.enchufe_bluetooth: true
+    #switch.enchufe_libre: true
+    switch.enchufe_infrarrojos: true
+    input_select.quien_en_casa: Familia
+
+
+- name: durmiendo
+  entities:
+    group.regleta1: false
+    switch.enchufe_monitor: false
+    switch.enchufe_bluetooth: false
+    switch.enchufe_infrarrojos: false
+
+

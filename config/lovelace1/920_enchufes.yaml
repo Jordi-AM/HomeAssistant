@@ -5,7 +5,7 @@ panel: true
 cards:
   - type: vertical-stack           
     cards:    
-      - !include /config/lovelace1/000_top_barv2.yaml
+      - !include /config/lovelace1/__menu__.yaml
 
       - type: horizontal-stack
         cards:
@@ -16,69 +16,140 @@ cards:
             cards:
 
                 # ************************************************** HORSESHOE Consumos *****************************************************
-              - type: 'custom:flex-horseshoe-card'
-                
-                entities:
-                  - entity: sensor.wemo_consumo
-                    decimals: 2
-                    area: 'Split'
-                    name: 'CONSUMOS '
-                  - entity: sensor.xiaomi_consumo
-                    decimals: 1
-                    area: 'Hassio'
-                card_filter: card--dropshadow-heavy--sepia90
-                scaleTickSize: 50
-                show:
-                  scale_tickmarks: true
-                layout:
-                  hlines:
-                    - id: 0
-                      xpos: 50
-                      ypos: 48
-                      length: 80
-                      styles:
-                        - opacity: 0.5;
-                  states:
-                    - id: 0
-                      entity_index: 0
-                      xpos: 50
-                      ypos: 40
-                      styles:
-                        - font-size: 3em;
-                        - opacity: 0.9;
-                    - id: 0
-                      entity_index: 1
-                      xpos: 75
-                      ypos: 65
-                      styles:
-                        - font-size: 3em;
-                        - text-anchor: end;
 
-                  names:
-                    - id: 0
-                      entity_index: 0
-                      xpos: 50
-                      ypos: 90
-                      styles:
-                          - font-size: 1.8em;
-                  areas:
-                    - id: 0
-                      entity_index: 0
-                      xpos: 50
-                      ypos: 20
-                    - id: 1
-                      entity_index: 1
-                      xpos: 50
-                      ypos: 75
 
-                horseshoe_scale:
-                  min: 0
-                  max: 215
-                  width: 1
-                color_stops:
-                  0: '#FFF6E3'
-                  215: '#FF8C06' 
+              - type: custom:state-switch
+#                entity: user
+#                default: default
+#                states:
+#                  'Jordi Aguilera':
+                entity: input_boolean.mostrar_horseshoe
+                states:
+                  "off":
+                    type: entities
+                    title: Consumos
+                    show_header_toggle: false
+                    header:
+                      image: 'local/img/lovelace/contador.png'
+                      type: picture
+                    style: |
+                      ha-card {
+                        width: 400px !important;
+                      }
+                    entities:
 
-              - type: custom:gap-card
+
+                      - entity: sensor.xiaomi_consumo
+                        icon: mdi:memory
+                        name: 'Pi'
+                        style: |
+
+                          .text-content {
+                            font-size: 24px; 
+                            color: white;
+                          }
+                      - entity: sensor.wemo_consumo
+                        name: 'AIRE ACONDICIONADO'
+                        icon: mdi:weather-sunny
+                        style: |
+
+                          .text-content {
+                            font-size: 24px; 
+                            color: white;
+                          }
+                      - entity: sensor.wemo_consumo_diario
+                        name: 'CONSUMO DIARIO'
+                        icon: mdi:weather-sunny
+                        style: |
+                          .text-content {
+                            font-size: 24px; 
+                            color: white;
+                          }
+
+                  "on":
+
+                    type: 'custom:flex-horseshoe-card'
+                    
+                    entities:
+                      - entity: sensor.wemo_consumo
+                        decimals: 2
+                        area: 'Split'
+                        name: 'CONSUMOS '
+                      - entity: sensor.xiaomi_consumo
+                        decimals: 1
+                        area: 'Hassio'
+                    card_filter: card--dropshadow-heavy--sepia90
+                    scaleTickSize: 50
+                    show:
+                      scale_tickmarks: true
+                    layout:
+                      hlines:
+                        - id: 0
+                          xpos: 50
+                          ypos: 48
+                          length: 80
+                          styles:
+                            - opacity: 0.5;
+                      states:
+                        - id: 0
+                          entity_index: 0
+                          xpos: 50
+                          ypos: 40
+                          styles:
+                            - font-size: 3em;
+                            - opacity: 0.9;
+                        - id: 0
+                          entity_index: 1
+                          xpos: 75
+                          ypos: 65
+                          styles:
+                            - font-size: 3em;
+                            - text-anchor: end;
+
+                      names:
+                        - id: 0
+                          entity_index: 0
+                          xpos: 50
+                          ypos: 90
+                          styles:
+                              - font-size: 1.8em;
+                      areas:
+                        - id: 0
+                          entity_index: 0
+                          xpos: 50
+                          ypos: 20
+                        - id: 1
+                          entity_index: 1
+                          xpos: 50
+                          ypos: 75
+
+                    horseshoe_scale:
+                      min: 0
+                      max: 215
+                      width: 1
+                    color_stops:
+                      0: '#FFF6E3'
+                      215: '#FF8C06' 
+
+
+
+              - type: horizontal-stack
+                cards:
+                  - type: picture-entity
+                    entity: switch.enchufe_aire
+                    tap_action:
+                      action: toggle
+                    show_name: false
+                    show_state: false
+                    state_image:
+                      "on": /local/img/lovelace/wemo_on.png
+                      "off": /local/img/lovelace/wemo_off.png
+                    style: |
+                      ha-card {
+                        width: 200px !important;
+                        margin-left: 90px;
+                      }
+                    entities:
+
 
 

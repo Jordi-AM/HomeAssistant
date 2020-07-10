@@ -1,0 +1,39 @@
+input_boolean: 
+
+  # no suena el timbre, desactiva automatizacion recordatorio_pastilla y recuerda coger pastilla :S
+  modo_fiesta:
+    name: Modo fiesta
+    icon: mdi:party-popper
+
+# ------------------------------------------------------------------------------------------------------
+# ------------------------------ MODO FIESTA -----------------------------------------------------
+# ------------------------------------------------------------------------------------------------------
+automation:
+  - id: activar_modo_fiesta
+    alias: activar modo fiesta
+    trigger:
+      - platform: state
+        entity_id: input_boolean.modo_fiesta
+        to: 'on'
+    action:
+      - service: automation.turn_off
+        entity_id: automation.tomar_pastilla
+      - service: automation.turn_off
+        entity_id: automation.sonar_timbre
+      - service: script.notificacion_google
+        data:
+          mensaje: "Recordar coger pastilla"
+          volumen: 0.6
+
+  - id: desactivar_modo_fiesta
+    alias: desactivar modo fiesta
+    trigger:
+      platform: time
+      at: '07:00:00'
+    action:
+      - service: automation.turn_on
+        entity_id: automation.tomar_pastilla
+      - service: automation.turn_on
+        entity_id: automation.sonar_timbre
+      - service: input_boolean.turn_off
+        entity_id: input_boolean.modo_fiesta

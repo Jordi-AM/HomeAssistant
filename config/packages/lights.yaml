@@ -24,13 +24,6 @@ light:
       - light.nil
 
   - platform: group
-    name: Luces principales
-    entities:
-      - light.jordi
-      - light.marti
-      - light.ana
-
-  - platform: group
     name: Luces Traseras
     entities:
       - light.dos
@@ -105,17 +98,17 @@ input_boolean:
     icon: mdi:lightbulb-group
 
   luces_cenando:
-    name: Luces principales
+    name: Luces cenando
     initial: false
     icon: mdi:lightbulb-group
 
   luces_relax:
-    name: Luces principales
+    name: Luces relax
     initial: false
     icon: mdi:lightbulb-group
 
   luces_cine:
-    name: Luces principales
+    name: Luces cine
     initial: false
     icon: mdi:lightbulb-group
 
@@ -220,11 +213,6 @@ automation:
   - platform: state
     entity_id: binary_sensor.pir_entrada
     to: 'off'
-    
-  - platform: state
-    entity_id: binary_sensor.puerta_principal
-    to: 'off'   
-    
   action:
   - service: light.turn_off
     entity_id: light.recibidor
